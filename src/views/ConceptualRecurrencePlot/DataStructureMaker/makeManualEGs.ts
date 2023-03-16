@@ -65,6 +65,10 @@ export function makeManualMTGs(
 //   ];
 // }
 
+export function getFullScriptEGTitles(): string[] {
+  return ["전체 토론 스크립트"];
+}
+
 export function getBasicIncomeManualMiddleEGTitles(): string[] {
   return [
     // "찬반 of '긴급재난지원금 경제적 효과'",

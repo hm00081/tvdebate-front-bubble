@@ -19,7 +19,7 @@ function Home(props: ComponentProps) {
 
   return (
     <div className={styles.home}>
-      <div className={styles.serviceTitle}>DebateVis</div>
+      <div className={styles.serviceTitle}>MDVis</div>
       {/* <Checkbox
         className={styles.checkbox}
         defaultChecked

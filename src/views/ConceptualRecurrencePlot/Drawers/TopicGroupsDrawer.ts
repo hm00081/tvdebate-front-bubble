@@ -71,8 +71,8 @@ export class TopicGroupsDrawer {
   public update() {
     const topicGuideRectGSelection = this.topicGuideRectGSelection
       .selectAll<SVGRectElement, unknown>("rect")
-      .data(this._topicGroups)
-      .join("rect");
+      .data(this._topicGroups);
+    //.join("rect");
 
     topicGuideRectGSelection.call(
       setAttributesOfTopicGuides.bind(
@@ -176,12 +176,18 @@ export class TopicGroupsDrawer {
           //       mostLeftTopBlock.beginningPointOfX) /
           //     2;
           //   return xPoint;
-          const xPoint =
-            mostLeftTopBlock.beginningPointOfY +
-            mostRightBottomBlock.beginningPointOfY / 2 +
-            10;
-          return xPoint;
+          if (this._guideColor === "000000") {
+            const xPoint = 3000;
+            return xPoint;
+          } else {
+            const xPoint =
+              mostLeftTopBlock.beginningPointOfY +
+              mostRightBottomBlock.beginningPointOfY / 2 +
+              10;
+            return xPoint;
+          }
         })
+
         .attr("y", (eg, i) => {
           const mostLeftTopBlock = eg[0][0];
           //TODO 객체의 topicGroup별로 yPoint 다르게 설정해야함.
@@ -189,10 +195,13 @@ export class TopicGroupsDrawer {
           // const yPoint = mostLeftTopBlock.beginningPointOfY - 5;
           // const yPoint = 30;
           if (this._guideColor === "#939393") {
-            const yPoint = 60;
+            const yPoint = 40;
+            return yPoint;
+          } else if (this._guideColor == "#ff0000") {
+            const yPoint = 20;
             return yPoint;
           } else {
-            const yPoint = 30;
+            const yPoint = 60;
             return yPoint;
           }
           // return yPoint;
@@ -230,7 +239,7 @@ export class TopicGroupsDrawer {
         // .style("fill", () => (arg.showTopicGroup ? "none" : "none"))
         .style("fill", () => (arg.showTopicGroup ? arg.guideColor : "none"))
         .style("cursor", "pointer")
-        .attr("transform", "rotate(-135) scale(-1, 1)")
+        //.attr("transform", "rotate(-135) scale(-1, 1)")
         .on("click", (e, d) => {
           const mouseEvent = (e as unknown) as MouseEvent;
           const engagementGroup = (d as unknown) as SimilarityBlock[][];

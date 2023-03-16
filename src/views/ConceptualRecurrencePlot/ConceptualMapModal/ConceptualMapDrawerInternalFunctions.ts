@@ -3,6 +3,7 @@ import * as d3 from "d3";
 // import { D3ZoomEvent } from "d3";
 import { LinkDatum, NodeDatum } from "./GraphDataStructureMaker";
 import { ParticipantCount } from "./TermCountDictOfEGMaker";
+import vis from "vis";
 
 export class SvgGSelectionsMaker {
   private svgSelection: null | d3.Selection<
@@ -32,7 +33,7 @@ export class SvgGSelectionsMaker {
   public appendSvgSelection() {
     this.svgSelection = this.conceptualMapDivSelection
       .append("svg")
-      .attr("width", this.svgWidth)
+      .attr("width", this.svgWidth * 2)
       .attr("height", this.svgHeight)
       .attr(
         "viewBox",
@@ -60,6 +61,7 @@ export class SvgGSelectionsMaker {
         .append("g")
         .attr("stroke", "#999")
         .attr("stroke-opacity", 0.5) // linkOpacity
+        .attr("curve", 0.8)
         .selectAll<SVGLineElement, LinkDatum>("line");
     } else {
       throw new Error("svgSelection is not appended yet");

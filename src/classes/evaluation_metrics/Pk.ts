@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { SentenceObject } from "./../../interfaces/DebateDataInterface";
+import { SentenceObject } from "../../interfaces/DebateDataInterface";
 
 /**
  * Pk for Evaluation of Topic Segmentation

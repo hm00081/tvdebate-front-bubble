@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { ParticipantDict } from "./../../../common_functions/makeParticipants";
+import { ParticipantDict } from "../../../common_functions/makeParticipants";
 import { SimilarityBlock, UtteranceObjectForDrawing } from "../interfaces";
 import { Participant } from "../../../common_functions/makeParticipants";
 import _ from "lodash";
@@ -38,7 +38,8 @@ export class ParticipantBlocksDrawer {
     const participantRectGSlectionDataBound = this.participantRectGSlection
       .selectAll<SVGRectElement, UtteranceObjectForDrawing>("rect")
       .data(this.utteranceObjectsForDrawing)
-      .join("rect");
+      .join("rect")
+      .attr("transform", "rotate(-135) scale(-1, 1)");
 
     participantRectGSlectionDataBound.call(
       setAttributes.bind(

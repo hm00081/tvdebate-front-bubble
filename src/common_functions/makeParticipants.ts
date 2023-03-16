@@ -68,6 +68,7 @@ export function makeParticipants( // 참가자 노드 생성 구간
     });
   } else if (debateName === "기본소득") {
     const colorDictionary: { [index: number]: string } = {
+      //  발화자 color 비슷한 계열로 수정하기
       0: "rgba(128, 128, 128, 1)", // 아나운서
       1: "rgba(141, 223, 95, 1)", // 박기성
       2: "rgba(56, 146, 3,1)", // 오세훈

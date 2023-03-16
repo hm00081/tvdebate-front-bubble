@@ -1,7 +1,7 @@
 import {
   KeytermObject,
   UtteranceObject,
-} from "./../../../interfaces/DebateDataInterface";
+} from "../../../interfaces/DebateDataInterface";
 import _ from "lodash";
 import * as math from "mathjs";
 import { findTopValueIndexes } from "../../../common_functions/findTopValueIndexes";

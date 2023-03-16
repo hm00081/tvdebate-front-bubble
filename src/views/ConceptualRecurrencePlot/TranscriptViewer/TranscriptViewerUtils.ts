@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import _ from "lodash";
-import { SentenceObject } from "./../../../interfaces/DebateDataInterface";
+import { SentenceObject } from "../../../interfaces/DebateDataInterface";
 
 export function getBackgroundColorOfSentenceSpan(
   sentenceObject: SentenceObject,

@@ -1,7 +1,7 @@
 import { UncertainIconDrawer } from "./UncertainIconDrawer";
-import { TermType } from "./../DataImporter";
+import { TermType } from "../DataImporter";
 import { DataStructureSet } from "../DataStructureMaker/DataStructureManager";
-import { DebateDataSet } from "./../../../interfaces/DebateDataInterface";
+import { DebateDataSet } from "../../../interfaces/DebateDataInterface";
 /* eslint-disable no-unused-vars */
 import { SimilarityBlocksDrawer } from "./SimilarityBlocksDrawer"; // 유사도 노드
 import { ParticipantBlocksDrawer } from "./ParticipantBlocksDrawer"; // 참가자 노드
@@ -52,6 +52,7 @@ export class D3Drawer {
   public readonly manualMiddleTGsDrawer: TopicGroupsDrawer;
   public readonly manualBigTGsDrawer: TopicGroupsDrawer;
   public readonly manualPeopleTGsDrawer: TopicGroupsDrawer;
+  public readonly manualFullTGsDrawer: TopicGroupsDrawer;
   public readonly lcsegEGsDrawer: TopicGroupsDrawer;
   private readonly svgWidth: number;
   private readonly svgHeight: number;
@@ -76,27 +77,27 @@ export class D3Drawer {
     this.conceptRecurrencePlotDiv = d3.select(".concept-recurrence-plot");
     this.svgWidth = this.conceptRecurrencePlotDiv.node()!.clientWidth;
     this.svgHeight = this.conceptRecurrencePlotDiv.node()!.clientHeight;
-    // this.svgRotate = this.conceptRecurrencePlotDiv.node()!;
-    // const rotate = d3.svg.transform().rotate(-45);
+    const margin = { top: 0, right: 0, bottom: 0, left: 0 };
     this.svgSelection = this.conceptRecurrencePlotDiv
       .select<SVGSVGElement>("svg")
-      .attr("width", this.svgWidth)
+      .attr("width", this.svgWidth * 2) // topic select 구간
       .attr("height", this.svgHeight)
-      .attr("transform", "scale(1, -1) rotate(-45)")
-      // .attr("transform", "rotate(45)")
-      // 임시로 45도 돌려놓음 현재
-      // zoom event 일어나는 곳
-      .call(
-        d3
-          .zoom<SVGSVGElement, D3ZoomEvent<SVGSVGElement, any>>()
-          .on("zoom", (event) => {
-            //@ts-ignore
-            this.svgGSelection.attr("transform", () => event.transform);
-            if (this._zoomListener) {
-              this._zoomListener(event.transform);
-            }
-          })
-      );
+      .attr("transform", "translate(24, 23) scale(1, 1)");
+    //.attr("transform", "translate(" + 19 + "," + margin.top + ")")
+    //.attr("transform", "scale(1, -1) rotate(-45)")
+    // 임시로 45도 돌려놓음 현재
+    // zoom event 일어나는 곳
+    // .call(
+    //   d3
+    //     .zoom<SVGSVGElement, D3ZoomEvent<SVGSVGElement, any>>()
+    //     .on("zoom", (event) => {
+    //       //@ts-ignore
+    //       this.svgGSelection.attr("transform", () => event.transform);
+    //       if (this._zoomListener) {
+    //         this._zoomListener(event.transform);
+    //       }
+    //     })
+    // );
 
     this.svgGSelection = this.svgSelection.select(".svgG");
 
@@ -184,6 +185,13 @@ export class D3Drawer {
       termType
     );
     this.manualMiddleTGsDrawer.color = "#939393";
+    this.manualFullTGsDrawer = new TopicGroupsDrawer(
+      this.svgGSelection,
+      debateDataSet,
+      dataStructureSet,
+      termType
+    );
+    this.manualFullTGsDrawer.color = "#000000";
     this.manualBigTGsDrawer = new TopicGroupsDrawer(
       this.svgGSelection,
       debateDataSet,
@@ -237,14 +245,16 @@ export class D3Drawer {
       const minusWidth =
         lastUtteranceObjectForDrawing.beginningPointOfXY +
         lastUtteranceObjectForDrawing.width;
-      const adjustedWidth = (this.svgWidth - minusWidth) / 2;
+      const minusHeight =
+        lastUtteranceObjectForDrawing.beginningPointOfXY +
+        lastUtteranceObjectForDrawing.width;
+      const adjustedWidth = (this.svgWidth - minusWidth) / 2 + 100;
 
-      const adjustedHeight = (this.svgHeight - minusWidth) / 2;
+      const adjustedHeight = (this.svgHeight - minusHeight + 80) / 2;
 
-      this.svgGSelection.attr(
-        "transform",
-        `translate(${adjustedWidth}, ${adjustedHeight})`
-      );
+      this.svgGSelection
+        .attr("transform", `translate(${adjustedWidth}, ${adjustedHeight})`)
+        .style("");
       if (this._zoomListener) {
         const element = document.createElement("div");
         const transform = zoomTransform(element);

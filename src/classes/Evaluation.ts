@@ -3,7 +3,7 @@ import {
   DebateDataSet,
   EvaluationDataSet,
   UtteranceObject,
-} from "./../interfaces/DebateDataInterface";
+} from "../interfaces/DebateDataInterface";
 import { SentenceObject } from "../interfaces/DebateDataInterface";
 import Pk from "./evaluation_metrics/Pk";
 import WindowDiff from "./evaluation_metrics/WindowDiff";

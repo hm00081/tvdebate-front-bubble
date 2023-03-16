@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import _ from "lodash";
-import { SentenceObject } from "./../../interfaces/DebateDataInterface";
+import { SentenceObject } from "../../interfaces/DebateDataInterface";
 
 /**
  * WindowDiff for Evaluation of Topic Segmentation

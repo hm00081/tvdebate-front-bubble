@@ -1,13 +1,17 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, {
+  Ref,
+  useRef,
+  useEffect,
+  useState,
+  useImperativeHandle,
+} from "react";
 import "./ConceptualRecurrencePlot.scss";
 import _ from "lodash";
 import { SimilarityBlock, UtteranceObjectForDrawing } from "./interfaces";
 import { makeEngagementGroups } from "./DataStructureMaker/makeEngagementGroups";
 import { D3Drawer } from "./Drawers/D3Drawer";
-import ConceptualMapModal, {
-  ConceptualMapModalRef,
-} from "./ConceptualMapModal/ConceptualMapModal";
+import ConceptualMapModal from "./ConceptualMapModal/ConceptualMapModal";
 import Controllers from "./Controllers/Controllers";
 import store from "../../redux/store";
 import { groupEGsMaker } from "./DataStructureMaker/GroupEGsMaker";
@@ -26,14 +30,39 @@ import { CHANGE_STANDARD_SIMILARITY_SCORE } from "../../redux/actionTypes";
 import CombinedEGsMaker from "./DataStructureMaker/CombinedEGsMaker";
 import { extractKeytermsFromEngagementGroup } from "./DataStructureMaker/extractTermsFromEngagementGroup";
 import ParticipantTooltip from "../../components/ParticipantTooltip/ParticipantTooltip";
-import Header from "./../Header/Header";
+import Header from "../Header/Header";
 import style from "./rootStyle.module.scss";
+import ConceptualMapControllers from "../ConceptualRecurrencePlot/ConceptualMapModal/ConceptualMapControllers/ConceptualMapControllers";
+import { ConceptualMapDrawer } from "./ConceptualMapModal/ConceptualMapDrawer";
+import { GraphDataStructureMaker } from "./ConceptualMapModal/GraphDataStructureMaker";
+import * as math from "mathjs";
+import { ParticipantDict } from "../../common_functions/makeParticipants";
+import { UtteranceObject } from "../../interfaces/DebateDataInterface";
+import { Modal } from "antd";
+import styles from "../ConceptualRecurrencePlot/ConceptualMapModal/ConceptualMapModal.module.scss";
 
-function ConceptualRecurrencePlot() {
+const modalContentWidth: number = 800;
+const modalContentHeight: number = 600;
+const conceptualMapDivClassName: string = "conceptual-map";
+
+export interface ConceptualMapModalRef {
+  openModal: (modalTitle: string, engagementGroup: SimilarityBlock[][]) => void;
+}
+interface ComponentProps {
+  participantDict: ParticipantDict;
+  utteranceObjects: UtteranceObject[];
+  termUtteranceBooleanMatrixTransposed: number[][];
+  termList: string[];
+  termType: TermType;
+}
+
+function ConceptualRecurrencePlot(
+  props: ComponentProps,
+  ref: Ref<ConceptualMapModalRef>
+) {
   const query = new URLSearchParams(useLocation().search);
   const debateNameOfQuery = query.get("debate_name") as DebateName;
   const termTypeOfQuery = query.get("term_type") as TermType;
-
   const [debateDataset, setDebateDataset] = useState<DebateDataSet | null>(
     null
   );
@@ -68,6 +97,84 @@ function ConceptualRecurrencePlot() {
   ] = useState<UtteranceObjectForDrawing | null>(null);
   const [transform, setTransform] = useState<d3.ZoomTransform | null>(null);
   const [tooltipVisible, setTooltipVisible] = useState<boolean>(false);
+  // 0226
+  const modalRef = useRef<HTMLDivElement>(null);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [modalTitle, setModalTitle] = useState<string>("");
+  const [conceptualMapDrawer, setConceptualMapDrawer] = useState<
+    ConceptualMapDrawer
+  >();
+  const [graphDataStructureMaker, setGraphDataStructureMaker] = useState<
+    GraphDataStructureMaker
+  >();
+  const [showNodeNotHavingLinks, setShowNodeNotHavingLinks] = useState<boolean>(
+    true
+  );
+  const [
+    standardTermCountToGenerateNode,
+    setStandardTermCountToGenerateNode,
+  ] = useState<number>(0);
+  const [maxOfLinksPerNode, setMaxOfLinksPerNode] = useState<number>(3);
+  const [maxCooccurrence, setMaxCooccurrence] = useState<number>(0);
+
+  useEffect(() => {
+    const modalPadding = 24;
+    const controllerWidth = 200;
+    setConceptualMapDrawer(
+      new ConceptualMapDrawer(
+        `.${conceptualMapDivClassName}`,
+        modalContentWidth - modalPadding * 2 - controllerWidth,
+        modalContentHeight - modalPadding * 2,
+        props.participantDict
+      )
+    );
+  }, []); // deps
+
+  useEffect(() => {
+    if (conceptualMapDrawer) {
+      conceptualMapDrawer.setParticipantDict(props.participantDict);
+    }
+  }, [props.participantDict]);
+
+  useEffect(() => {
+    openModal: (modalTitle: string, engagementGroup: SimilarityBlock[][]) => {
+      setModalVisible(true);
+      setModalTitle(modalTitle);
+      // console.log("engagementGroup", engagementGroup);
+      conceptualMapDrawer!.removeDrawing();
+
+      const graphDataStructureMaker = new GraphDataStructureMaker(
+        engagementGroup,
+        props.participantDict,
+        props.utteranceObjects,
+        props.termType
+      );
+
+      const cooccurrenceMatrixOfEG = graphDataStructureMaker.getCooccurrenceMatrixOfEG();
+      const ceiledMedian = Math.ceil(math.mean(cooccurrenceMatrixOfEG));
+
+      const nodeLinkDict = graphDataStructureMaker.generateNodesAndLinks(
+        ceiledMedian,
+        maxOfLinksPerNode,
+        showNodeNotHavingLinks
+      );
+      // console.log("nodeLinkDict", nodeLinkDict);
+
+      conceptualMapDrawer!.setGraphData(nodeLinkDict);
+      conceptualMapDrawer!.updateGraph();
+
+      const maxCooccurrence = _.max(
+        _.map(
+          cooccurrenceMatrixOfEG,
+          (cooccurrenceVector) => _.orderBy(cooccurrenceVector, [], ["desc"])[1] // TODO [0] or [1]
+        )
+      ) as number;
+
+      setStandardTermCountToGenerateNode(ceiledMedian);
+      setMaxCooccurrence(maxCooccurrence);
+      setGraphDataStructureMaker(graphDataStructureMaker);
+    };
+  });
 
   // Import Debate Data
   useEffect(() => {
@@ -95,8 +202,8 @@ function ConceptualRecurrencePlot() {
           dataImporter.debateDataSet!
         );
 
-        console.log("dataImporter", dataImporter);
-        console.log("dataStructureMaker", dataStructureMaker);
+        // console.log("dataImporter", dataImporter);
+        // console.log("dataStructureMaker", dataStructureMaker);
 
         const combinedEGsMaker = new CombinedEGsMaker(
           dataStructureMaker.dataStructureSet.similarityBlockManager.similarityBlockGroup,
@@ -133,6 +240,8 @@ function ConceptualRecurrencePlot() {
       const manualMiddleEGTitles = datasetOfManualEGs.manualMiddleEGTitles;
       const manualSmallEGs = datasetOfManualEGs.manualSmallEGs;
       const manualSmallEGTitles = datasetOfManualEGs.manualSmallEGTitles;
+      const manualFullEGs = datasetOfManualEGs.manualFullEGs;
+      const manualFullEGTitles = datasetOfManualEGs.manualFullEGTitles;
       const maxSimilarityScore = dataStructureSet.maxSimilarityScore;
       const topicGroups = combinedEGsMaker!.makeByNumOfSegments(4);
 
@@ -216,7 +325,7 @@ function ConceptualRecurrencePlot() {
         engagementGroupIndex: number
       ) => {
         conceptualMapModalRef.current?.openModal(
-          `Manual Middle Engagement Group ${engagementGroupIndex}`,
+          `${manualMiddleEGTitles[engagementGroupIndex]}`,
           engagementGroup
         );
       };
@@ -231,11 +340,26 @@ function ConceptualRecurrencePlot() {
         engagementGroupIndex: number
       ) => {
         conceptualMapModalRef.current?.openModal(
-          `Manual Big Engagement Group ${engagementGroupIndex}`,
+          `${manualBigEGTitles[engagementGroupIndex]}`,
           engagementGroup
         );
       };
       d3Drawer.manualBigTGsDrawer.visible = true;
+
+      // Manual Big Engagement Group Drawer's Settings
+      d3Drawer.manualFullTGsDrawer.topicGroups = manualFullEGs;
+      d3Drawer.manualFullTGsDrawer.topicGroupTitles = manualFullEGTitles;
+      d3Drawer.manualFullTGsDrawer.onTitleClicked = (
+        mouseEvent: MouseEvent,
+        engagementGroup: SimilarityBlock[][],
+        engagementGroupIndex: number
+      ) => {
+        conceptualMapModalRef.current?.openModal(
+          `${manualFullEGTitles}`,
+          engagementGroup
+        );
+      };
+      d3Drawer.manualFullTGsDrawer.visible = true;
 
       d3Drawer.manualPeopleTGsDrawer.onTitleClicked = (
         mouseEvent: MouseEvent,
@@ -258,8 +382,9 @@ function ConceptualRecurrencePlot() {
       d3Drawer.manualSmallTGsDrawer.update();
       d3Drawer.manualMiddleTGsDrawer.update();
       d3Drawer.manualBigTGsDrawer.update();
+      d3Drawer.manualFullTGsDrawer.update();
       // d3Drawer.manualPeopleTGsDrawer.update();
-      console.log("d3Drawer", d3Drawer);
+      // console.log("d3Drawer", d3Drawer);
 
       setD3Drawer(d3Drawer);
     }
@@ -268,50 +393,7 @@ function ConceptualRecurrencePlot() {
   return (
     <div className="root-div">
       <Header />
-      <Controllers
-        d3Drawer={d3Drawer}
-        combinedEGsMaker={combinedEGsMaker}
-        maxSimilarityScore={
-          dataStructureManager
-            ? dataStructureManager.dataStructureSet.maxSimilarityScore
-            : 0
-        }
-        debateDataset={debateDataset}
-        evaluationDataSet={evaluationDataSet}
-        dataStructureSet={
-          dataStructureManager ? dataStructureManager.dataStructureSet : null
-        }
-        dataStructureManager={
-          dataStructureManager ? dataStructureManager : null
-        }
-      ></Controllers>
-      <div className="concept-recurrence-plot">
-        {/* <img
-          className="imgPos"
-          // TODO 추후 marginLeft 고치기
-          style={{ marginTop: "35px", position: "fixed", marginLeft: "-340px" }}
-          width="200"
-          height="67"
-          src="https://i.imgur.com/2JQzpJF.jpg"
-        ></img> */}
-        <svg className="fullSvg">
-          <svg>
-            <g className="test">
-              <g className="svgG"></g>
-            </g>
-          </svg>
-        </svg>
-        <ParticipantTooltip
-          utteranceObjectForDrawing={mouseoveredUtterance}
-          transform={transform}
-          visible={tooltipVisible}
-          d3Drawer={d3Drawer}
-          debateDataset={debateDataset}
-        />
-      </div>
-      <TranscriptViewer
-        dataStructureMaker={dataStructureManager}
-      ></TranscriptViewer>
+      {/* <div ref={modalRef}></div> */}
       <ConceptualMapModal
         ref={conceptualMapModalRef}
         participantDict={
@@ -328,6 +410,16 @@ function ConceptualRecurrencePlot() {
         }
         termType={termTypeOfQuery}
       ></ConceptualMapModal>
+      <ParticipantTooltip
+        utteranceObjectForDrawing={mouseoveredUtterance}
+        transform={transform}
+        visible={tooltipVisible}
+        d3Drawer={d3Drawer}
+        debateDataset={debateDataset}
+      />
+      {/* <TranscriptViewer
+        dataStructureMaker={dataStructureManager}
+      ></TranscriptViewer> */}
     </div>
   );
 }

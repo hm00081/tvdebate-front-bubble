@@ -6,7 +6,7 @@
 import { Popover, Tooltip } from "antd";
 import { PopoverProps } from "antd/lib/popover";
 import _ from "lodash";
-import { transform } from "lodash";
+// import { transform } from "lodash";
 import React, { useEffect, useState, Ref } from "react";
 import { findTopValueIndexes } from "../../common_functions/findTopValueIndexes";
 import { DebateDataSet } from "../../interfaces/DebateDataInterface";
@@ -65,7 +65,7 @@ function ParticipantTooltip(props: ComponentProps, ref: Ref<SvgTooltipRef>) {
               (topValueIndex) =>
                 props.debateDataset!.keytermObjects[topValueIndex]
             );
-
+            console.log(mainKeytermObjects);
             let mainKeytermsString: string = ""; //툴팁 주요 용어
             if (mainKeytermObjects.length <= numOfMainKeyterms) {
               mainKeytermsString = _.reduce(
@@ -76,7 +76,7 @@ function ParticipantTooltip(props: ComponentProps, ref: Ref<SvgTooltipRef>) {
                 ""
               );
             }
-            console.log(mainKeytermsString);
+            // console.log(mainKeytermsString);
             // return `${props.utteranceObjectForDrawing.name}`;
             return `${props.utteranceObjectForDrawing.name}  [${mainKeytermsString} ]`;
           } else {
@@ -97,8 +97,8 @@ function ParticipantTooltip(props: ComponentProps, ref: Ref<SvgTooltipRef>) {
           style={{
             position: "absolute",
             left: getPosition(props.utteranceObjectForDrawing),
-            top: getPosition(props.utteranceObjectForDrawing),
-            width: getWidth(props.utteranceObjectForDrawing),
+            //top: getPosition(props.utteranceObjectForDrawing),
+            //width: getWidth(props.utteranceObjectForDrawing),
             height: getWidth(props.utteranceObjectForDrawing),
             // backgroundColor: "yellow",
           }}
@@ -119,6 +119,7 @@ function ParticipantTooltip(props: ComponentProps, ref: Ref<SvgTooltipRef>) {
     utteranceObjectForDrawing: UtteranceObjectForDrawing | null
   ) {
     let position: number = 0;
+    // const lastUtteranceObjectForDrawing =
     if (utteranceObjectForDrawing) {
       position = utteranceObjectForDrawing.beginningPointOfXY;
     }
@@ -130,7 +131,7 @@ function ParticipantTooltip(props: ComponentProps, ref: Ref<SvgTooltipRef>) {
   ) {
     let width: number = 0;
     if (utteranceObjectForDrawing) {
-      width = utteranceObjectForDrawing.width;
+      width = utteranceObjectForDrawing.width + 50;
     }
     return width;
   }

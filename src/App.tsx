@@ -57,6 +57,7 @@ function App() {
             <DescriptionForManualTopicSegmentation />
           </Route>
           <Route path="/coocurence_matrix">
+            {/* @ts-ignore */}
             <ConceptualRecurrencePlot></ConceptualRecurrencePlot>
           </Route>
           <Route path="/">

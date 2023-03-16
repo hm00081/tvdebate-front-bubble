@@ -14,6 +14,7 @@ import {
 import {
   makeManualTGs,
   // getBasicIncomeManualSmallEGTitles,
+  getFullScriptEGTitles,
   getBasicIncomeManualMiddleEGTitles,
   getBasicIncomeManualBigEGTitles,
   getSatManualBigEGTitles,
@@ -37,10 +38,12 @@ export interface DataStructureSet {
 export interface DataSetOfManualTGs {
   manualSmallEGs: SimilarityBlock[][][];
   manualMiddleEGs: SimilarityBlock[][][];
+  manualFullEGs: SimilarityBlock[][][];
   manualBigEGs: SimilarityBlock[][][];
   manualSmallEGTitles: string[];
   manualMiddleEGTitles: string[];
   manualBigEGTitles: string[];
+  manualFullEGTitles: string[];
 }
 export class DataStructureManager {
   private _dataStructureSet: DataStructureSet;
@@ -111,7 +114,9 @@ export class DataStructureManager {
     let manualSmallEGs: SimilarityBlock[][][] = [];
     let manualMiddleEGs: SimilarityBlock[][][] = [];
     let manualBigEGs: SimilarityBlock[][][] = [];
+    let manualFullEGs: SimilarityBlock[][][] = [];
     // let manualSmallEGTitles: string[] = [];
+    let manualFullEGTitles: string[] = [];
     let manualMiddleEGTitles: string[] = [];
     let manualBigEGTitles: string[] = [];
     if (debateName === "기본소득") {
@@ -137,7 +142,7 @@ export class DataStructureManager {
         97,
         133,
         // 134,
-        177,
+        //177,
       ]);
       manualBigEGs = makeManualTGs(conceptSimilarityMatrix, [
         0,
@@ -147,7 +152,10 @@ export class DataStructureManager {
         133,
         177,
       ]);
+      manualFullEGs = makeManualTGs(conceptSimilarityMatrix, [0, 185]);
       // manualSmallEGTitles = getBasicIncomeManualSmallEGTitles();
+      manualFullEGTitles = getFullScriptEGTitles();
+      // console.log(manualFullEGs);
       manualMiddleEGTitles = getBasicIncomeManualMiddleEGTitles();
       manualBigEGTitles = getBasicIncomeManualBigEGTitles();
     } else if (debateName === "기본소득clipped") {
@@ -161,6 +169,7 @@ export class DataStructureManager {
         79,
         97,
       ]);
+      manualFullEGs = makeManualTGs(conceptSimilarityMatrix, [0, 97]);
       // manualMiddleEGs = makeManualTGs(conceptSimilarityMatrix, [
       //   0,
       //   22,
@@ -229,7 +238,9 @@ export class DataStructureManager {
       manualSmallEGs,
       manualMiddleEGs,
       manualBigEGs,
+      manualFullEGs,
       // manualSmallEGTitles,
+      manualFullEGTitles,
       manualMiddleEGTitles,
       manualBigEGTitles,
     };

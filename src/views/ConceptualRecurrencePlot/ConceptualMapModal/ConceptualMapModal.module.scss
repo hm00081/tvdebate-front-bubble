@@ -1,3 +1,20 @@
 .conceptualMapModalContent {
   display: flex;
+  //float: left;
+  .topicPos {
+    display: flex;
+  }
+  .concept-recurrence-plot {
+    // top: 40px;
+    flex: 1;
+    display: block;
+    float: left;
+    //justify-content: center;
+    // overflow: scroll;
+    //width: 0px;
+    //height: 0px;
+    // position: relative;
+  }
+  .topic-select {
+  }
 }

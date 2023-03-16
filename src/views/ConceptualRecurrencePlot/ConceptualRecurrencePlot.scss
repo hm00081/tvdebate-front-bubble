@@ -5,11 +5,12 @@
 
   .concept-recurrence-plot {
     flex: 1;
-    display: flex;
-    justify-content: center;
+    display: block;
+    //justify-content: center;
     // overflow: scroll;
-    // width: 1200px;
-    position: relative;
+    //width: 0px;
+    //height: 0px;
+    // position: relative;
   }
   // .imgPos {
   //   margin-top: 35px;

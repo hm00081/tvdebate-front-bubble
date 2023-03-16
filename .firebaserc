@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "conceptual-map-of-debate"
-  }
+    "default": "debate-bubble",
+    "staging": "debate-bubble"
+  },
+  "targets": {},
+  "etags": {}
 }

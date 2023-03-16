@@ -72,15 +72,16 @@ export class SimilarityBlocksDrawer {
       .data(this.similarityBlocks)
       .style("fill", (d) => {
         return d.visible
-          ? fillColorOfSimilarityBlock(
-              d,
-              this.utteranceObjectsForDrawing,
-              this.similarityBlockGroup,
-              this.participantDict,
-              this._standardHighPointOfSimilarityScore,
-              this._coloringSelfSimilarities,
-              this._coloringRebuttal
-            )
+          ? // ? fillColorOfSimilarityBlock(
+            //     d,
+            //     this.utteranceObjectsForDrawing,
+            //     this.similarityBlockGroup,
+            //     this.participantDict,
+            //     this._standardHighPointOfSimilarityScore,
+            //     this._coloringSelfSimilarities,
+            //     this._coloringRebuttal
+            //   )
+            "none"
           : "none";
       })
       .style("stroke-width", 3)
@@ -97,15 +98,16 @@ export class SimilarityBlocksDrawer {
       .attr("height", (d) => d.height)
       .style("fill", (d) => {
         return d.visible
-          ? fillColorOfSimilarityBlock(
-              d,
-              this.utteranceObjectsForDrawing,
-              this.similarityBlockGroup,
-              this.participantDict,
-              this._standardHighPointOfSimilarityScore,
-              this._coloringSelfSimilarities,
-              this._coloringRebuttal
-            )
+          ? // ? fillColorOfSimilarityBlock(
+            //     d,
+            //     this.utteranceObjectsForDrawing,
+            //     this.similarityBlockGroup,
+            //     this.participantDict,
+            //     this._standardHighPointOfSimilarityScore,
+            //     this._coloringSelfSimilarities,
+            //     this._coloringRebuttal
+            //   )
+            "none"
           : "none";
       })
       .style("stroke-width", 3)

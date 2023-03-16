@@ -7,15 +7,21 @@ import { GraphDataStructureMaker } from "../GraphDataStructureMaker";
 import styles from "./ConceptualMapControllers.module.scss";
 
 interface ComponentProps {
+  // props
   conceptualMapDrawer?: ConceptualMapDrawer;
   graphDataStructureMaker?: GraphDataStructureMaker;
   maxCooccurrence: number;
+  maxCount: number;
+  maxCountNode: number;
   standardTermCount: number;
   maxOfLinksPerNode: number;
-  showNodeNotHavingLinks: boolean;
+  showNodeForCount: boolean; // 노드 필터링
+  showNodeNotHavingLinks: boolean; // 링크 관계 필터링
+  maxCountPerNodesSliderListener: (changedValue: number) => void;
   standardTermCountSliderListener: (changedValue: number) => void;
   maxOfLinksPerNodeSliderListener: (changedValue: number) => void;
   showNodeNotHavingLinksCheckboxListener: (checked: boolean) => void;
+  //showSentimentAnalysisCheckboxListener: (checked: boolean) => void;
 }
 interface ComponentState {
   nodeSizeMultiplier: number;
@@ -35,7 +41,7 @@ class ConceptualMapControllers extends React.Component<
   render() {
     return (
       <div className={styles.conceptualMapControllers}>
-        <div>Node Size Multiplier</div>
+        {/* <div>Change Node Size</div>
         <SliderWithInput
           min={1}
           max={10}
@@ -48,26 +54,49 @@ class ConceptualMapControllers extends React.Component<
               nodeSizeMultiplier: changedValue,
             });
           }}
-        ></SliderWithInput>
+        ></SliderWithInput> */}
 
-        <div>Standard High Cooccurrence Count to Generate Links</div>
+        <div>동시 발생 횟수별 링크 수</div>
         <SliderWithInput
           min={0}
           max={this.props.maxCooccurrence}
           value={this.props.standardTermCount}
           onChangeListener={(changedValue) => {
             // Make new nodes, links
+            this.props.graphDataStructureMaker;
             const nodesAndLinks = this.props.graphDataStructureMaker!.generateNodesAndLinks(
               changedValue,
               this.props.maxOfLinksPerNode,
               this.props.showNodeNotHavingLinks
             );
+            // console.log(nodesAndLinks);
             this.props.conceptualMapDrawer!.setGraphData(nodesAndLinks);
             this.props.conceptualMapDrawer!.updateGraph();
 
             this.props.standardTermCountSliderListener(changedValue);
           }}
         ></SliderWithInput>
+
+        {/* <div>노드 카운트 필터링</div>
+        <SliderWithInput
+          min={0}
+          max={100}
+          value={this.props.maxCountNode}
+          onChangeListener={(changedValue) => {
+            // Make new nodes, links
+            this.props.graphDataStructureMaker;
+            const nodesAndLinks = this.props.graphDataStructureMaker!.generateNodesAndLinks(
+              changedValue,
+              this.props.maxOfLinksPerNode,
+              this.props.showNodeForCount
+            );
+            // console.log(nodesAndLinks);
+            this.props.conceptualMapDrawer!.setGraphData(nodesAndLinks);
+            this.props.conceptualMapDrawer!.updateGraph();
+
+            this.props.maxCountPerNodesSliderListener(changedValue);
+          }}
+        ></SliderWithInput> */}
 
         <div>Number of Links per a Node</div>
         <SliderWithInput
@@ -107,34 +136,25 @@ class ConceptualMapControllers extends React.Component<
             );
           }}
         >
-          Nodes not having Link
+          Visible Node Without Link
         </Checkbox>
 
         <Checkbox
           className={styles.checkbox}
+          // defaultChecked
           onChange={(event) => {
             this.props.conceptualMapDrawer!.sentimentMarkerVisible =
               event.target.checked;
             this.props.conceptualMapDrawer!.updateGraph();
           }}
         >
-          Sentiment Marker
+          Visible Sentiment Analysis
         </Checkbox>
         {/* Delete Minimum Keyword + 세부 인터랙션이 필요한 곳에 대한 컴포넌트 만들 수 있다.*/}
-        <Checkbox
-          className={styles.checkbox}
-          onChange={(event) => {
-            this.props.conceptualMapDrawer!.sentimentMarkerVisible =
-              event.target.checked;
-            this.props.conceptualMapDrawer!.updateGraph();
-          }}
-        >
-          Delete Min Count Keyword
-        </Checkbox>
 
-        <div style={{ marginBottom: 12 }}>
+        {/* <div style={{ marginBottom: 12 }}>
           checkbox for &apos;at least 1 link or not&apos;
-        </div>
+        </div> */}
       </div>
     );
   }

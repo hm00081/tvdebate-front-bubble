@@ -1,4 +1,4 @@
-import { ParticipantDict } from "./../../../common_functions/makeParticipants";
+import { ParticipantDict } from "../../../common_functions/makeParticipants";
 /* eslint-disable no-unused-vars */
 // import { participantDict } from "./../DataStructureMaker/index";
 // NodeLink Diagram를 그리기 위한 정보가 들어있는 Drawer Data.ts
@@ -95,9 +95,11 @@ export class ConceptualMapDrawer {
   public updateGraph() {
     const nodes = this._nodeLinkDict!.nodes;
     const links = this._nodeLinkDict!.links;
+    // console.log(nodes, links, "hello");
     const nodeSizeMultiplier = this._nodeSizeMultiplier;
     // select root div
     if (this.conceptualMapDivSelection === null) {
+      // div conceptualMapDivClassName
       this.conceptualMapDivSelection = d3.select(this.coneptualMapDivClassName);
     }
 
@@ -127,12 +129,15 @@ export class ConceptualMapDrawer {
     this.linksGSelection = this.linksGSelection
       .data(links)
       .join("line")
-      .attr("stroke-width", (d) => Math.sqrt(d.count));
+      .attr("stroke-width", (d) => Math.sqrt(d.count))
+      .text((d) => `${d.count}`);
 
     // Update drawing nodePies
     this.nodePiesGSelection = this.nodePiesGSelection.data(nodes).join("g");
     const that = this;
     this.nodePiesGSelection.each(function (nodeDatum) {
+      //console.log(nodeDatum.participantCounts);
+      // plus arcPath = conToVi처럼 영역을 Topic으로 쌓면 재밌을것같음.
       const arcsSelection = d3
         .select(this)
         .selectAll<SVGPathElement, d3.PieArcDatum<ParticipantCount>>("path")
@@ -150,7 +155,7 @@ export class ConceptualMapDrawer {
           .join("title")
           .text(
             (d) =>
-              `발화자: ${d.data.name}, 발화 횟수: ${d.data.count}, sentiment: ${d.data.sentiment}`
+              `발화자: ${d.data.name}, 발화 횟수: ${d.data.count}, sentiment: ${d.data.sentiment}, test:}`
           );
       });
     });
@@ -213,12 +218,21 @@ export class ConceptualMapDrawer {
             // scaledSentiment = scaledSentiment / 2 + 0.5;
             // return that.gradient.rgbAt(scaledSentiment).toHexString();
             // 감성분석 결과 색상 조절.
-            if (d.sentiment > 0.25 * 2) {
-              return "rgb(79, 198, 66)"; // green: 긍정
-            } else if (d.sentiment < -0.25 * 2) {
-              return "rgb(196, 67, 67)"; // red: 부정
+            // 발화 정도에 따른 세분화해보는 것도 쫗아보임!!!
+            if (d.sentiment > 0.75) {
+              return "rgba(79, 198, 66, 1)"; // green: 긍정
+            } else if (d.sentiment > 0.5) {
+              return "rgba(79, 198, 66, 0.5)"; // light-green: 긍정
+            } else if (d.sentiment > 0.3) {
+              return "rgba(79, 198, 66, 0.3)"; // light-green: 긍정
+            } else if (d.sentiment < -0.75) {
+              return "rgba(196, 67, 67, 1)"; // red: 부정
+            } else if (d.sentiment < -0.5) {
+              return "rgba(196, 67, 67, 0.5)"; // light-red: 부정
+            } else if (d.sentiment < -0.3) {
+              return "rgba(196, 67, 67, 0.3)"; // light-red: 부정
             } else {
-              return "rgb(100, 100, 100)"; // 중립
+              return "rgba(255, 190, 15, 1)"; // 중립
             }
           } else {
             return "none";
@@ -256,7 +270,8 @@ export class ConceptualMapDrawer {
         .attr("x1", (d) => (d.source as NodeDatum).x!)
         .attr("y1", (d) => (d.source as NodeDatum).y!)
         .attr("x2", (d) => (d.target as NodeDatum).x!)
-        .attr("y2", (d) => (d.target as NodeDatum).y!);
+        .attr("y2", (d) => (d.target as NodeDatum).y!)
+        .text((d) => `${d.count}`);
 
       this.nodePiesGSelection.attr(
         "transform",

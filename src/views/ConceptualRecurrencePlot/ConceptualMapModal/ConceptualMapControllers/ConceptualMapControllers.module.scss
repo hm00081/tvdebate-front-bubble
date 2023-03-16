@@ -1,5 +1,12 @@
 .conceptualMapControllers {
   width: 200px;
+  margin-top: 45px;
+  padding-left: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  //margin-right: 5px;
+  border-right: 0px solid #000;
+  // position: fixed;
   .checkbox {
     margin-bottom: 12px;
     margin-left: 0;

@@ -108,7 +108,7 @@ export class Controllers extends React.Component<
         // style={{ backgroundColor: "gray" }}
         className={styles.controllersZone}
       >
-        {/* <Tree
+        <Tree
           selectable={false}
           treeData={[
             {
@@ -319,7 +319,7 @@ export class Controllers extends React.Component<
             },
           ]}
         ></Tree>
-        For High Semantic Consistency Standard */}
+        For High Semantic Consistency Standard
         {/* <div>Standard High Semantic Consistency</div>
         <SliderWithInput
           min={10}
@@ -762,7 +762,6 @@ export class Controllers extends React.Component<
             });
           }}
         ></SliderWithInput>
-
         <div
           style={{
             fontSize: 11,
@@ -863,7 +862,6 @@ export class Controllers extends React.Component<
             });
           }}
         ></SliderWithInput>
-
         {/* <Tree
           selectable={false}
           // defaultExpandedKeys={["0-0-0", "0-0-1"]}
