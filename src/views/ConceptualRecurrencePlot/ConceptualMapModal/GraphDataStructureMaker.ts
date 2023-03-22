@@ -78,7 +78,7 @@ export class GraphDataStructureMaker {
     );
 
     const occurrenceMaker =
-      termType === "single_term"
+      termType !== "compound_term"
         ? new OccurrenceMaker(
             utteranceObjectsOfEG,
             this.termListOfEG,

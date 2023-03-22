@@ -7,7 +7,7 @@ import {
   StopwordDict,
   UtteranceObject,
 } from "../../interfaces/DebateDataInterface";
-export type TermType = "single_term" | "compound_term";
+export type TermType = "compound_term";
 export type DebateName =
   | "sample"
   | "기본소득"

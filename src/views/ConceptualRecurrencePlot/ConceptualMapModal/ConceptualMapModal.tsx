@@ -469,12 +469,17 @@ function ConceptualMapModal(
         //   setSentimentAnalysis(checked);
         // }}
       ></ConceptualMapControllers>
-      <div className="concept-recurrence-plot">
+      <div className="concept-recurrence-plot" style={{}}>
         {/* css 배치 어미없노 */}
         {/* conceptual-map */}
         <div className="topic-select" style={{ top: "20px" }}>
           <svg
-            style={{ left: "0px", paddingTop: "0px", height: "120px" }}
+            style={{
+              marginLeft: "0px",
+              paddingTop: "0px",
+              height: "120px",
+              //width: "inherit",
+            }}
             // viewBox="0 0 1200 1200"
           >
             <g className="svgG" style={{}}></g>
@@ -483,7 +488,7 @@ function ConceptualMapModal(
         <div className={conceptualMapDivClassName}>
           <div
             className="topicPos"
-            style={{ marginTop: "20px", marginLeft: "35px" }}
+            style={{ marginTop: "20px", marginLeft: "0px" }}
           >
             {modalTitle}
           </div>

@@ -72,7 +72,8 @@ export class TopicGroupsDrawer {
     const topicGuideRectGSelection = this.topicGuideRectGSelection
       .selectAll<SVGRectElement, unknown>("rect")
       .data(this._topicGroups);
-    //.join("rect");
+    //.join("rect")
+    //.attr("transform", "rotate(-135) scale(-1, 1)"); // topicgroup 나눠주는 rect
 
     topicGuideRectGSelection.call(
       setAttributesOfTopicGuides.bind(

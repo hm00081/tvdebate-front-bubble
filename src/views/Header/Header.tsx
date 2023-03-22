@@ -4,7 +4,7 @@ import React from "react";
 export default function Header() {
   return (
     <a className={style.mainLink}>
-      <div className={style.navi}>DebateVis</div>
+      <div className={style.navi}>MetaDebateVis</div>
     </a>
   );
 }

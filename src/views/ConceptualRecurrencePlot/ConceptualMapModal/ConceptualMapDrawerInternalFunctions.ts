@@ -33,7 +33,7 @@ export class SvgGSelectionsMaker {
   public appendSvgSelection() {
     this.svgSelection = this.conceptualMapDivSelection
       .append("svg")
-      .attr("width", this.svgWidth * 2)
+      .attr("width", this.svgWidth * 1.5)
       .attr("height", this.svgHeight)
       .attr(
         "viewBox",
@@ -59,9 +59,9 @@ export class SvgGSelectionsMaker {
     if (this.svgGSelection !== null) {
       return this.svgGSelection
         .append("g")
-        .attr("stroke", "#999")
+        .attr("stroke", "#999") // link-color
         .attr("stroke-opacity", 0.5) // linkOpacity
-        .attr("curve", 0.8)
+        .attr("curve", 0.2)
         .selectAll<SVGLineElement, LinkDatum>("line");
     } else {
       throw new Error("svgSelection is not appended yet");
@@ -72,6 +72,8 @@ export class SvgGSelectionsMaker {
     if (this.svgGSelection !== null) {
       return this.svgGSelection
         .append("g")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 0.3)
         .selectAll<SVGGElement, NodeDatum>("g");
     } else {
       throw new Error("svgSelection is not appended yet");
@@ -80,20 +82,23 @@ export class SvgGSelectionsMaker {
 
   public appendCirclesOfNodePiesGSelection() {
     if (this.svgGSelection !== null) {
-      return this.svgGSelection
-        .append("g")
-        .selectAll<SVGGElement, NodeDatum>("g");
+      return (
+        this.svgGSelection
+          .append("g")
+          //.attr("stroke", "#fff")
+          .selectAll<SVGGElement, NodeDatum>("g")
+      );
     } else {
       throw new Error("svgSelection is not appended yet");
     }
   }
-
+  // 노드 주위 쌓는 것.
   public appendNodesGSelection() {
     if (this.svgGSelection !== null) {
       return this.svgGSelection
-        .append("g")
+        .append("g") // apend g htmlelement
         .attr("stroke", "#fff") // white
-        .attr("stroke-width", 1)
+        .attr("stroke-width", 0.1)
         .selectAll<SVGCircleElement, NodeDatum>("circle");
     } else {
       throw new Error("svgSelection is not appended yet");
@@ -116,16 +121,21 @@ export class SvgGSelectionsMaker {
   }
 }
 // node에 대한 interaction
+// d3-force 정도 조절이 필요해보임.
 export function makeSimulation(nodes: NodeDatum[], links: LinkDatum[]) {
-  return d3
-    .forceSimulation<NodeDatum>(nodes)
-    .force(
-      "link",
-      d3.forceLink<NodeDatum, LinkDatum>(links).id((d) => d.id)
-    )
-    .force("charge", d3.forceManyBody())
-    .force("x", d3.forceX())
-    .force("y", d3.forceY());
+  return (
+    d3
+      .forceSimulation<NodeDatum>(nodes)
+      .force(
+        "link",
+        d3.forceLink<NodeDatum, LinkDatum>(links).id((d) => d.id)
+      )
+      .force("charge", d3.forceManyBody().strength(-28))
+      //.force("center", d3.forceCenter())
+      .force("x", d3.forceX())
+      .force("y", d3.forceY())
+    //.on('tick', )
+  );
 } //d3-force
 
 export function makeDrag() {
@@ -158,7 +168,9 @@ export function makeDrag() {
 // do Make Compound!!
 export const makePieData = d3
   .pie<ParticipantCount>()
-  .sort(null)
+  .sort(function (a, b) {
+    return d3.descending(a.count, b.count);
+  })
   .value((d) => d.count);
 
 export function makeArcDAttribute(

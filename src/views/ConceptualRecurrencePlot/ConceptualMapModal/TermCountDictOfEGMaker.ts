@@ -48,7 +48,7 @@ export class TermCountDictOfEGMaker {
     _.forEach(utteranceObjectsOfEG, (utteranceObject) => {
       _.forEach(utteranceObject.sentenceObjects, (sentenceObject) => {
         const termCountDict =
-          termType === "single_term"
+          termType !== "compound_term"
             ? (sentenceObject.singleTermCountDict as TermCountDict)
             : (sentenceObject.compoundTermCountDict as TermCountDict);
         _.forEach(termCountDict, (count, term) => {

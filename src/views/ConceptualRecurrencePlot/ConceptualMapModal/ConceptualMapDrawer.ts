@@ -41,7 +41,7 @@ export class ConceptualMapDrawer {
     unknown
   >;
   private nodesGSelection!: d3.Selection<
-    SVGCircleElement,
+    SVGCircleElement | SVGGElement,
     NodeDatum,
     SVGGElement,
     unknown
@@ -115,6 +115,7 @@ export class ConceptualMapDrawer {
       this.linksGSelection = svgGSelectionsMaker.appendLinksGSelection();
       this.nodePiesGSelection = svgGSelectionsMaker.appendNodePiesGSelection();
       this.circlesOfNodePiesGSelection = svgGSelectionsMaker.appendCirclesOfNodePiesGSelection();
+      //@ts-ignore
       this.nodesGSelection = svgGSelectionsMaker.appendNodesGSelection();
       this.nodeTextsGSelection = svgGSelectionsMaker.appendTextsGSelection();
     }
@@ -129,7 +130,7 @@ export class ConceptualMapDrawer {
     this.linksGSelection = this.linksGSelection
       .data(links)
       .join("line")
-      .attr("stroke-width", (d) => Math.sqrt(d.count))
+      .attr("stroke-width", (d) => Math.sqrt(d.count) / 1.5)
       .text((d) => `${d.count}`);
 
     // Update drawing nodePies
@@ -145,6 +146,9 @@ export class ConceptualMapDrawer {
         .join("path")
         .attr("fill", (d) => that._participantDict[d.data.name].color)
         .attr("d", (d) => makeArcDAttribute(d, nodeDatum, nodeSizeMultiplier));
+      // .sort(function (a, b) {
+      //   return d3.descending(a.data.count, b.data.count);
+      // });
       // each  = d3-selection 함수., d3 내장
       arcsSelection.each(function (arcDatum) {
         d3.select(this)
@@ -241,17 +245,21 @@ export class ConceptualMapDrawer {
     });
 
     // Update drawing nodes
+    // 중앙의 count를 보여주는 circle node
     this.nodesGSelection = this.nodesGSelection
+      //.data(nodes)
       .data(nodes)
       .join("circle")
+      .attr("stroke-width", 1)
       .attr("r", (d) => Math.sqrt(d.count * nodeSizeMultiplier))
-      // .attr("fill", "rgb(100, 100, 100)")
       .attr("fill", "rgb(55, 55, 55)")
+      //@ts-ignore
       .call(drag(simulation));
 
     this.nodesGSelection.each(function (nodeDatum) {
       d3.select(this)
         .selectAll<HTMLTitleElement, NodeDatum>("title")
+        //.attr("fill", "rgb(255, 255, 255)")
         .data([nodeDatum])
         .join("title")
         .text((d) => `count: ${d.count}`);
