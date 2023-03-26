@@ -77,12 +77,11 @@ export class D3Drawer {
     this.conceptRecurrencePlotDiv = d3.select(".concept-recurrence-plot");
     this.svgWidth = this.conceptRecurrencePlotDiv.node()!.clientWidth;
     this.svgHeight = this.conceptRecurrencePlotDiv.node()!.clientHeight;
-    const margin = { top: 0, right: 0, bottom: 0, left: 0 };
     this.svgSelection = this.conceptRecurrencePlotDiv
       .select<SVGSVGElement>("svg")
-      .attr("width", this.svgWidth * 2) // topic select 구간
-      .attr("height", this.svgHeight)
-      .attr("transform", "translate(24, 23) scale(1, 1)");
+      // .attr("width", '100vw') // topic select 구간 //this.svgWidth
+      // .attr("height", '100vh')
+      // .attr("transform", "translate(24, 23) scale(1, 1)");
     //.attr("transform", "translate(" + 19 + "," + margin.top + ")")
     //.attr("transform", "scale(1, -1) rotate(-45)")
     // 임시로 45도 돌려놓음 현재
@@ -248,9 +247,9 @@ export class D3Drawer {
       const minusHeight =
         lastUtteranceObjectForDrawing.beginningPointOfXY +
         lastUtteranceObjectForDrawing.width;
-      const adjustedWidth = (this.svgWidth - minusWidth) / 2 + 100;
 
-      const adjustedHeight = (this.svgHeight - minusHeight + 80) / 2;
+      const adjustedWidth = -550 ;
+      const adjustedHeight = this.svgHeight/4;
 
       this.svgGSelection
         .attr("transform", `translate(${adjustedWidth}, ${adjustedHeight})`)

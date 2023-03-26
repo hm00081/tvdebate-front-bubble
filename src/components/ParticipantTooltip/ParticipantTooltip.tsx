@@ -89,8 +89,8 @@ function ParticipantTooltip(props: ComponentProps, ref: Ref<SvgTooltipRef>) {
             : ""
         }
         // trigger="click"
-        visible={visible}
-        onVisibleChange={handleVisibleChange}
+        open={visible}
+        onOpenChange={handleVisibleChange}
         overlayClassName={styles.popover}
       >
         <div
@@ -99,7 +99,7 @@ function ParticipantTooltip(props: ComponentProps, ref: Ref<SvgTooltipRef>) {
             left: getPosition(props.utteranceObjectForDrawing),
             //top: getPosition(props.utteranceObjectForDrawing),
             //width: getWidth(props.utteranceObjectForDrawing),
-            height: getWidth(props.utteranceObjectForDrawing),
+            //height: getWidth(props.utteranceObjectForDrawing),
             // backgroundColor: "yellow",
           }}
           onClick={(mouseEvent) => {
@@ -134,6 +134,16 @@ function ParticipantTooltip(props: ComponentProps, ref: Ref<SvgTooltipRef>) {
       width = utteranceObjectForDrawing.width + 50;
     }
     return width;
+  }
+
+  function getHeight(
+    utteranceObjectForDrawing: UtteranceObjectForDrawing | null
+  ) {
+    let height: number = 0;
+    if (utteranceObjectForDrawing) {
+      height = utteranceObjectForDrawing.height + 50;
+    }
+    return height;
   }
 
   function handleVisibleChange(visible: boolean) {
