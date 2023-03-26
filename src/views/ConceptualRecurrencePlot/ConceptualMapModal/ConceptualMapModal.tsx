@@ -33,8 +33,8 @@ import { CHANGE_STANDARD_SIMILARITY_SCORE } from "../../../redux/actionTypes";
 import { extractKeytermsFromEngagementGroup } from "../DataStructureMaker/extractTermsFromEngagementGroup";
 import { falseDependencies } from "mathjs";
 
-const modalContentWidth: number = 800;
-const modalContentHeight: number = 600;
+const modalContentWidth: number = 1000;
+const modalContentHeight: number = 650;
 const conceptualMapDivClassName: string = "conceptual-map";
 
 export interface ConceptualMapModalRef {
@@ -120,8 +120,8 @@ function ConceptualMapModal(
     setConceptualMapDrawer(
       new ConceptualMapDrawer(
         `.${conceptualMapDivClassName}`,
-        modalContentWidth - modalPadding * 2 - conrollerWidth,
-        modalContentHeight - modalPadding * 2,
+        modalContentWidth ,
+        modalContentHeight,
         props.participantDict
       )
     );
@@ -469,28 +469,23 @@ function ConceptualMapModal(
         //   setSentimentAnalysis(checked);
         // }}
       ></ConceptualMapControllers>
-      <div className="concept-recurrence-plot" style={{}}>
-        {/* css 배치 어미없노 */}
+      <div className="concept-recurrence-plot" style={{marginLeft:"-20px",display:"flex", flexDirection:"column", alignItems:"center"}}>
         {/* conceptual-map */}
-        <div className="topic-select" style={{ top: "20px" }}>
+        <div className="topic-select" style={{ top: "20px"}}>
           <svg
             style={{
-              marginLeft: "0px",
-              paddingTop: "0px",
-              height: "120px",
-              //width: "inherit",
+              paddingLeft: "20px",
+              width:"100vw",
+              height:"200px"
             }}
-            // viewBox="0 0 1200 1200"
+            viewBox="0 0 320 160"
           >
-            <g className="svgG" style={{}}></g>
+            <g className="svgG"></g>
           </svg>
         </div>
-        <div className={conceptualMapDivClassName}>
-          <div
-            className="topicPos"
-            style={{ marginTop: "20px", marginLeft: "0px" }}
-          >
-            {modalTitle}
+        <div className={conceptualMapDivClassName} >
+          <div className="topicPos">
+          {modalTitle}
           </div>
         </div>
       </div>

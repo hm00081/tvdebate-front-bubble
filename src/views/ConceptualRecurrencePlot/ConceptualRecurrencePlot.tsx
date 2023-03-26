@@ -137,7 +137,7 @@ function ConceptualRecurrencePlot(
   }, [props.participantDict]);
 
   useEffect(() => {
-    openModal: (modalTitle: string, engagementGroup: SimilarityBlock[][]) => {
+    (modalTitle: string, engagementGroup: SimilarityBlock[][]) => {
       setModalVisible(true);
       setModalTitle(modalTitle);
       // console.log("engagementGroup", engagementGroup);
@@ -392,34 +392,40 @@ function ConceptualRecurrencePlot(
 
   return (
     <div className="root-div">
-      <Header />
-      {/* <div ref={modalRef}></div> */}
-      <ConceptualMapModal
-        ref={conceptualMapModalRef}
-        participantDict={
-          dataStructureManager
-            ? dataStructureManager.dataStructureSet.participantDict
-            : {}
-        }
-        utteranceObjects={debateDataset ? debateDataset.utteranceObjects : []}
-        termList={debateDataset ? debateDataset.termList : []}
-        termUtteranceBooleanMatrixTransposed={
-          debateDataset
-            ? debateDataset.termUtteranceBooleanMatrixTransposed
-            : []
-        }
-        termType={termTypeOfQuery}
-      ></ConceptualMapModal>
-      <ParticipantTooltip
-        utteranceObjectForDrawing={mouseoveredUtterance}
-        transform={transform}
-        visible={tooltipVisible}
-        d3Drawer={d3Drawer}
-        debateDataset={debateDataset}
-      />
-      {/* <TranscriptViewer
-        dataStructureMaker={dataStructureManager}
-      ></TranscriptViewer> */}
+      <div className={styles.mainContainer}>
+        <Header />
+        <div className={styles.contents}>
+          {/* <div ref={modalRef}></div> */}
+          <ConceptualMapModal
+            ref={conceptualMapModalRef}
+            participantDict={
+              dataStructureManager
+                ? dataStructureManager.dataStructureSet.participantDict
+                : {}
+            }
+            utteranceObjects={debateDataset ? debateDataset.utteranceObjects : []}
+            termList={debateDataset ? debateDataset.termList : []}
+            termUtteranceBooleanMatrixTransposed={
+              debateDataset
+                ? debateDataset.termUtteranceBooleanMatrixTransposed
+                : []
+            }
+            termType={termTypeOfQuery}
+        ></ConceptualMapModal>
+        <ParticipantTooltip
+            utteranceObjectForDrawing={mouseoveredUtterance}
+            transform={transform}
+            visible={tooltipVisible}
+            d3Drawer={d3Drawer}
+            debateDataset={debateDataset}
+          />
+        {/* <TranscriptViewer
+          dataStructureMaker={dataStructureManager}
+        ></TranscriptViewer> */}
+        </div>
+      </div>
+
+
     </div>
   );
 }
