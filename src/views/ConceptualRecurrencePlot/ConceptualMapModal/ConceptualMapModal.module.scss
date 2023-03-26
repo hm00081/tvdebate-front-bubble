@@ -1,5 +1,4 @@
 .conceptualMapModalContent {
-  margin-top: 35px;
   display: flex;
   //float: left;
   .topicPos {
@@ -16,10 +15,6 @@
     //height: 0px;
     // position: relative;
   }
-}
-
-.conceptualMapDivClassName{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  .topic-select {
+  }
 }

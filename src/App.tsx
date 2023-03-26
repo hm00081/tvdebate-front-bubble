@@ -25,7 +25,7 @@ import SampleViewOfTopicSegmentation from "./views/SampleViewOfTopicSegmentation
 function App() {
   return (
     <Router>
-      <div style={{overflow:"hidden"}}>
+      <div>
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
