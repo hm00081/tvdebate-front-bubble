@@ -28,6 +28,6 @@
   "원이면": true,
   "이번": true,
   "병제": true,
-  "모병제": true,
-  "징병제": true
+  "모병제": false,
+  "징병제": false
 }

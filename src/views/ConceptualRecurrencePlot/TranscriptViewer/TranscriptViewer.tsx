@@ -12,31 +12,36 @@ interface ComponentProps {
 
 function TranscriptViewer(props: ComponentProps) {
   return (
-    <div className={styles.transcriptViewer}>
-      {props.dataStructureMaker ? (
-        _.map(
-          props.dataStructureMaker.dataStructureSet
-            .utteranceObjectsForDrawingManager.utteranceObjectsForDrawing,
-          (utteranceObject, index) => {
-            return (
-              <div style={{ marginBottom: "12px" }} key={`utterance-${index}`}>
+    <div className={styles.transcriptViewerWrapper}>
+      <div className={styles.transcriptViewer}>
+        {props.dataStructureMaker ? (
+          _.map(
+            props.dataStructureMaker.dataStructureSet
+              .utteranceObjectsForDrawingManager.utteranceObjectsForDrawing,
+            (utteranceObject, index) => {
+              return (
                 <div
-                  style={{
-                    color: props.dataStructureMaker!.dataStructureSet
-                      .participantDict[utteranceObject.name].color,
-                  }}
+                  style={{ marginBottom: "12px" }}
+                  key={`utterance-${index}`}
                 >
-                  [ {utteranceObject.name} ]
+                  <div
+                    style={{
+                      color: props.dataStructureMaker!.dataStructureSet
+                        .participantDict[utteranceObject.name].color,
+                    }}
+                  >
+                    [ {utteranceObject.name} ]
+                  </div>
+                  <div>{utteranceObject.utterance}</div>
+                  {/* {getSentenceSpans(utteranceObject)} */}
                 </div>
-                <div>{utteranceObject.utterance}</div>
-                {/* {getSentenceSpans(utteranceObject)} */}
-              </div>
-            );
-          }
-        )
-      ) : (
-        <div />
-      )}
+              );
+            }
+          )
+        ) : (
+          <div />
+        )}
+      </div>
     </div>
   );
 }

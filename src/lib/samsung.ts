@@ -1,6 +1,6 @@
-import axios from 'axios';
-import _ from 'lodash';
-const HOST = 'http://summarnoteweb.koreacentral.cloudapp.azure.com';
+import axios from "axios";
+import _ from "lodash";
+const HOST = "http://summarnoteweb.koreacentral.cloudapp.azure.com";
 
 export interface Meeting {
   title: string;
@@ -101,14 +101,16 @@ export interface ParticipantsStat {
 
 export class Samsung {
   public readonly syskey: string =
-    'ab113740-caa9-46e8-adf8-d83fbcf1628b-b23f9e42-77af-4c8d-8af5-e00259898d16';
+    "ab113740-caa9-46e8-adf8-d83fbcf1628b-b23f9e42-77af-4c8d-8af5-e00259898d16";
   public async getMeetingList(sysKey: string, uid: string): Promise<Meeting[]> {
-    const r = (await axios.get(`${HOST}/api/get/meetingList`, {
-      headers: {
-        Syskey: sysKey,
-        uid
-      }
-    })).data;
+    const r = (
+      await axios.get(`${HOST}/api/get/meetingList`, {
+        headers: {
+          Syskey: sysKey,
+          uid,
+        },
+      })
+    ).data;
     return r.meetings;
   }
   public async getMeetingInfo(
@@ -120,8 +122,8 @@ export class Samsung {
       headers: {
         Syskey: sysKey,
         uid,
-        meetingId
-      }
+        meetingId,
+      },
     });
 
     if (!_.isNil(r.data.insights) && !_.isEmpty(r.data.insights)) {
@@ -131,9 +133,9 @@ export class Samsung {
       } catch (e) {
         r.data.insights = {
           exist: false,
-          process: false
+          process: false,
         };
-        console.error('GET MEETING ERROR JSON PARSE');
+        console.error("GET MEETING ERROR JSON PARSE");
         console.error(e);
       }
     }
@@ -153,21 +155,23 @@ export class Samsung {
         // TODO
         // queryObj.type이 fullscript, highlight, actionItem 이 아닐때 안보내야하나?
         // 아니면 보내고 에러 처리?
-        url = url.concat('?type=', queryObj.type);
-        url = url.concat('&agenda=', queryObj.agenda);
+        url = url.concat("?type=", queryObj.type);
+        url = url.concat("&agenda=", queryObj.agenda);
       } else if (!_.isNil(queryObj.type)) {
-        url = url.concat('?type=', queryObj.type);
+        url = url.concat("?type=", queryObj.type);
       } else if (!_.isNil(queryObj.agenda)) {
-        url = url.concat('?agenda=', queryObj.agenda);
+        url = url.concat("?agenda=", queryObj.agenda);
       }
     }
 
-    const r = (await axios.get(url, {
-      headers: {
-        Syskey: sysKey,
-        meetingId
-      }
-    })).data;
+    const r = (
+      await axios.get(url, {
+        headers: {
+          Syskey: sysKey,
+          meetingId,
+        },
+      })
+    ).data;
     return r;
   }
 
@@ -178,15 +182,17 @@ export class Samsung {
   ): Promise<MeetingStatDay> {
     let url = `${HOST}/api/get/meetingStatDay`;
     if (!_.isNil(queryObj)) {
-      url = url.concat('?starttime=', queryObj.starttime);
-      url = url.concat('&endtime=', queryObj.endtime);
+      url = url.concat("?starttime=", queryObj.starttime);
+      url = url.concat("&endtime=", queryObj.endtime);
     }
-    const r = (await axios.get(url, {
-      headers: {
-        Syskey: sysKey,
-        uid
-      }
-    })).data;
+    const r = (
+      await axios.get(url, {
+        headers: {
+          Syskey: sysKey,
+          uid,
+        },
+      })
+    ).data;
     return r;
   }
 
@@ -198,17 +204,19 @@ export class Samsung {
   ): Promise<boolean> {
     const url = `${HOST}/api/post/updateInsights`;
     const body = JSON.stringify(data);
-    console.warn('body', body);
-    const r = (await axios.post(
-      url,
-      { meetingId, uid, body },
-      {
-        headers: {
-          Syskey: sysKey,
-          uid
+    console.warn("body", body);
+    const r = (
+      await axios.post(
+        url,
+        { meetingId, uid, body },
+        {
+          headers: {
+            Syskey: sysKey,
+            uid,
+          },
         }
-      }
-    )).data;
+      )
+    ).data;
     return r.isSuccess;
   }
   // TODO test 필요 -> 에러남
@@ -219,15 +227,17 @@ export class Samsung {
   ): Promise<ParticipantsStat> {
     let url = `${HOST}/api/get/participantStat`;
     if (!_.isNil(queryObj)) {
-      url = url.concat('?starttime=', queryObj.starttime);
-      url = url.concat('&endtime=', queryObj.endtime);
+      url = url.concat("?starttime=", queryObj.starttime);
+      url = url.concat("&endtime=", queryObj.endtime);
     }
-    const r = (await axios.get(url, {
-      headers: {
-        Syskey: sysKey,
-        uid
-      }
-    })).data;
+    const r = (
+      await axios.get(url, {
+        headers: {
+          Syskey: sysKey,
+          uid,
+        },
+      })
+    ).data;
     return r;
   }
 }

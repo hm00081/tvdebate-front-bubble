@@ -1,15 +1,16 @@
 .transcriptViewer {
   // width: 100%;
   // height: 100%;
-  margin-top: 35px;
-  position: relative;
+  margin-top: -15px;
+  //position: relative;
   min-width: 250px;
   width: 330px;
   font-size: 12px;
   // border-left: solid 1px #aaa;
   // white-space: nowrap;
   word-break: break-all;
-  height: 100%;
+  height: calc(100vh - 55px);
+  max-height: calc(100vh - 55px);
   overflow-y: auto;
   padding: 8px;
   // border: 1px solid gray;

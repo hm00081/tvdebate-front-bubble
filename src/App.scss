@@ -2,6 +2,13 @@
 @import "~antd/dist/antd.css"; // or 'antd/dist/antd.less'
 @import "~video.js/dist/video-js.css";
 
+.root-div {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
 // antd's css
 .ant-popover-content {
   // border: 1px solid #ff0000;

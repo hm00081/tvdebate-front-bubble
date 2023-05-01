@@ -5,7 +5,6 @@ import {
 export interface UtteranceObjectForDrawing extends UtteranceObject {
   beginningPointOfXY: number;
   width: number;
-  height : number;
   insistence: boolean;
 }
 

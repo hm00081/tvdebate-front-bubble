@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useState,
   useImperativeHandle,
+  forwardRef,
 } from "react";
 import "./ConceptualRecurrencePlot.scss";
 import _ from "lodash";
@@ -12,8 +13,9 @@ import { SimilarityBlock, UtteranceObjectForDrawing } from "./interfaces";
 import { makeEngagementGroups } from "./DataStructureMaker/makeEngagementGroups";
 import { D3Drawer } from "./Drawers/D3Drawer";
 import ConceptualMapModal from "./ConceptualMapModal/ConceptualMapModal";
-import Controllers from "./Controllers/Controllers";
-import store from "../../redux/store";
+import ConceptualMapModalTwo from "./ConceptualMapModalTwo/ConceptualMapModal";
+import ConceptualMapModalThree from "./ConceptualMapModalThree/ConceptualMapModal";
+import ConceptualMapModalFour from "./ConceptualMapModalFour/ConceptualMapModal";
 import { groupEGsMaker } from "./DataStructureMaker/GroupEGsMaker";
 import { useLocation } from "react-router-dom";
 import TranscriptViewer from "./TranscriptViewer/TranscriptViewer";
@@ -32,14 +34,13 @@ import { extractKeytermsFromEngagementGroup } from "./DataStructureMaker/extract
 import ParticipantTooltip from "../../components/ParticipantTooltip/ParticipantTooltip";
 import Header from "../Header/Header";
 import style from "./rootStyle.module.scss";
-import ConceptualMapControllers from "./ConceptualMapModal/ConceptualMapControllers/ConceptualMapControllers";
+//import ConceptualMapControllers from "./ConceptualMapModal/ConceptualMapControllers/ConceptualMapControllers";
 import { ConceptualMapDrawer } from "./ConceptualMapModal/ConceptualMapDrawer";
 import { GraphDataStructureMaker } from "./ConceptualMapModal/GraphDataStructureMaker";
 import * as math from "mathjs";
 import { ParticipantDict } from "../../common_functions/makeParticipants";
 import { UtteranceObject } from "../../interfaces/DebateDataInterface";
-import { Modal } from "antd";
-import styles from "./ConceptualMapModal/ConceptualMapModal.module.scss";
+import ConceptualRecurrencePlotTwo from "./ConceptualRecurrencePlotThree";
 
 const modalContentWidth: number = 800;
 const modalContentHeight: number = 600;
@@ -49,11 +50,14 @@ export interface ConceptualMapModalRef {
   openModal: (modalTitle: string, engagementGroup: SimilarityBlock[][]) => void;
 }
 interface ComponentProps {
+  engagementGroup?: SimilarityBlock[][];
   participantDict: ParticipantDict;
   utteranceObjects: UtteranceObject[];
   termUtteranceBooleanMatrixTransposed: number[][];
   termList: string[];
   termType: TermType;
+  drawGraph: (index: number, engagementGroup: SimilarityBlock[][]) => void;
+  manualBigEGs: SimilarityBlock[][][]; // 추가
 }
 
 function ConceptualRecurrencePlot(
@@ -81,7 +85,11 @@ function ConceptualRecurrencePlot(
   ] = useState<CombinedEGsMaker | null>(null);
   const [d3Drawer, setD3Drawer] = useState<D3Drawer | null>(null);
   const conceptualMapModalRef = React.useRef<ConceptualMapModalRef>(null);
-
+  const conceptualMapModalRefTwo = React.useRef<ConceptualMapModalRef>(null);
+  const [manualBigEGs, setManualBigEGs] = useState<SimilarityBlock[][][]>([]);
+  const [engagementGroup, setEngagementGroup] = useState<SimilarityBlock[][]>(
+    []
+  );
   const standardSimilarityScore = useSelector<
     CombinedState<{
       standardSimilarityScoreReducer: StandardSimilarityScoreState;
@@ -116,67 +124,98 @@ function ConceptualRecurrencePlot(
   ] = useState<number>(0);
   const [maxOfLinksPerNode, setMaxOfLinksPerNode] = useState<number>(3);
   const [maxCooccurrence, setMaxCooccurrence] = useState<number>(0);
+  const [conceptualMapDrawers, setConceptualMapDrawers] = useState<
+    ConceptualMapDrawer[]
+  >([]);
 
-  useEffect(() => {
-    const modalPadding = 24;
-    const controllerWidth = 200;
-    setConceptualMapDrawer(
-      new ConceptualMapDrawer(
-        `.${conceptualMapDivClassName}`,
-        modalContentWidth - modalPadding * 2 - controllerWidth,
-        modalContentHeight - modalPadding * 2,
-        props.participantDict
-      )
+  const drawGraph = (index: number, engagementGroup: SimilarityBlock[][]) => {
+    const conceptualMapDrawer = conceptualMapDrawers[index];
+
+    conceptualMapDrawer!.removeDrawing();
+
+    const graphDataStructureMaker = new GraphDataStructureMaker(
+      engagementGroup,
+      props.participantDict,
+      props.utteranceObjects,
+      props.termType
     );
-  }, []); // deps
 
-  useEffect(() => {
-    if (conceptualMapDrawer) {
-      conceptualMapDrawer.setParticipantDict(props.participantDict);
+    // manualBigEGs를 활용하는 로직
+    // 안나옴
+    const selectedManualBigEG = manualBigEGs[index];
+    console.log(selectedManualBigEG);
+    for (let i = 0; i < selectedManualBigEG.length; i++) {
+      const engagementGroupManual = selectedManualBigEG[i];
+      engagementGroup.push(engagementGroupManual); // manualBigEG를 기존 engagementGroup에 추가
     }
-  }, [props.participantDict]);
+
+    const cooccurrenceMatrixOfEG = graphDataStructureMaker.getCooccurrenceMatrixOfEG();
+    const ceiledMedian = Math.ceil(math.mean(cooccurrenceMatrixOfEG));
+
+    const nodeLinkDict = graphDataStructureMaker.generateNodesAndLinks(
+      ceiledMedian,
+      maxOfLinksPerNode,
+      showNodeNotHavingLinks
+    );
+
+    conceptualMapDrawer!.setGraphData(nodeLinkDict);
+    conceptualMapDrawer!.updateGraph();
+    console.log("drawGraph 함수 호출됨");
+  };
+
+  const drawGraphTwo = (
+    index: number,
+    engagementGroup: SimilarityBlock[][]
+  ) => {
+    const conceptualMapDrawer = conceptualMapDrawers[index];
+
+    conceptualMapDrawer!.removeDrawing();
+
+    const graphDataStructureMaker = new GraphDataStructureMaker(
+      engagementGroup,
+      props.participantDict,
+      props.utteranceObjects,
+      props.termType
+    );
+
+    // manualBigEGs를 활용하는 로직
+    // 안나옴
+    const selectedManualBigEG = manualBigEGs[index];
+    console.log(selectedManualBigEG);
+    for (let i = 0; i < selectedManualBigEG.length; i++) {
+      const engagementGroupManual = selectedManualBigEG[i];
+      engagementGroup.push(engagementGroupManual); // manualBigEG를 기존 engagementGroup에 추가
+    }
+
+    const cooccurrenceMatrixOfEG = graphDataStructureMaker.getCooccurrenceMatrixOfEG();
+    const ceiledMedian = Math.ceil(math.mean(cooccurrenceMatrixOfEG));
+
+    const nodeLinkDict = graphDataStructureMaker.generateNodesAndLinks(
+      ceiledMedian,
+      maxOfLinksPerNode,
+      showNodeNotHavingLinks
+    );
+
+    conceptualMapDrawer!.setGraphData(nodeLinkDict);
+    conceptualMapDrawer!.updateGraph();
+    console.log("drawGraph 함수 호출됨");
+  };
 
   useEffect(() => {
-    (modalTitle: string, engagementGroup: SimilarityBlock[][]) => {
-      setModalVisible(true);
-      setModalTitle(modalTitle);
-      // console.log("engagementGroup", engagementGroup);
-      conceptualMapDrawer!.removeDrawing();
-
-      const graphDataStructureMaker = new GraphDataStructureMaker(
+    if (conceptualMapDrawer && combinedEGsMaker) {
+      const engagementGroupIndex = 0;
+      const engagementGroup = combinedEGsMaker.makeByNumOfSegments(40)[
+        engagementGroupIndex
+      ];
+      const extractedKeytermObjects = extractKeytermsFromEngagementGroup(
         engagementGroup,
-        props.participantDict,
-        props.utteranceObjects,
-        props.termType
+        debateDataset!.conceptMatrixTransposed,
+        debateDataset!.keytermObjects,
+        8
       );
+    }
+  }, [conceptualMapDrawer, combinedEGsMaker]);
 
-      const cooccurrenceMatrixOfEG = graphDataStructureMaker.getCooccurrenceMatrixOfEG();
-      const ceiledMedian = Math.ceil(math.mean(cooccurrenceMatrixOfEG));
-
-      const nodeLinkDict = graphDataStructureMaker.generateNodesAndLinks(
-        ceiledMedian,
-        maxOfLinksPerNode,
-        showNodeNotHavingLinks
-      );
-      // console.log("nodeLinkDict", nodeLinkDict);
-
-      conceptualMapDrawer!.setGraphData(nodeLinkDict);
-      conceptualMapDrawer!.updateGraph();
-
-      const maxCooccurrence = _.max(
-        _.map(
-          cooccurrenceMatrixOfEG,
-          (cooccurrenceVector) => _.orderBy(cooccurrenceVector, [], ["desc"])[1] // TODO [0] or [1]
-        )
-      ) as number;
-
-      setStandardTermCountToGenerateNode(ceiledMedian);
-      setMaxCooccurrence(maxCooccurrence);
-      setGraphDataStructureMaker(graphDataStructureMaker);
-    };
-  });
-
-  // Import Debate Data
   useEffect(() => {
     if (!dataStructureManager) {
       if (
@@ -188,10 +227,6 @@ function ConceptualRecurrencePlot(
         debateNameOfQuery === "정시확대clipped" ||
         debateNameOfQuery === "모병제clipped"
       ) {
-        // const debateDataset = new DataImporter(
-        //   debateNameOfQuery,
-        //   termTypeOfQuery
-        // ).debateDataSet as DebateDataSet;
         const dataImporter = new DataImporter(
           debateNameOfQuery,
           termTypeOfQuery
@@ -201,9 +236,6 @@ function ConceptualRecurrencePlot(
           debateNameOfQuery,
           dataImporter.debateDataSet!
         );
-
-        // console.log("dataImporter", dataImporter);
-        // console.log("dataStructureMaker", dataStructureMaker);
 
         const combinedEGsMaker = new CombinedEGsMaker(
           dataStructureMaker.dataStructureSet.similarityBlockManager.similarityBlockGroup,
@@ -230,22 +262,10 @@ function ConceptualRecurrencePlot(
     if (dataStructureManager && debateDataset) {
       const dataStructureSet = dataStructureManager.dataStructureSet;
       const datasetOfManualEGs = dataStructureManager.datasetOfManualEGs;
-      const conceptSimilarityBlocks =
-        dataStructureSet.similarityBlockManager.similarityBlocks;
-      const conceptSimilarityMatrix =
-        dataStructureSet.similarityBlockManager.similarityBlockGroup;
       const manualBigEGs = datasetOfManualEGs.manualBigEGs;
       const manualBigEGTitles = datasetOfManualEGs.manualBigEGTitles;
-      const manualMiddleEGs = datasetOfManualEGs.manualMiddleEGs;
-      const manualMiddleEGTitles = datasetOfManualEGs.manualMiddleEGTitles;
-      const manualSmallEGs = datasetOfManualEGs.manualSmallEGs;
-      const manualSmallEGTitles = datasetOfManualEGs.manualSmallEGTitles;
       const manualFullEGs = datasetOfManualEGs.manualFullEGs;
       const manualFullEGTitles = datasetOfManualEGs.manualFullEGTitles;
-      const maxSimilarityScore = dataStructureSet.maxSimilarityScore;
-      const topicGroups = combinedEGsMaker!.makeByNumOfSegments(4);
-
-      // settings of d3Drawer
       const d3Drawer = new D3Drawer(
         debateDataset,
         dataStructureSet,
@@ -259,77 +279,10 @@ function ConceptualRecurrencePlot(
         mouseEvent,
         utteranceObjectForDrawing
       ) => {
-        // console.log("mouseEvent", tooltipDatum);
-        // setTooltipDatum({
-        //   utteranceObjectForDrawing,
-        //   transform: tooltipDatum.transform,
-        //   visible: true,
-        // });
-
         setMouseoveredUtterance(utteranceObjectForDrawing);
         setTooltipVisible(true);
       };
-      d3Drawer.participantBlocksDrawer.mouseoutLisener = () => {
-        // setTooltipDatum({
-        //   ...tooltipDatum,
-        //   visible: false,
-        // });
-      };
-
-      // Engagement Group Drawer's Settings
-      d3Drawer.topicGroupsDrawer.topicGroups = topicGroups;
-      d3Drawer.topicGroupsDrawer.onTitleClicked = (
-        mouseEvent: MouseEvent,
-        engagementGroup: SimilarityBlock[][],
-        engagementGroupIndex: number
-      ) => {
-        // conceptualMapModalRef.current?.openModal(
-        //   `Engagement Group ${engagementGroupIndex}`,
-        //   engagementGroup
-        // );
-        const extractedKeytermObjects = extractKeytermsFromEngagementGroup(
-          engagementGroup,
-          debateDataset.conceptMatrixTransposed,
-          debateDataset.keytermObjects,
-          10
-        );
-
-        conceptualMapModalRef.current?.openModal(
-          `${_.map(extractedKeytermObjects, (o) => o.name)}`,
-          engagementGroup
-        );
-      };
-      d3Drawer.topicGroupsDrawer.visible = false;
-
-      // Manual Small Engagement Group Drawer's Settings
-      d3Drawer.manualSmallTGsDrawer.topicGroups = manualSmallEGs;
-      d3Drawer.manualSmallTGsDrawer.topicGroupTitles = manualSmallEGTitles;
-      d3Drawer.manualSmallTGsDrawer.onTitleClicked = (
-        mouseEvent: MouseEvent,
-        engagementGroup: SimilarityBlock[][],
-        engagementGroupIndex: number
-      ) => {
-        conceptualMapModalRef.current?.openModal(
-          `Manual Small Engagement Group ${engagementGroupIndex}`,
-          engagementGroup
-        );
-      };
-      d3Drawer.manualSmallTGsDrawer.visible = false;
-
-      // Manual Middle Engagement Group Drawer's Settings
-      d3Drawer.manualMiddleTGsDrawer.topicGroups = manualMiddleEGs;
-      d3Drawer.manualMiddleTGsDrawer.topicGroupTitles = manualMiddleEGTitles;
-      d3Drawer.manualMiddleTGsDrawer.onTitleClicked = (
-        mouseEvent: MouseEvent,
-        engagementGroup: SimilarityBlock[][],
-        engagementGroupIndex: number
-      ) => {
-        conceptualMapModalRef.current?.openModal(
-          `${manualMiddleEGTitles[engagementGroupIndex]}`,
-          engagementGroup
-        );
-      };
-      d3Drawer.manualMiddleTGsDrawer.visible = true;
+      d3Drawer.participantBlocksDrawer.mouseoutLisener = () => {};
 
       // Manual Big Engagement Group Drawer's Settings
       d3Drawer.manualBigTGsDrawer.topicGroups = manualBigEGs;
@@ -344,7 +297,7 @@ function ConceptualRecurrencePlot(
           engagementGroup
         );
       };
-      d3Drawer.manualBigTGsDrawer.visible = true;
+      d3Drawer.manualBigTGsDrawer.visible = false;
 
       // Manual Big Engagement Group Drawer's Settings
       d3Drawer.manualFullTGsDrawer.topicGroups = manualFullEGs;
@@ -372,7 +325,7 @@ function ConceptualRecurrencePlot(
         );
       };
 
-      d3Drawer.centerConceptualRecurrentPlot();
+      //d3Drawer.centerConceptualRecurrentPlot();
       d3Drawer.participantBlocksDrawer.update();
       d3Drawer.insistenceMarkersDrawer.update();
       // similarityBlocksDrawer 그리는 곳
@@ -391,43 +344,34 @@ function ConceptualRecurrencePlot(
   }, [dataStructureManager, debateDataset]);
 
   return (
-    <div className="root-div">
-      <div className={styles.mainContainer}>
-        <Header />
-        <div className={styles.contents}>
-          {/* <div ref={modalRef}></div> */}
-          <ConceptualMapModal
-            ref={conceptualMapModalRef}
-            participantDict={
-              dataStructureManager
-                ? dataStructureManager.dataStructureSet.participantDict
-                : {}
-            }
-            utteranceObjects={debateDataset ? debateDataset.utteranceObjects : []}
-            termList={debateDataset ? debateDataset.termList : []}
-            termUtteranceBooleanMatrixTransposed={
-              debateDataset
-                ? debateDataset.termUtteranceBooleanMatrixTransposed
-                : []
-            }
-            termType={termTypeOfQuery}
-        ></ConceptualMapModal>
-        <ParticipantTooltip
-            utteranceObjectForDrawing={mouseoveredUtterance}
-            transform={transform}
-            visible={tooltipVisible}
-            d3Drawer={d3Drawer}
-            debateDataset={debateDataset}
-          />
-        {/* <TranscriptViewer
-          dataStructureMaker={dataStructureManager}
-        ></TranscriptViewer> */}
-        </div>
-      </div>
-
-
-    </div>
+    <>
+      <ConceptualMapModal
+        ref={conceptualMapModalRef}
+        participantDict={
+          dataStructureManager
+            ? dataStructureManager.dataStructureSet.participantDict
+            : {}
+        }
+        utteranceObjects={debateDataset ? debateDataset.utteranceObjects : []}
+        termList={debateDataset ? debateDataset.termList : []}
+        termUtteranceBooleanMatrixTransposed={
+          debateDataset
+            ? debateDataset.termUtteranceBooleanMatrixTransposed
+            : []
+        }
+        termType={termTypeOfQuery}
+        drawGraph={(index, engagementGroup) =>
+          drawGraph(index, engagementGroup)
+        }
+        manualBigEGs={manualBigEGs}
+        engagementGroup={engagementGroup}
+        //@ts-ignore
+        dataStructureManager={dataStructureManager}
+      ></ConceptualMapModal>
+    </>
   );
 }
 
 export default ConceptualRecurrencePlot;
+//0424 수정
+//export default forwardRef(ConceptualRecurrencePlot);

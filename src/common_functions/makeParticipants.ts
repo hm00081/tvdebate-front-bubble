@@ -26,7 +26,7 @@ export function makeParticipants( // 참가자 노드 생성 구간
     nameDictionary[utteranceObject.name] = utteranceObject.name;
   });
   const names: string[] = _.values(nameDictionary).sort();
-  console.log("names", names);
+  //console.log("names", names);
 
   let participants: Participant[] = [];
 
@@ -178,11 +178,17 @@ export function makeParticipants( // 참가자 노드 생성 구간
     });
   } else if (debateName === "모병제" || debateName === "모병제clipped") {
     const colorDictionary: { [index: number]: string } = {
-      0: "#FF0000",
-      1: "#00FF00",
-      2: "#3CB043",
-      3: "#A020F0",
-      4: "#333333",
+      // 0: "#FF0000", // 김종대
+      // 1: "#00FF00", // 박휘락
+      // 2: "#3CB043", // 이준석
+      // 3: "#A020F0", // 장경태
+      // 4: "#333333", // 아나운서
+      // 4: "rgba(128, 128, 128, 1)", // 아나운서
+      0: "#00AB6E", // 김종대
+      1: "#C7611E", // 박휘락
+      2: "#B60E3C", // 이준석
+      3: "#00a0e2", // 장경태
+      4: "#808080", // 사회자
     };
     participants = _.map(names, (name, index) => {
       let team: number;

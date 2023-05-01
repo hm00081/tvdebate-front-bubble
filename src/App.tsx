@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,23 +9,30 @@ import {
   useHistory,
 } from "react-router-dom";
 import "./App.scss";
-
+import { DataStructureManager } from "./views/ConceptualRecurrencePlot/DataStructureMaker/DataStructureManager";
 import Timeline from "./views/Timeline/Timeline";
 import ConceptualRecurrencePlot from "./views/ConceptualRecurrencePlot/ConceptualRecurrencePlot";
+import ConceptualRecurrencePlotTwo from "./views/ConceptualRecurrencePlot/ConceptualRecurrencePlotTwo";
+import ConcecptualRecurrencePlotThree from "./views/ConceptualRecurrencePlot/ConceptualRecurrencePlotThree";
+import ConceptualRecurrencePlotFour from "./views/ConceptualRecurrencePlot/ConceptualRecurrencePlotFour";
 import Home from "./views/Home/Home";
 import FunctionComponentTemplate from "./views/FunctionComponentTemplate/FunctionComponentTemplate";
 import ClassComponentTemplate from "./views/ClassComponentTemplate/ClassComponentTemplate";
 import TranscriptViewerM from "./views/TranscriptViewerM/TranscriptViewerM";
 import TranscriptSubjectTest from "./views/TranscriptSubjectTest/TranscriptSubjectTest";
-import DescriptionForManualTopicSegmentation from "./views/TestDescription/TestDescription";
-import VideoSubjectTest from "./views/VideoSubjectTest/VideoSubjectTest";
 import SubjectTestEnd from "./views/SubjectTestEnd/SubjectTestEnd";
 import SampleViewOfTopicSegmentation from "./views/SampleViewOfTopicSegmentation/SampleViewOfTopicSegmentation";
+import Header from "./views/Header/Header";
+import TranscriptViewer from "./views/ConceptualRecurrencePlot/TranscriptViewer/TranscriptViewer";
 
 function App() {
+  const [
+    dataStructureManager,
+    setDataStructureManager,
+  ] = useState<DataStructureManager | null>(null);
   return (
     <Router>
-      <div style={{overflow:"hidden"}}>
+      <div>
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
@@ -50,15 +57,35 @@ function App() {
           <Route path="/subject-test-end">
             <SubjectTestEnd />
           </Route>
-          <Route path="/video-subject-test">
-            <VideoSubjectTest />
-          </Route>
-          <Route path="/test-description">
-            <DescriptionForManualTopicSegmentation />
-          </Route>
-          <Route path="/coocurence_matrix">
-            {/* @ts-ignore */}
-            <ConceptualRecurrencePlot></ConceptualRecurrencePlot>
+          <Route path="/bubble_chart">
+            <div className="root-div">
+              <Header />
+              <div
+                style={{
+                  marginTop: "50px",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <div
+                  style={{
+                    flexGrow: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {/* @ts-ignore */}
+                  <ConceptualRecurrencePlotTwo></ConceptualRecurrencePlotTwo>
+                  {/* @ts-ignore */}
+                  <ConceptualRecurrencePlot></ConceptualRecurrencePlot>
+                  {/* @ts-ignore */}
+                  <ConcecptualRecurrencePlotThree></ConcecptualRecurrencePlotThree>
+                  {/* @ts-ignore */}
+                  <ConceptualRecurrencePlotFour></ConceptualRecurrencePlotFour>
+                </div>
+              </div>
+            </div>
           </Route>
           <Route path="/">
             <Home />

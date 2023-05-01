@@ -5,7 +5,7 @@ import { ParticipantDict } from "../../../common_functions/makeParticipants";
 import { SentenceObject } from "../../../interfaces/DebateDataInterface";
 import { UtteranceObjectForDrawing } from "../interfaces";
 import { SimilarityBlock } from "../interfaces";
-import { Tooltip } from "antd";
+// import { Tooltip } from "antd";
 
 export type ColoringSelfSimilarities =
   | "none"
@@ -86,7 +86,9 @@ export class SimilarityBlocksDrawer {
       })
       .style("stroke-width", 3)
       .style("stroke", (d) =>
-        this._showEngagementPoint && d.engagementPoint ? "rgb(0, 0, 255)" : null
+        this._showEngagementPoint && d.engagementPoint
+          ? "rgb(97, 64, 65)"
+          : null
       );
 
     similarityRectGSelectionDataBound

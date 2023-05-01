@@ -68,6 +68,7 @@ export class ParticipantBlocksDrawer {
         .attr("y", (d) => d.beginningPointOfXY)
         .attr("width", (d) => d.width) // 노드 두께
         .attr("height", (d) => d.width) // 노드 높이
+        .attr("display", "none")
         .style("fill", (d) => participantDict[d.name].color)
         // .on("click", (e, u) => {
         //   const mouseEvent = (e as unknown) as MouseEvent;

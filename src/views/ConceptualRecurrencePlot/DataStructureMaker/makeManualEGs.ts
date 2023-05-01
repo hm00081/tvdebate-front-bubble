@@ -94,6 +94,17 @@ export function getBasicIncomeManualBigEGTitles(): string[] {
   ];
 }
 
+export function getInsistenceRefutationEGTitles(): string[] {
+  return [
+    "주장반박구긴1",
+    "주장반박구긴2",
+    "주장반박구긴3",
+    "주장반박구긴4",
+    "주장반박구간5",
+    "주장반박구긴6",
+  ];
+} // 주장과 반박 구간 나눠주는 요소도 추가해야 쉽게 보일듯함.
+
 export function getSatManualSmallEGTitles(): string[] {
   return [];
 }
@@ -125,16 +136,16 @@ export function getMilitaryManualMiddleEGTitles(): string[] {
 
 export function getMilitaryManualBigEGTitles(): string[] {
   return [
-    "모병제에 대한 첫 발언",
-    "모병제가 정치적 선거용인지",
+    "토론 시작",
+    "모병제는 정치적 선거용?",
     "인구절벽과 군인 수 문제",
-    "근본적인 보병의 숫자가 필요한 이슈",
-    "모병제가 되면 신분제가 되지 않느냐에 대한 이슈",
-    "시청자 의견: 모병제로 인한 질적 향상",
-    "시청자 의견: 군 간부 인력 확충 이슈",
-    "시청자 의견: 여성 징집 or 모병",
-    "군대 계급의 사다리가 되려면 그에 대한 예산 이슈",
-    "군대문화 개선으로 각자 마무리 발언",
+    "군인 수에 대한 문제",
+    "모병제로 인한 신분제 부활",
+    "모병제로 인한 질적 향상",
+    "군 간부 인력 확충 ",
+    "여성 징집과 모병",
+    "군대 계급별 예산 이슈",
+    "군문화 개선안 마무리 발언",
   ];
 }
 
