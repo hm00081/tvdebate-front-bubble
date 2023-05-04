@@ -44,7 +44,7 @@ export class ConceptualMapDrawer {
     HTMLElement,
     any
   > = null;
-  private svgSelection: null | d3.Selection<
+  public svgSelection: null | d3.Selection<
     SVGSVGElement,
     MouseEvent,
     HTMLElement,
@@ -87,7 +87,7 @@ export class ConceptualMapDrawer {
     unknown
   >;
   // draw for circle packing
-  private circlePackingGSelection!: d3.Selection<
+  public circlePackingGSelection!: d3.Selection<
     SVGCircleElement | SVGGElement,
     d3.HierarchyCircularNode<HierarchyDatum>,
     SVGGElement,
@@ -115,8 +115,8 @@ export class ConceptualMapDrawer {
       | SVGSVGElement
       | HTMLElement
       | null,
-    private readonly svgWidth: number,
-    private readonly svgHeight: number,
+    private svgWidth: number,
+    private svgHeight: number,
     private _participantDict: ParticipantDict,
     private onSvgClick?: (event: MouseEvent) => void //private onSvgClick?: (index: number, event: MouseEvent) => void, //@ts-ignore //private index?: number
   ) {
@@ -143,6 +143,26 @@ export class ConceptualMapDrawer {
     };
   }
 
+  public calculateViewBox(
+    circleCount: number,
+    minX: number,
+    minY: number,
+    maxX: number,
+    maxY: number,
+    dataWidth: number,
+    dataHeight: number
+  ): string {
+    const padding = 50;
+    const newMinX = circleCount < 10 ? 0 : minX;
+    const newMinY = circleCount < 10 ? 0 : minY;
+    const newDataWidth =
+      circleCount < 10 ? this.svgWidth : dataWidth + 2 * padding;
+    const newDataHeight =
+      circleCount < 10 ? this.svgWidth : dataHeight + 2 * padding;
+
+    return `${newMinX} ${newMinY} ${newDataWidth} ${newDataHeight}`;
+  }
+
   public updateGraph(
     filterCondition: string[] = [
       "이준석",
@@ -151,14 +171,19 @@ export class ConceptualMapDrawer {
       "박휘락",
       "진행자",
     ]
-  ) {
+  ): Promise<void> {
     if (this._nodeLinkDict === null) {
       console.warn("NodeLinkDict is null, skipping updateGraph.");
-      return;
+      return Promise.resolve();
     }
 
     const nodes = this._nodeLinkDict!.nodes;
     const links = this._nodeLinkDict!.links;
+
+    if (!nodes || !links) {
+      console.error("Unable to update graph: nodes or links data is missing.");
+      return Promise.resolve();
+    }
 
     const nodeSizeMultiplier = this._nodeSizeMultiplier;
     if (this.conceptualMapDivSelection === null) {
@@ -251,33 +276,6 @@ export class ConceptualMapDrawer {
       );
     };
 
-    function checkHierarchyDatum(obj: HierarchyDatum) {
-      if (!obj || !obj.children) {
-        console.error("HierarchyDatum or HierarchyDatum.children is undefined");
-        return;
-      } else {
-        obj.children.forEach((child, index) => {
-          if (!child) {
-            console.error(`HierarchyDatum.children[${index}] is undefined`);
-          }
-        });
-      }
-    }
-
-    function checkHierarchyCircularNodeLeaf(
-      obj: d3.HierarchyCircularNode<HierarchyDatum>
-    ) {
-      if (!obj) {
-        console.error("HierarchyCircularNode is undefined");
-      } else {
-        if (!obj.data) {
-          console.error("HierarchyCircularNode.data is undefined");
-        } else {
-          checkHierarchyDatum(obj.data);
-        }
-      }
-    }
-
     const groupedData = transformData(nodes);
 
     const speakers = Array.from(groupedData.keys());
@@ -309,7 +307,7 @@ export class ConceptualMapDrawer {
     ) => {
       const centerX = width / 2;
       const centerY = height / 2;
-      const radius = Math.min(width, height) / 3;
+      const radius = Math.min(width, height) / 2; // 노드간 거리 조정?
       const angleStep = (2 * Math.PI) / speakers.length;
 
       const speakerCenters = new Map<string, { x: number; y: number }>();
@@ -342,14 +340,12 @@ export class ConceptualMapDrawer {
         }
       }
     });
-
+    const simulation = makeSimulation(leaves);
     const filteredLeaves = leaves.filter(
       (d) =>
         (d.parent?.data.id === "이준석" || d.parent?.data.id === "김종대") &&
         d.data.count > 0
     );
-
-    const simulation = makeSimulation(leaves);
 
     const colorScale = d3
       .scaleOrdinal<number, string>()
@@ -362,14 +358,39 @@ export class ConceptualMapDrawer {
         "rgb(251,154,153)",
       ]);
 
+    const circleCount = filteredLeaves.length;
+    // console.log(circleCount);
+
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+
+    filteredLeaves.forEach((leaf) => {
+      const cx = leaf.x;
+      const cy = leaf.y;
+      const r = leaf.data.count * nodeSizeMultiplier + 2;
+
+      minX = Math.min(minX, cx - r);
+      minY = Math.min(minY, cy - r);
+      maxX = Math.max(maxX, cx + r);
+      maxY = Math.max(maxY, cy + r);
+    });
+
+    const dataWidth = maxX - minX;
+    const dataHeight = maxY - minY;
+
+    this.svgSelection
+      .attr("width", this.svgWidth)
+      .attr("height", this.svgHeight)
+      .attr("viewBox", `${minX} ${minY} ${dataWidth} ${dataHeight}`)
+      .attr("preserveAspectRatio", "xMidYMid meet");
+
     if (this.onSvgClick) {
-      this.svgSelection
-        .attr("viewBox", `0 0 ${this.svgWidth} ${this.svgHeight}`)
-        .attr("preserveAspectRatio", "xMidYMid meet")
-        .on("click", (event: MouseEvent) => {
-          this.onSvgClick!(event);
-          console.log("svg clicked");
-        });
+      this.svgSelection.on("click", (event: MouseEvent) => {
+        this.onSvgClick!(event);
+        console.log("svg clicked");
+      });
     }
 
     const groups = this.circlePackingGSelection
@@ -409,14 +430,15 @@ export class ConceptualMapDrawer {
         } else {
           return colorScale(4);
         }
-      });
-    //.call(drag(simulation));
+      })
+      //@ts-ignore
+      .call(drag(simulation));
 
     groups
       .append("title")
       .text(
         (d) =>
-          `발화자: ${d.parent?.data.id}count: ${d.data.count} keyword: ${d.data.id}`
+          `발화자: ${d.parent?.data.id}, 키워드: ${d.data.id}, 언급 횟수: ${d.data.count} `
       );
 
     groups
@@ -448,25 +470,11 @@ export class ConceptualMapDrawer {
       .attr(
         "y",
         (d: d3.HierarchyCircularNode<HierarchyDatum>) =>
-          d.y +
-          Math.max(Math.sqrt(d.data.count * nodeSizeMultiplier), 2) +
-          10 +
-          8
+          d.y + d.data.count * nodeSizeMultiplier + 10
       );
-
-    // // Animate the graph
-    // simulation.on("tick", () => {
-    //   this.circlePackingTextsGSelection
-    //     .attr("x", (d: d3.HierarchyCircularNode<HierarchyDatum>) => d.x)
-    //     .attr("y", (d: d3.HierarchyCircularNode<HierarchyDatum>) => d.y);
-
-    //   // 수정 코드 2
-    //   groups.attr(
-    //     "transform",
-    //     (d: d3.HierarchyCircularNode<HierarchyDatum>) =>
-    //       `translate(${d.x},${d.y})`
-    //   );
-    // });
+    return new Promise<void>((resolve) => {
+      resolve();
+    });
   }
 
   public removeDrawing() {

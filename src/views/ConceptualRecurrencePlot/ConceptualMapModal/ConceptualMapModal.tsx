@@ -99,8 +99,7 @@ function ConceptualMapModal(
 
   const findDataIndex = (element: HTMLElement | null): number | null => {
     if (!element) return null;
-    const divSelectionElement = element.closest(".divSelection");
-    console.log("divSelectionElement:", divSelectionElement);
+    const divSelectionElement = element.closest(".divSelectionOne");
     //@ts-ignore
     if (divSelectionElement && divSelectionElement.dataset.index) {
       //@ts-ignore
@@ -109,10 +108,17 @@ function ConceptualMapModal(
     return null;
   };
 
-  const handleSvgClick = (event: MouseEvent) => {
+  const handleSvgClick = (
+    event: MouseEvent | React.MouseEvent<HTMLDivElement>
+  ) => {
     event.preventDefault();
     event.stopPropagation();
-    const targetElement = event.target as HTMLElement;
+    let targetElement = event.target as HTMLElement;
+    // Find the parent element with a data-index attribute if the target element doesn't have one
+    while (targetElement && !targetElement.dataset.index) {
+      targetElement = targetElement.parentElement as HTMLElement;
+    }
+
     const dataIndex = findDataIndex(targetElement);
     if (
       circlePackingMapModalRef.current &&
@@ -131,6 +137,7 @@ function ConceptualMapModal(
     const conceptualMapDrawer = conceptualMapDrawers[index];
     if (conceptualMapDrawer) {
       conceptualMapDrawer.removeDrawing();
+
       const selectedManualBigEG = manualBigEGsFromDSM[index];
       const graphDataStructureMaker = new GraphDataStructureMaker(
         selectedManualBigEG,
@@ -187,9 +194,9 @@ function ConceptualMapModal(
       setEngagementGroups(manualBigEGsFromDSM);
       const newConceptualMapDrawers = manualBigEGsFromDSM.map((_, index) => {
         const newConceptualMapDrawer: ConceptualMapDrawer = new ConceptualMapDrawer(
-          `.${conceptualMapDivClassName}-${index}`,
+          `.divSelectionOne.${conceptualMapDivClassName}-${index}`,
           svgWidth,
-          svgWidth,
+          svgWidth * 1.3,
           props.participantDict,
           handleSvgClick
         );
@@ -270,7 +277,7 @@ function ConceptualMapModal(
             display: "fle-direction",
             flexDirection: "column",
             alignItems: "center",
-            zIndex: 1,
+            zIndex: 2,
           }}
         >
           {Array.from({ length: 1 }).map((_, relationshipIndex) => {
@@ -289,6 +296,8 @@ function ConceptualMapModal(
                     fontSize: "13px",
                     fontWeight: "bold",
                     textAlign: "center",
+                    position: "relative",
+                    zIndex: 10,
                   }}
                 >
                   이준석
@@ -302,15 +311,19 @@ function ConceptualMapModal(
                   return (
                     <div
                       style={{
-                        border: "1.5px solid black",
+                        // border: "1.5px solid black",
                         width: svgWidth * 1.03,
                         height: svgWidth * 1.3,
                         alignItems: "center",
                         margin: "3px",
+                        position: "relative",
+                        zIndex: 1,
                       }}
                       key={dataIndex}
                       data-index={dataIndex}
-                      className={`divSelection ${conceptualMapDivClassName}-${dataIndex}`}
+                      className={`divSelectionOne ${conceptualMapDivClassName}-${dataIndex}`}
+                      id={`divSelectionOne-${dataIndex}`}
+                      onClick={handleSvgClick} // 클릭 이벤트 바인딩
                     >
                       <div className="topicPos">{modalTitle}</div>
                     </div>

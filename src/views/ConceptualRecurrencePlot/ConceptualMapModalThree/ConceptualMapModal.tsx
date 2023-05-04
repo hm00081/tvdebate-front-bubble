@@ -94,13 +94,12 @@ function ConceptualMapModal(
   const [windowHeight, setWindowHeight] = useState(window.innerWidth);
   const circlePackingMapModalRef = React.useRef<CirclePackingModalRef>(null);
   const svgWidth = windowWidth / 15;
-  const relationships = [["박휘락", "김종대"]];
+  const relationships = [["이준석", "김종대"]];
   const dispatch = useDispatch();
 
   const findDataIndex = (element: HTMLElement | null): number | null => {
     if (!element) return null;
-    const divSelectionElement = element.closest(".divSelection");
-    console.log("divSelectionElement:", divSelectionElement);
+    const divSelectionElement = element.closest(".divSelectionThree");
     //@ts-ignore
     if (divSelectionElement && divSelectionElement.dataset.index) {
       //@ts-ignore
@@ -188,9 +187,9 @@ function ConceptualMapModal(
       setEngagementGroups(manualBigEGsFromDSM);
       const newConceptualMapDrawers = manualBigEGsFromDSM.map((_, index) => {
         const newConceptualMapDrawer: ConceptualMapDrawer = new ConceptualMapDrawer(
-          `.${conceptualMapDivClassName}-${index}`,
+          `.divSelectionThree.${conceptualMapDivClassName}-${index}`,
           svgWidth,
-          svgWidth,
+          svgWidth * 1.3,
           props.participantDict,
           handleSvgClick
         );
@@ -271,6 +270,7 @@ function ConceptualMapModal(
             display: "fle-direction",
             flexDirection: "column",
             alignItems: "center",
+            zIndex: 2,
           }}
         >
           {Array.from({ length: 1 }).map((_, relationshipIndex) => {
@@ -302,7 +302,7 @@ function ConceptualMapModal(
                   return (
                     <div
                       style={{
-                        border: "1.5px solid black",
+                        //border: "1.5px solid black",
                         width: svgWidth * 1.03,
                         height: svgWidth * 1.3,
                         alignItems: "center",
@@ -310,7 +310,8 @@ function ConceptualMapModal(
                       }}
                       key={dataIndex}
                       data-index={dataIndex}
-                      className={`divSelection ${conceptualMapDivClassName}-${dataIndex}`}
+                      className={`divSelectionThree ${conceptualMapDivClassName}-${dataIndex}`}
+                      id={`divSelection2-${dataIndex}`}
                     >
                       <div className="topicPos">{modalTitle}</div>
                     </div>

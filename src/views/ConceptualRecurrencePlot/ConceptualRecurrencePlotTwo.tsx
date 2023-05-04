@@ -12,10 +12,7 @@ import _ from "lodash";
 import { SimilarityBlock, UtteranceObjectForDrawing } from "./interfaces";
 import { makeEngagementGroups } from "./DataStructureMaker/makeEngagementGroups";
 import { D3Drawer } from "./Drawers/D3Drawer";
-import ConceptualMapModal from "./ConceptualMapModal/ConceptualMapModal";
 import ConceptualMapModalTwo from "./ConceptualMapModalTwo/ConceptualMapModal";
-import ConceptualMapModalThree from "./ConceptualMapModalThree/ConceptualMapModal";
-import ConceptualMapModalFour from "./ConceptualMapModalFour/ConceptualMapModal";
 import { groupEGsMaker } from "./DataStructureMaker/GroupEGsMaker";
 import { useLocation } from "react-router-dom";
 import TranscriptViewer from "./TranscriptViewer/TranscriptViewer";
@@ -247,7 +244,6 @@ function ConceptualRecurrencePlotTwo(
         setTooltipVisible(true);
       };
       d3Drawer.participantBlocksDrawer.mouseoutLisener = () => {};
-
       // Manual Big Engagement Group Drawer's Settings
       d3Drawer.manualBigTGsDrawer.topicGroups = manualBigEGs;
       d3Drawer.manualBigTGsDrawer.topicGroupTitles = manualBigEGTitles;

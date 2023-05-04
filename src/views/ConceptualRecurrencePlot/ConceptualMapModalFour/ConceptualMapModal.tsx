@@ -94,13 +94,12 @@ function ConceptualMapModal(
   const [windowHeight, setWindowHeight] = useState(window.innerWidth);
   const circlePackingMapModalRef = React.useRef<CirclePackingModalRef>(null);
   const svgWidth = windowWidth / 15;
-  const relationships = [["박휘락", "장경태"]];
+  const relationships = [["이준석", "김종대"]];
   const dispatch = useDispatch();
 
   const findDataIndex = (element: HTMLElement | null): number | null => {
     if (!element) return null;
-    const divSelectionElement = element.closest(".divSelection");
-    console.log("divSelectionElement:", divSelectionElement);
+    const divSelectionElement = element.closest(".divSelectionFour");
     //@ts-ignore
     if (divSelectionElement && divSelectionElement.dataset.index) {
       //@ts-ignore
@@ -188,9 +187,9 @@ function ConceptualMapModal(
       setEngagementGroups(manualBigEGsFromDSM);
       const newConceptualMapDrawers = manualBigEGsFromDSM.map((_, index) => {
         const newConceptualMapDrawer: ConceptualMapDrawer = new ConceptualMapDrawer(
-          `.${conceptualMapDivClassName}-${index}`,
+          `.divSelectionFour.${conceptualMapDivClassName}-${index}`,
           svgWidth,
-          svgWidth,
+          svgWidth * 1.3,
           props.participantDict,
           handleSvgClick
         );
@@ -271,6 +270,7 @@ function ConceptualMapModal(
             display: "fle-direction",
             flexDirection: "column",
             alignItems: "center",
+            zIndex: 2,
           }}
         >
           {Array.from({ length: 1 }).map((_, relationshipIndex) => {
@@ -278,7 +278,6 @@ function ConceptualMapModal(
               <div key={relationshipIndex} style={{ display: "flex" }}>
                 <div
                   style={{
-                    //border: "1.5px solid black",
                     width: "50px", // 작은 직사각형의 너비를 조절하세요.
                     height: svgWidth * 1.3, // 작은 직사각형의 높이를 조절하세요.
                     alignItems: "center",
@@ -302,7 +301,7 @@ function ConceptualMapModal(
                   return (
                     <div
                       style={{
-                        border: "1.5px solid black",
+                        //border: "1.5px solid black",
                         width: svgWidth * 1.03,
                         height: svgWidth * 1.3,
                         alignItems: "center",
@@ -310,7 +309,8 @@ function ConceptualMapModal(
                       }}
                       key={dataIndex}
                       data-index={dataIndex}
-                      className={`divSelection ${conceptualMapDivClassName}-${dataIndex}`}
+                      className={`divSelectionFour ${conceptualMapDivClassName}-${dataIndex}`}
+                      id={`divSelection2-${dataIndex}`}
                     >
                       <div className="topicPos">{modalTitle}</div>
                     </div>

@@ -78,7 +78,7 @@ function App() {
                   {/* @ts-ignore */}
                   <ConceptualRecurrencePlotTwo></ConceptualRecurrencePlotTwo>
                   {/* @ts-ignore */}
-                  <ConceptualRecurrencePlot></ConceptualRecurrencePlot>
+                  <ConceptualRecurrencePlot key="ConceptualRecurrencePlot"></ConceptualRecurrencePlot>
                   {/* @ts-ignore */}
                   <ConcecptualRecurrencePlotThree></ConcecptualRecurrencePlotThree>
                   {/* @ts-ignore */}

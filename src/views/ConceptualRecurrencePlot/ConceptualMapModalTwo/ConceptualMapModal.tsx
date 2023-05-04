@@ -100,7 +100,6 @@ function ConceptualMapModal(
   const findDataIndex = (element: HTMLElement | null): number | null => {
     if (!element) return null;
     const divSelectionElement = element.closest(".divSelection");
-    console.log("divSelectionElement:", divSelectionElement);
     //@ts-ignore
     if (divSelectionElement && divSelectionElement.dataset.index) {
       //@ts-ignore
@@ -109,7 +108,9 @@ function ConceptualMapModal(
     return null;
   };
 
-  const handleSvgClick = (event: MouseEvent) => {
+  const handleSvgClick = (
+    event: MouseEvent | React.MouseEvent<HTMLDivElement>
+  ) => {
     event.preventDefault();
     event.stopPropagation();
     const targetElement = event.target as HTMLElement;
@@ -190,7 +191,7 @@ function ConceptualMapModal(
         const newConceptualMapDrawer: ConceptualMapDrawer = new ConceptualMapDrawer(
           `.${conceptualMapDivClassName}-${index}`,
           svgWidth,
-          svgWidth,
+          svgWidth * 1.3,
           props.participantDict,
           handleSvgClick
         );
@@ -290,6 +291,8 @@ function ConceptualMapModal(
                     fontSize: "13px",
                     fontWeight: "bold",
                     textAlign: "center",
+                    position: "relative", // position 추가
+                    zIndex: 10, // z-index 추가
                   }}
                 >
                   이준석
@@ -303,15 +306,19 @@ function ConceptualMapModal(
                   return (
                     <div
                       style={{
-                        border: "1.5px solid black",
+                        //border: "1.5px solid black",
                         width: svgWidth * 1.03,
                         height: svgWidth * 1.3,
                         alignItems: "center",
                         margin: "3px",
+                        position: "relative", // position 추가
+                        zIndex: 1, // z-index 추가
                       }}
                       key={dataIndex}
                       data-index={dataIndex}
                       className={`divSelection ${conceptualMapDivClassName}-${dataIndex}`}
+                      id={`divSelection2-${dataIndex}`}
+                      onClick={handleSvgClick}
                     >
                       <div className="topicPos">{modalTitle}</div>
                     </div>

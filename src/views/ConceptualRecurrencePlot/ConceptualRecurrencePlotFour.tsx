@@ -12,9 +12,6 @@ import _ from "lodash";
 import { SimilarityBlock, UtteranceObjectForDrawing } from "./interfaces";
 import { makeEngagementGroups } from "./DataStructureMaker/makeEngagementGroups";
 import { D3Drawer } from "./Drawers/D3Drawer";
-import ConceptualMapModal from "./ConceptualMapModal/ConceptualMapModal";
-import ConceptualMapModalTwo from "./ConceptualMapModalTwo/ConceptualMapModal";
-import ConceptualMapModalThree from "./ConceptualMapModalThree/ConceptualMapModal";
 import ConceptualMapModalFour from "./ConceptualMapModalFour/ConceptualMapModal";
 import { groupEGsMaker } from "./DataStructureMaker/GroupEGsMaker";
 import { useLocation } from "react-router-dom";
@@ -31,9 +28,6 @@ import DataImporter, { DebateName, TermType } from "./DataImporter";
 import { CHANGE_STANDARD_SIMILARITY_SCORE } from "../../redux/actionTypes";
 import CombinedEGsMaker from "./DataStructureMaker/CombinedEGsMaker";
 import { extractKeytermsFromEngagementGroup } from "./DataStructureMaker/extractTermsFromEngagementGroup";
-import ParticipantTooltip from "../../components/ParticipantTooltip/ParticipantTooltip";
-import Header from "../Header/Header";
-import style from "./rootStyle.module.scss";
 //import ConceptualMapControllers from "./ConceptualMapModal/ConceptualMapControllers/ConceptualMapControllers";
 import { ConceptualMapDrawer } from "./ConceptualMapModal/ConceptualMapDrawer";
 import { GraphDataStructureMaker } from "./ConceptualMapModal/GraphDataStructureMaker";
@@ -300,8 +294,6 @@ function ConceptualRecurrencePlotFour(
       d3Drawer.manualMiddleTGsDrawer.update();
       d3Drawer.manualBigTGsDrawer.update();
       d3Drawer.manualFullTGsDrawer.update();
-      // d3Drawer.manualPeopleTGsDrawer.update();
-      // console.log("d3Drawer", d3Drawer);
 
       setD3Drawer(d3Drawer);
     }

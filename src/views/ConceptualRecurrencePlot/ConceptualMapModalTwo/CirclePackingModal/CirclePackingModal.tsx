@@ -8,7 +8,7 @@ import React, {
   useMemo,
 } from "react";
 import styles from "./CirclePackingModal.module.scss";
-import { ConceptualMapDrawer } from "../ConceptualMapDrawer";
+import { ConceptualMapDrawer, HierarchyDatum } from "../ConceptualMapDrawer";
 import { GraphDataStructureMaker } from "../GraphDataStructureMaker";
 import * as math from "mathjs";
 import { SimilarityBlock, UtteranceObjectForDrawing } from "../../interfaces";
@@ -21,8 +21,10 @@ import {
 import { ParticipantDict } from "../../../../common_functions/makeParticipants";
 import { Modal } from "antd";
 import { DataStructureManager } from "../../DataStructureMaker/DataStructureManager";
+import * as d3 from "d3";
+import TranscriptViewer from "../../TranscriptViewer/TranscriptViewer";
 
-const modalContentWidth: number = 800;
+const modalContentWidth: number = 1200;
 const modalContentHeight: number = 600;
 const CirclePackingMapDivClassName: string = "conceptual-map";
 
@@ -68,10 +70,36 @@ function CirclePackingModal(
     return `${CirclePackingMapDivClassName}-${selectedSvgIndex}`;
   };
   const circlePackingMapDivId = `circle-packing-map-div-${selectedSvgIndex}`;
+  const barChartDivRef = useRef<HTMLDivElement>(null);
+  const barChartDivId = `bar-chart-div-${selectedSvgIndex}`;
+  const transcriptViewerRef = useRef<typeof TranscriptViewer>(null);
+  const [circleKeywords, setCircleKeywords] = useState<string[] | null>(null);
+  const [circleData, setCircleData] = useState<
+    d3.HierarchyCircularNode<HierarchyDatum>[]
+  >([]);
+
+  let manualBigEGs = [0, 10, 15, 36, 57, 78, 93, 108, 138, 175, 185];
+
   const handleWindowResize = () => {
     setWindowWidth(window.innerWidth);
     setWindowHeight(window.innerWidth);
   };
+
+  useEffect(() => {
+    if (selectedSvgIndex >= 0 && selectedSvgIndex < manualBigEGs.length - 1) {
+      let startIndex = manualBigEGs[selectedSvgIndex];
+      let endIndex = manualBigEGs[selectedSvgIndex + 1] - 1;
+
+      // 수정된 startIndex와 endIndex를 전달합니다.
+      <TranscriptViewer
+        dataStructureMaker={props.dataStructureManager}
+        selectedRange={{
+          startIndex: startIndex,
+          endIndex: endIndex,
+        }}
+      />;
+    }
+  }, [selectedSvgIndex]);
 
   useEffect(() => {
     if (
@@ -79,9 +107,7 @@ function CirclePackingModal(
       props.dataStructureManager.datasetOfManualEGs
     ) {
       // dataStructureManager를 사용하는 코드
-      console.log(
-        props.dataStructureManager.datasetOfManualEGs.manualBigEGTitles
-      );
+      //console.log(props.dataStructureManager.datasetOfManualEGs);
     } else {
       console.log("dataStructureManager or datasetOfManualEGs is null");
     }
@@ -108,8 +134,7 @@ function CirclePackingModal(
   useEffect(() => {
     if (modalVisible && selectedSvgIndex >= 0 && engagementGroup) {
       console.log("Drawing graph for index:", selectedSvgIndex);
-      const modalPadding = 24;
-      const conrollerWidth = 200;
+      const circlePackingMapDivId = `circle-packing-map-div-${selectedSvgIndex}`;
 
       if (conceptualMapDrawer) {
         conceptualMapDrawer.removeDrawing();
@@ -117,8 +142,8 @@ function CirclePackingModal(
 
       const newConceptualMapDrawer = new ConceptualMapDrawer(
         `#${circlePackingMapDivId}`,
-        modalContentWidth - modalPadding * 2 - conrollerWidth,
-        modalContentHeight - modalPadding * 2,
+        modalContentWidth,
+        modalContentHeight,
         props.participantDict
       );
       setConceptualMapDrawer(newConceptualMapDrawer);
@@ -144,10 +169,109 @@ function CirclePackingModal(
 
       if (conceptualMapDrawer) {
         conceptualMapDrawer.setGraphData(nodeLinkDict);
-        conceptualMapDrawer.updateGraph();
+        conceptualMapDrawer.updateGraph().then(() => {
+          const nodeSizeMultiplierOnModal = 3.3;
+          const fontSizeMultiplierOnModal = 3.5;
+          const positionScalingFactor = 0.52;
+
+          const circleData = conceptualMapDrawer.circlePackingGSelection
+            .selectAll<
+              SVGCircleElement,
+              d3.HierarchyCircularNode<HierarchyDatum>
+            >("circle")
+            .data();
+
+          let minX = Infinity;
+          let minY = Infinity;
+          let maxX = -Infinity;
+          let maxY = -Infinity;
+
+          circleData.forEach((node) => {
+            const cx = node.x;
+            const cy = node.y;
+            const r = node.data.count * 2.5 + 2;
+            minX = Math.min(minX, cx - r);
+            minY = Math.min(minY, cy - r);
+            maxX = Math.max(maxX, cx + r);
+            maxY = Math.max(maxY, cy + r);
+          });
+
+          const dataWidth = maxX - minX;
+          const dataHeight = maxY - minY;
+
+          conceptualMapDrawer
+            .svgSelection!.attr("width", modalContentWidth - 110)
+            .attr("height", modalContentHeight)
+            .attr("viewBox", `${minX} ${minY} ${dataWidth} ${dataHeight}`)
+            .attr("preserveAspectRatio", "xMidYMid meet");
+
+          conceptualMapDrawer.circlePackingGSelection
+            .selectAll<
+              SVGCircleElement,
+              d3.HierarchyCircularNode<HierarchyDatum>
+            >("circle")
+            .attr("r", (d) => d.data.count * nodeSizeMultiplierOnModal + 2)
+            .attr("cx", (d) => d.x * positionScalingFactor)
+            .attr("cy", (d) => d.y * positionScalingFactor);
+
+          conceptualMapDrawer.circlePackingGSelection
+            .selectAll<
+              SVGTextElement,
+              d3.HierarchyCircularNode<HierarchyDatum>
+            >("text")
+            .attr("x", (d) => d.x * positionScalingFactor)
+            .attr("y", (d) => {
+              const radius = d.data.count * nodeSizeMultiplierOnModal;
+              const fontSize = d.data.count * fontSizeMultiplierOnModal * 0.8;
+              const radiusFactor = 1; // 원의 반지름에 대한 비율을 조정합니다.
+              const fontSizeFactor = 1; // font-size에 대한 비율을 조정합니다.
+
+              return (
+                d.y * positionScalingFactor +
+                radius * radiusFactor +
+                fontSize * fontSizeFactor +
+                6
+              );
+            })
+            .style("font-size", (d) => {
+              if (d.data.count > 3) {
+                return d.data.count * nodeSizeMultiplierOnModal * 0.8;
+              } else {
+                return d.data.count * nodeSizeMultiplierOnModal * 1.3;
+              }
+            });
+        });
+
+        const circleData = conceptualMapDrawer.circlePackingGSelection
+          .selectAll<
+            SVGCircleElement,
+            d3.HierarchyCircularNode<HierarchyDatum>
+          >("circle")
+          .data();
+
+        setCircleData(circleData);
+        // circleData에서 keyword만 추출하여 배열로 만들기
+        const extractedKeywords = circleData.map((node) => node.data.id);
+
+        console.log(circleData);
+        console.log(extractedKeywords);
+
+        // 상태 변수를 설정
+        setCircleKeywords(extractedKeywords);
+
+        const countById = new Map<string, number>();
+
+        circleData.forEach((circleNode) => {
+          const parentId = circleNode.parent?.data.id;
+          if (parentId) {
+            const currentCount = countById.get(parentId) || 0;
+            countById.set(parentId, currentCount + circleNode.data.count);
+          }
+        });
+        drawBarChart(countById, selectedSvgIndex);
       }
     }
-  }, [modalVisible, selectedSvgIndex, engagementGroup, circlePackingMapDivId]);
+  }, [modalVisible, selectedSvgIndex, engagementGroup]);
 
   useEffect(() => {
     // 그려지는 상황인가??
@@ -174,16 +298,77 @@ function CirclePackingModal(
         if (circlePackingMapDivRef.current) {
           circlePackingMapDivRef.current.innerHTML = "";
         }
+        if (barChartDivRef.current) {
+          barChartDivRef.current.innerHTML = ""; // 이 부분을 추가하여 이전 바 차트를 지웁니다.
+        }
         if (conceptualMapDrawer) {
           conceptualMapDrawer.removeDrawing();
           setConceptualMapDrawer(null);
+        }
+        // 이 부분을 추가하여 이전 서클 패킹 그래프를 지웁니다.
+        if (svgRef.current) {
+          d3.select(svgRef.current).selectAll("*").remove();
         }
       }}
       maskClosable={false}
     >
       <div ref={modalRef}>
-        <div className={styles.modalContent}>
-          <div ref={circlePackingMapDivRef} id={circlePackingMapDivId}></div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            justifyContent: "space-around",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around",
+              width: "100%",
+            }}
+          >
+            <div
+              style={{ marginLeft: "110px", transform: "translateX(400px)" }}
+              ref={circlePackingMapDivRef}
+              id={circlePackingMapDivId}
+            ></div>
+            <div
+              style={{
+                width: "140px",
+                marginLeft: "10px",
+                marginRight: "800px",
+              }}
+              ref={barChartDivRef}
+              id={barChartDivId}
+            ></div>
+            <div
+              style={{
+                position: "absolute",
+                right: 0,
+                height: "565px",
+                overflow: "auto", // 추가
+                maxHeight: "565px",
+              }}
+            >
+              <TranscriptViewer
+                ref={transcriptViewerRef}
+                dataStructureMaker={props.dataStructureManager}
+                selectedRange={{
+                  startIndex:
+                    selectedSvgIndex >= 0 ? manualBigEGs[selectedSvgIndex] : -1,
+                  endIndex:
+                    selectedSvgIndex >= 0 &&
+                    selectedSvgIndex < manualBigEGs.length - 1
+                      ? manualBigEGs[selectedSvgIndex + 1] - 1
+                      : -1,
+                }}
+                circleKeywords={circleKeywords}
+                circleData={circleData}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </Modal>
@@ -191,3 +376,98 @@ function CirclePackingModal(
 }
 
 export default forwardRef(CirclePackingModal);
+
+function drawBarChart(
+  countById: Map<string, number>,
+  selectedSvgIndex: number
+) {
+  // 바 차트를 그리기 위한 설정
+  const barChartWidth = 120;
+  const barChartHeight = 580;
+  const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+  const barChartDivId = `bar-chart-div-${selectedSvgIndex}`;
+
+  d3.select(`#${barChartDivId}`).select("svg").remove();
+  // 바 차트의 SVG 요소 설정
+  const barChartSvg = d3
+    .select(`#${barChartDivId}`)
+    .append("svg")
+    .attr("width", barChartWidth)
+    .attr("height", barChartHeight);
+
+  const xScale = d3
+    .scaleBand()
+    .domain(Array.from(countById.keys()))
+    .range([margin.left, barChartWidth - margin.right])
+    .padding(0.1);
+
+  const yScale = d3
+    .scaleLinear()
+    .domain([0, Math.max(...Array.from(countById.values()))])
+    .range([barChartHeight - margin.bottom, margin.top]);
+
+  const xAxis = d3.axisBottom(xScale);
+  const yAxis = d3.axisLeft(yScale);
+
+  barChartSvg
+    .append("g")
+    .attr("transform", `translate(0, ${barChartHeight - margin.bottom})`)
+    .call(xAxis)
+    .style("font-weight", "bold");
+
+  barChartSvg
+    .append("g")
+    .attr("transform", `translate(${margin.left}, 0)`)
+    .call(yAxis);
+
+  // 바 차트의 막대 그리기
+  // 막대를 위한 데이터를 바인딩하고, 막대의 속성을 설정합니다.
+  const bars = barChartSvg
+    .selectAll("rect")
+    .data(Array.from(countById.entries()));
+  //console.log(countById.entries());
+  bars
+    .enter()
+    .append("rect")
+    //@ts-ignore
+    .merge(bars)
+    .attr("x", (d) => xScale(d[0]) ?? 0) // 이름에 따른 x 좌표 설정
+    .attr("y", (d) => yScale(d[1]) ?? 0) // 카운트에 따른 y 좌표 설정
+    .attr("height", (d) =>
+      //@ts-ignore
+      Math.max(0, barChartHeight - margin.bottom - yScale(d[1]))
+    ) // 막대의 높이 설정
+    .attr("width", xScale.bandwidth()) // 막대의 너비 설정
+    .attr("fill", (d) => {
+      const name = d[0];
+
+      switch (name) {
+        case "이준석":
+          return "#B60E3C";
+        case "장경태":
+          return "#00a0e2";
+        case "박휘락":
+          return "#C7611E";
+        case "김종대":
+          return "#00AB6E";
+        default:
+          return "rgb(251,154,153)";
+      }
+    });
+  bars.exit().remove(); // 불필요한 막대 제거
+}
+
+function calculateIndexRanges(
+  datasetOfManualEGs: any[][]
+): { startIndex: number; endIndex: number }[] {
+  let ranges = [];
+  let startIndex = 0;
+
+  for (let i = 0; i < datasetOfManualEGs.length; i++) {
+    const endIndex = startIndex + datasetOfManualEGs[i].length - 1;
+    ranges.push({ startIndex, endIndex });
+    startIndex = endIndex + 1;
+  }
+
+  return ranges;
+}
