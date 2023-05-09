@@ -28,6 +28,8 @@ export type HierarchyDatum = {
   count: number;
   children: HierarchyDatum[];
   extraInfo: string;
+  evaluateAgainst?: string;
+  utteranceObject?: UtteranceObjectForDrawing;
 };
 
 export class ConceptualMapDrawer {
@@ -212,36 +214,24 @@ export class ConceptualMapDrawer {
     // drag event listener
     const drag = makeDrag();
 
-    function transformData(nodes: NodeDatum[]): Map<string, HierarchyDatum[]> {
+    function transformDataForAgainst(
+      nodes: NodeDatum[]
+    ): Map<string, HierarchyDatum[]> {
       const transformedData: HierarchyDatum[] = [];
 
       nodes.forEach((node) => {
         if (node.group === "term" || node.group === "keyterm") {
           node.participantCounts.forEach((participant) => {
-            const existingChild = transformedData.find(
-              (child) => child.id === participant.name
-            );
-            if (existingChild) {
-              existingChild.children.push({
-                name: node.name,
-                id: `${node.id}`,
-                count: participant.count,
-                booleanCount: 0,
-                participantCounts: [],
-                participantBooleanCounts: [],
-                children: [],
-                extraInfo: "Example extra information",
-              });
-              existingChild.count += participant.count;
-            } else {
-              transformedData.push({
-                name: participant.name,
-                id: participant.name,
-                booleanCount: 0,
-                participantCounts: [],
-                participantBooleanCounts: [],
-                children: [
-                  {
+            if (participant.evaluateAgainst !== undefined) {
+              const existingChild = transformedData.find(
+                (child) => child.id === participant.evaluateAgainst
+              );
+              if (existingChild) {
+                const existingSubChild = existingChild.children.find(
+                  (subChild) => subChild.id === participant.evaluateAgainst // 이거까지해줘야함
+                );
+                if (existingSubChild) {
+                  existingSubChild.children.push({
                     name: node.name,
                     id: `${node.id}`,
                     count: participant.count,
@@ -250,16 +240,76 @@ export class ConceptualMapDrawer {
                     participantBooleanCounts: [],
                     children: [],
                     extraInfo: "Example extra information",
-                  },
-                ],
-                count: participant.count,
-                extraInfo: "",
-              });
+                    evaluateAgainst: participant.evaluateAgainst,
+                  });
+                  existingSubChild.count += participant.count;
+                } else {
+                  existingChild.children.push({
+                    name: participant.name,
+                    id: participant.name,
+                    evaluateAgainst: participant.evaluateAgainst,
+                    booleanCount: 0,
+                    participantCounts: [],
+                    participantBooleanCounts: [],
+                    children: [
+                      {
+                        name: node.name,
+                        id: `${node.id}`,
+                        evaluateAgainst: participant.evaluateAgainst,
+                        count: participant.count,
+                        booleanCount: 0,
+                        participantCounts: [],
+                        participantBooleanCounts: [],
+                        children: [],
+                        extraInfo: "Example extra information",
+                      },
+                    ],
+                    count: participant.count,
+                    extraInfo: "",
+                  });
+                }
+              } else {
+                transformedData.push({
+                  name: participant.evaluateAgainst,
+                  id: participant.evaluateAgainst,
+                  booleanCount: 0,
+                  participantCounts: [],
+                  participantBooleanCounts: [],
+                  children: [
+                    {
+                      name: participant.name,
+                      id: participant.name,
+                      evaluateAgainst: participant.evaluateAgainst,
+                      booleanCount: 0,
+                      participantCounts: [],
+                      participantBooleanCounts: [],
+                      children: [
+                        {
+                          name: node.name,
+                          id: `${node.id}`,
+                          count: participant.count,
+                          evaluateAgainst: participant.evaluateAgainst,
+                          booleanCount: 0,
+                          participantCounts: [],
+                          participantBooleanCounts: [],
+                          children: [],
+                          extraInfo: "Example extra information",
+                        },
+                      ],
+                      count: participant.count,
+                      extraInfo: "",
+                    },
+                  ],
+                  count: participant.count,
+                  extraInfo: "",
+                });
+              }
             }
           });
         }
       });
       const groupedData = d3.group(transformedData, (d) => d.id);
+      //@ts-ignore
       return groupedData;
     }
 
@@ -270,48 +320,51 @@ export class ConceptualMapDrawer {
       const hierarchicalData = rootHierarchy
         .sum((d) => d.count || 0)
         .sort((a, b) => (b.data.count || 0) - (a.data.count || 0));
+      //그룹 내 서클 간 거리 조정
       //@ts-ignore
-      return d3.pack().size([this.svgWidth, this.svgHeight]).padding(1.5)(
+      return d3.pack().size([this.svgWidth, this.svgHeight]).padding(1.1)(
         hierarchicalData
       );
     };
+    const convertGroupedData = transformDataForAgainst(nodes);
 
-    const groupedData = transformData(nodes);
+    //console.log("groupedData", groupedData);
+    //console.log("convertGroupedData", convertGroupedData); // 찬반중립으로 나눔
 
-    const speakers = Array.from(groupedData.keys());
+    const againsts = Array.from(convertGroupedData.keys());
 
-    const dataBySpeaker = speakers.map((speaker) => {
+    const dataByAgainst = againsts.map((against) => {
       return {
-        id: speaker,
-        children: groupedData.get(speaker) || [],
+        id: against,
+        children: convertGroupedData.get(against) || [],
       };
     });
 
-    const packLayouts = dataBySpeaker.map((speakerData) => {
+    const packLayoutss = dataByAgainst.map((againstData) => {
       return createPackLayout({
-        id: speakerData.id,
+        id: againstData.id,
         booleanCount: 0,
         participantCounts: [],
         participantBooleanCounts: [],
         count: 0,
         extraInfo: "",
-        children: speakerData.children,
+        children: againstData.children,
       });
     });
-    // console.log("Pack layouts:", packLayouts);
 
     const getSpeakerCenters = (
-      speakers: string[],
+      againsts: string[],
       width: number,
       height: number
     ) => {
       const centerX = width / 2;
       const centerY = height / 2;
-      const radius = Math.min(width, height) / 2; // 노드간 거리 조정?
-      const angleStep = (2 * Math.PI) / speakers.length;
+      // 서클 그룹 간 거리 조정
+      const radius = Math.min(width, height) / 1.48; // 노드간 거리 조정?
+      const angleStep = (2 * Math.PI) / againsts.length;
 
       const speakerCenters = new Map<string, { x: number; y: number }>();
-      speakers.forEach((speaker, index) => {
+      againsts.forEach((speaker, index) => {
         const x = centerX + radius * Math.cos(index * angleStep);
         const y = centerY + radius * Math.sin(index * angleStep);
         speakerCenters.set(speaker, { x, y });
@@ -320,28 +373,30 @@ export class ConceptualMapDrawer {
       return speakerCenters;
     };
 
-    const speakerCenters = getSpeakerCenters(
-      speakers,
+    const againstCenters = getSpeakerCenters(
+      againsts,
       this.svgWidth,
       this.svgHeight
     );
-
-    const leaves = packLayouts
+    //console.log(againsts);
+    const leavess = packLayoutss
       .flatMap((layout) => layout.leaves())
       .filter((d) => d !== undefined);
 
-    leaves.forEach((leaf) => {
-      const speaker = leaf.parent?.data.id;
+    leavess.forEach((leaf) => {
+      const speaker = leaf.data.evaluateAgainst;
       if (speaker) {
-        const center = speakerCenters.get(speaker);
+        const center = againstCenters.get(speaker);
         if (center) {
           leaf.x += center.x - this.svgWidth / 2;
           leaf.y += center.y - this.svgHeight / 2;
         }
       }
     });
-    const simulation = makeSimulation(leaves);
-    const filteredLeaves = leaves.filter(
+
+    const simulation = makeSimulation(leavess);
+
+    const filteredLeavess = leavess.filter(
       (d) =>
         (d.parent?.data.id === "이준석" || d.parent?.data.id === "김종대") &&
         d.data.count > 0
@@ -358,15 +413,13 @@ export class ConceptualMapDrawer {
         "rgb(251,154,153)",
       ]);
 
-    const circleCount = filteredLeaves.length;
-    // console.log(circleCount);
-
     let minX = Infinity;
     let minY = Infinity;
     let maxX = -Infinity;
     let maxY = -Infinity;
 
-    filteredLeaves.forEach((leaf) => {
+    //찬반 필터링용
+    filteredLeavess.forEach((leaf) => {
       const cx = leaf.x;
       const cy = leaf.y;
       const r = leaf.data.count * nodeSizeMultiplier + 2;
@@ -379,6 +432,7 @@ export class ConceptualMapDrawer {
 
     const dataWidth = maxX - minX;
     const dataHeight = maxY - minY;
+    const totalRadius = Math.min(dataWidth, dataHeight) / 2;
 
     this.svgSelection
       .attr("width", this.svgWidth)
@@ -394,13 +448,16 @@ export class ConceptualMapDrawer {
     }
 
     const groups = this.circlePackingGSelection
-      .selectAll<SVGGElement, d3.HierarchyCircularNode<HierarchyDatum>>("g")
-      .data(
-        filteredLeaves,
-        (d: d3.HierarchyCircularNode<HierarchyDatum>) =>
-          d.data.id || d.data.name!
+      .selectAll<SVGGElement, d3.HierarchyCircularNode<HierarchyDatum>>(
+        "g.filtered-leavess-group"
       )
-      .join("g");
+      .data(
+        filteredLeavess,
+        (d: d3.HierarchyCircularNode<HierarchyDatum>) =>
+          d.data.id || d.data.evaluateAgainst!
+      )
+      .join("g")
+      .classed("filtered-leavess-group", true);
 
     groups
       .append("circle")
@@ -438,7 +495,7 @@ export class ConceptualMapDrawer {
       .append("title")
       .text(
         (d) =>
-          `발화자: ${d.parent?.data.id}, 키워드: ${d.data.id}, 언급 횟수: ${d.data.count} `
+          `발화자: ${d.parent?.data.id}, 키워드: ${d.data.id}, 언급 횟수: ${d.data.count}, 찬반: ${d.data.evaluateAgainst} `
       );
 
     groups
@@ -456,7 +513,7 @@ export class ConceptualMapDrawer {
           } else if (name === "김종대") {
             return "black";
           } else {
-            return "none";
+            return "black";
           }
         } else {
           return "black";
@@ -472,6 +529,53 @@ export class ConceptualMapDrawer {
         (d: d3.HierarchyCircularNode<HierarchyDatum>) =>
           d.y + d.data.count * nodeSizeMultiplier + 10
       );
+
+    const againstsGroup = this.circlePackingGSelection
+      .selectAll<SVGGElement, d3.HierarchyCircularNode<HierarchyDatum>>(
+        "g.againsts-group"
+      )
+      .data(againsts)
+      .join("g")
+      .classed("againsts-group", true);
+
+    againstsGroup
+      .append("circle")
+      .attr("cx", (d) => againstCenters.get(d)?.x || 0)
+      .attr("cy", (d) => againstCenters.get(d)?.y || 0)
+      .attr("r", (d, i) => {
+        if (d !== "중립") {
+          return totalRadius / 1.4;
+        }
+        return 0;
+      })
+      .attr("stroke", "black")
+      .attr("fill", "none")
+      .attr("stroke-width", (d) => (d !== "중립" ? 1 : 0));
+
+    againstsGroup
+      .append("text")
+      .attr("x", (d) => againstCenters.get(d)?.x || 0)
+      .attr(
+        "y",
+        (d) => (againstCenters.get(d)?.y || 0) - totalRadius / 1.4 - 18
+      )
+      .attr("text-anchor", "middle")
+      .attr("dy", ".35em") // Adjust the vertical alignment
+      .text((d) => {
+        console.log(d);
+        if (d === "찬성") {
+          return "찬성";
+        } else if (d === "반대") {
+          return "반대";
+        } else {
+          return "";
+        }
+      })
+      .style("stroke", "black")
+      .style("stroke-width", "0.2px")
+      .style("font-size", "20px")
+      .style("font-weight", "bold");
+
     return new Promise<void>((resolve) => {
       resolve();
     });

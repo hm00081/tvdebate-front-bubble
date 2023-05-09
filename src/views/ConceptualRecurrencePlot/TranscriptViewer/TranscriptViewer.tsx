@@ -21,23 +21,43 @@ function TranscriptViewer(props: ComponentProps, ref: any) {
     circleData,
   } = props;
 
-  const filteredUtterances = useMemo(() => {
+  const modalfilteredUtterances = useMemo(() => {
     if (dataStructureMaker) {
       const utterances =
         dataStructureMaker.dataStructureSet.utteranceObjectsForDrawingManager
           .utteranceObjectsForDrawing;
 
+      // 새로운 배열 생성 및 checkFindAgainst 값 할당
+      const updatedUtterances = utterances.map((utterance) => {
+        let checkFindAgainst = "중립";
+
+        if (utterance.name === "이준석" || utterance.name === "박휘락") {
+          checkFindAgainst = "반대";
+        } else if (utterance.name !== "진행자") {
+          checkFindAgainst = "찬성";
+        }
+
+        // 기존 utterance 객체에 checkFindAgainst 속성 추가
+        const newUtterance = {
+          ...utterance,
+          checkFindAgainst,
+        };
+        return newUtterance;
+      });
+
       if (selectedRange) {
-        return utterances.slice(
+        const slicedUtterances = updatedUtterances.slice(
           selectedRange.startIndex,
           selectedRange.endIndex + 1
         );
+
+        return slicedUtterances;
+      } else {
+        // 선택된 범위가 없는 경우, 전체 스크립트 반환
+        return updatedUtterances;
       }
-
-      return utterances;
     }
-
-    return [];
+    return []; // 빈 배열 반환
   }, [dataStructureMaker, selectedRange]);
 
   // 키워드들을 하이라이팅하는 함수를 추가합니다.
@@ -52,8 +72,8 @@ function TranscriptViewer(props: ComponentProps, ref: any) {
     }
     keywords.forEach((keyword) => {
       //console.log("Keyword:", keyword);
-      const parentNode = circleData.find((node) => node.data.id === keyword)
-        ?.parent;
+      // const parentNode = circleData.find((node) => node.data.id === keyword)
+      //   ?.parent;
       // const personName = parentNode?.data.id.split("-")[0];
       // // 화자별 색상적용코드
       // const personColor =
@@ -69,7 +89,7 @@ function TranscriptViewer(props: ComponentProps, ref: any) {
       //   personColor.slice(5, 7),
       //   16
       // )}, 0.9)`; // Opacity
-      //고정된 색상
+      // //고정된 색상
       const personColor = "yellow";
       const rgbaPersonColor = "rgba(255, 255, 0, 0.64)"; // Opacity (yellow with 0.9 opacity)
 
@@ -83,52 +103,35 @@ function TranscriptViewer(props: ComponentProps, ref: any) {
     return highlightedText;
   }
 
-  console.log("circleKeywords:", circleKeywords);
-  console.log("circleData:", circleData);
-
   return (
     <div className={styles.transcriptViewerWrapper}>
       <div className={styles.transcriptViewer}>
-        {filteredUtterances
-          // .filter((utteranceObject) => {
-          //   if (!circleData) {
-          //     return true;
-          //   }
-
-          //   // circleData에서 발화자 이름을 찾습니다.
-          //   const speakerNode = circleData.find(
-          //     (node) => node.data.id === utteranceObject.name
-          //   );
-
-          //   // 발화자가 선택된 이준석 또는 김종대인 경우에만 표시합니다.
-          //   return speakerNode !== undefined;
-          // })
-          .map((utteranceObject, index) => (
-            <div style={{ marginBottom: "12px" }} key={`utterance-${index}`}>
-              <div
-                style={{
-                  color: dataStructureMaker!.dataStructureSet.participantDict[
-                    utteranceObject.name
-                  ].color,
-                }}
-              >
-                [ {utteranceObject.name} ]
-              </div>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html:
-                    circleKeywords && circleData
-                      ? highlightKeywords(
-                          utteranceObject.utterance,
-                          circleKeywords,
-                          circleData
-                        )
-                      : utteranceObject.utterance,
-                }}
-              />
-              {/* {getSentenceSpans(utteranceObject)} */}
+        {modalfilteredUtterances.map((utteranceObject, index) => (
+          <div style={{ marginBottom: "12px" }} key={`utterance-${index}`}>
+            <div
+              style={{
+                color: dataStructureMaker!.dataStructureSet.participantDict[
+                  utteranceObject.name
+                ].color,
+              }}
+            >
+              [ {utteranceObject.name} ] / {index}
             </div>
-          ))}
+            <div
+              dangerouslySetInnerHTML={{
+                __html:
+                  circleKeywords && circleData
+                    ? highlightKeywords(
+                        utteranceObject.utterance,
+                        circleKeywords,
+                        circleData
+                      )
+                    : utteranceObject.utterance,
+              }}
+            />
+            {/* {getSentenceSpans(utteranceObject)} */}
+          </div>
+        ))}
       </div>
     </div>
   );

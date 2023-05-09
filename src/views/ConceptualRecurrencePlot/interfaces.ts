@@ -6,6 +6,7 @@ export interface UtteranceObjectForDrawing extends UtteranceObject {
   beginningPointOfXY: number;
   width: number;
   insistence: boolean;
+  checkFindAgainst?: string;
 }
 
 export interface SimilarityBlock {

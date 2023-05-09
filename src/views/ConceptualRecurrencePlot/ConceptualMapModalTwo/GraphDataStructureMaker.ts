@@ -4,6 +4,7 @@ import axios from "axios";
 import { SimilarityBlock } from "../interfaces";
 import _ from "lodash";
 import { SimulationLinkDatum, SimulationNodeDatum } from "d3";
+import { DataStructureManager } from "../DataStructureMaker/DataStructureManager";
 import {
   ParticipantCount,
   TermCountDetailDict,
@@ -55,6 +56,29 @@ export class GraphDataStructureMaker {
       this.nodes = [];
       return;
     }
+    // const utteranceObjectsForDrawing =
+    //   dataStructureMaker.dataStructureSet.utteranceObjectsForDrawingManager
+    //     .utteranceObjectsForDrawing;
+
+    // // 새로운 배열 생성 및 checkFindAgainst 값 할당
+    // const updatedUtteranceObjectsForDrawing = utteranceObjectsForDrawing.map(
+    //   (utterance) => {
+    //     let utteranceCheckFindAgainst = "중립";
+
+    //     if (utterance.name === "이준석" || utterance.name === "박휘락") {
+    //       utteranceCheckFindAgainst = "반대";
+    //     } else if (utterance.name !== "진행자") {
+    //       utteranceCheckFindAgainst = "찬성";
+    //     }
+
+    //     // 기존 utterance 객체에 checkFindAgainst 속성 추가
+    //     const newUtterance = {
+    //       ...utterance,
+    //       checkFindAgainst: utteranceCheckFindAgainst,
+    //     };
+    //     return newUtterance;
+    //   }
+    // );
 
     const startIndex = engagementGroup[0][0].columnUtteranceIndex;
     const endIndex = startIndex + engagementGroup.length;
@@ -73,7 +97,7 @@ export class GraphDataStructureMaker {
     const termBooleanCountDictOfEG = termCountDictOfEGMaker.getTermBooleanCountDictOfEG();
     const termCountDetailDictOfEG = termCountDictOfEGMaker.getTermCountDetailDictOfEG();
     const termBooleanCountDetailDictOfEG = termCountDictOfEGMaker.getTermBooleanCountDetailDictOfEG();
-
+    //console.log(termCountDetailDictOfEG); // 찬반 데이터 포함되어있음
     this.termListOfEG = this.makeTermListOfEG(termCountDictOfEG, 2);
     const frequencyVectorOfEG = this.makeFrequencyVectorOfEG(
       this.termListOfEG,
@@ -202,17 +226,6 @@ export class GraphDataStructureMaker {
           : false
     );
 
-    // TODO Can I make cooccurrenceMatrix in local?
-    // By utteranceObject.sentenceOjbects[0].singleTermCountDict
-
-    // make termCountDictsOfWSOfEG and termListOfEG
-
-    // for each term1 in termListOfEG
-    //    for each term2 in termListOfEG
-    //       for each termCountDictOfWS in termCountDictsOfWS
-    //          if (term1 in termCountDictOfWS and term2 in termCountDictOfWS)
-    //              cooccurrenceMatrix[term1Index][term2Index] += 1
-
     return new Promise<number[][]>((resolve, reject) => {
       axios
         .post<number[][]>(pythonFlaskAddress + "/make-cooccurrence-matrix", {
@@ -227,7 +240,9 @@ export class GraphDataStructureMaker {
         });
     });
   }
-
+  // ParticipantCount,
+  // TermCountDetailDict,
+  // TermCountDictOfEGMaker,
   private makeNodes(
     termListOfEG: string[],
     frequencyVectorOfEG: number[],
@@ -235,6 +250,8 @@ export class GraphDataStructureMaker {
     termCountDetailDictOfEG: TermCountDetailDict,
     termBooleanCountDetailDictOfEG: TermCountDetailDict
   ): NodeDatum[] {
+    //console.log(termCountDetailDictOfEG);
+    // console.log(termBooleanCountDetailDictOfEG);
     const nodes = _.map<string, NodeDatum>(termListOfEG, (term, termIndex) => {
       return {
         id: term,
@@ -247,9 +264,9 @@ export class GraphDataStructureMaker {
         ),
       };
     });
+    //console.log(nodes);
     return nodes;
   }
-
   private makeLinks(
     termListOfEG: string[],
     cooccurrenceMatrixOfEG: number[][],
@@ -327,31 +344,6 @@ export class GraphDataStructureMaker {
         }
       }
     });
-
-    // related to upper commented code.
-    // TODO If 1 node don't have any links, insert 1 link having most count
-    // _.forEach(termListOfEG, (term, termIndex) => {
-    //   const filteredLinks = _.filter(
-    //     filteredLinkDict,
-    //     (linkDatum, linkId) =>
-    //       linkDatum.source === term || linkDatum.target === term
-    //   );
-
-    //   if (filteredLinks.length === 0) {
-    //     const aliveLinkDatum = _.chain(linkCandidateDict)
-    //       .filter(
-    //         (linkDatum, linkId) =>
-    //           linkDatum.source === term || linkDatum.target === term
-    //       )
-    //       .maxBy((linkDatum) => linkDatum.count)
-    //       .value();
-
-    //     console.log("aliveLinkDatum", aliveLinkDatum);
-
-    //     filteredLinkDict[aliveLinkDatum.id] = aliveLinkDatum;
-    //   }
-    // });
-
     return _.values(filteredLinkDict);
   }
 }

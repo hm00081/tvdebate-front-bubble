@@ -19,6 +19,7 @@ import {
   getBasicIncomeManualBigEGTitles,
   getSatManualBigEGTitles,
   getMilitaryManualBigEGTitles,
+  getMilitaryManualSmallEGTitles,
 } from "./makeManualEGs";
 import UtteranceObjectsForDrawingManager from "./UtteranceObjectsForDrawingManager";
 import { SimilarityBlockManager } from "./SimilarityBlockManager";
@@ -115,7 +116,7 @@ export class DataStructureManager {
     let manualMiddleEGs: SimilarityBlock[][][] = [];
     let manualBigEGs: SimilarityBlock[][][] = [];
     let manualFullEGs: SimilarityBlock[][][] = [];
-    // let manualSmallEGTitles: string[] = [];
+    let manualSmallEGTitles: string[] = [];
     let manualFullEGTitles: string[] = [];
     let manualMiddleEGTitles: string[] = [];
     let manualBigEGTitles: string[] = [];
@@ -170,28 +171,6 @@ export class DataStructureManager {
         97,
       ]);
       manualFullEGs = makeManualTGs(conceptSimilarityMatrix, [0, 97]);
-      // manualMiddleEGs = makeManualTGs(conceptSimilarityMatrix, [
-      //   0,
-      //   22,
-      //   47,
-      //   69,
-      //   79,
-      //   97,
-      //   132,
-      //   134,
-      //   177,
-      // ]);
-      // manualBigEGs = makeManualTGs(conceptSimilarityMatrix, [
-      //   0,
-      //   22,
-      //   47,
-      //   69,
-      //   133,
-      //   177,
-      // ]);
-      // manualSmallEGTitles = getBasicIncomeManualSmallEGTitles();
-      // manualMiddleEGTitles = getBasicIncomeManualMiddleEGTitles();
-      // manualBigEGTitles = getBasicIncomeManualBigEGTitles();
     } else if (debateName === "정시확대") {
       manualBigEGs = makeManualTGs(conceptSimilarityMatrix, [
         0,
@@ -207,17 +186,25 @@ export class DataStructureManager {
     } else if (debateName === "모병제") {
       manualBigEGs = makeManualTGs(conceptSimilarityMatrix, [
         0,
-        10,
-        15,
-        36,
-        57,
-        78,
-        93,
-        108,
-        138,
-        175,
-      ]);
+        18,
+        24, // 18-24 없애기
+        58,
+        73, // 58-73 없애기
+        106,
+        146, // 106-146 없애기
+      ]); // index 1,3,5 없애기.
+      manualSmallEGs = makeManualTGs(conceptSimilarityMatrix, [
+        0,
+        15, // 없애기.
+        37,
+        56, // 37-56 없애기
+        79,
+        94, // 79-94 없애기
+        126,
+        182, // 126~127 없애기
+      ]); // index 7,9,11,13,14 없애기
       manualBigEGTitles = getMilitaryManualBigEGTitles();
+      manualSmallEGTitles = getMilitaryManualSmallEGTitles();
     } else if (debateName === "sample") {
       manualSmallEGs = makeManualTGs(conceptSimilarityMatrix, [0, 5]);
     }
@@ -239,7 +226,7 @@ export class DataStructureManager {
       manualMiddleEGs,
       manualBigEGs,
       manualFullEGs,
-      // manualSmallEGTitles,
+      manualSmallEGTitles,
       manualFullEGTitles,
       manualMiddleEGTitles,
       manualBigEGTitles,

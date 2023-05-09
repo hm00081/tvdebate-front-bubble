@@ -23,6 +23,7 @@ import { Modal } from "antd";
 import { DataStructureManager } from "../../DataStructureMaker/DataStructureManager";
 import * as d3 from "d3";
 import TranscriptViewer from "../../TranscriptViewer/TranscriptViewer";
+import { makeManualMTGs } from "../../DataStructureMaker/makeManualEGs";
 
 const modalContentWidth: number = 1200;
 const modalContentHeight: number = 600;
@@ -32,6 +33,7 @@ export interface CirclePackingModalRef {
   openModal: (
     selectedSvgIndex: number,
     engagementGroup: SimilarityBlock[][]
+    //engagementGroupTwo: SimilarityBlock[][]
   ) => void;
 }
 
@@ -66,9 +68,6 @@ function CirclePackingModal(
   );
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
   const circlePackingMapDivRef = useRef<HTMLDivElement>(null);
-  const getCirclePackingMapDivClassName = () => {
-    return `${CirclePackingMapDivClassName}-${selectedSvgIndex}`;
-  };
   const circlePackingMapDivId = `circle-packing-map-div-${selectedSvgIndex}`;
   const barChartDivRef = useRef<HTMLDivElement>(null);
   const barChartDivId = `bar-chart-div-${selectedSvgIndex}`;
@@ -78,7 +77,19 @@ function CirclePackingModal(
     d3.HierarchyCircularNode<HierarchyDatum>[]
   >([]);
 
-  let manualBigEGs = [0, 10, 15, 36, 57, 78, 93, 108, 138, 175, 185];
+  interface CombinedIndexMap {
+    [key: number]: number;
+  }
+
+  let combinedIndexMap: CombinedIndexMap = {
+    0: 18,
+    15: 37,
+    24: 58,
+    56: 79,
+    73: 106,
+    94: 126,
+    146: 183,
+  };
 
   const handleWindowResize = () => {
     setWindowWidth(window.innerWidth);
@@ -86,11 +97,16 @@ function CirclePackingModal(
   };
 
   useEffect(() => {
-    if (selectedSvgIndex >= 0 && selectedSvgIndex < manualBigEGs.length - 1) {
-      let startIndex = manualBigEGs[selectedSvgIndex];
-      let endIndex = manualBigEGs[selectedSvgIndex + 1] - 1;
+    if (
+      selectedSvgIndex >= 0 &&
+      selectedSvgIndex < Object.keys(combinedIndexMap).length
+    ) {
+      let startIndex = parseInt(
+        Object.keys(combinedIndexMap)[selectedSvgIndex]
+      );
+      let endIndex = combinedIndexMap[startIndex] - 1;
 
-      // 수정된 startIndex와 endIndex를 전달합니다.
+      console.log(startIndex, endIndex);
       <TranscriptViewer
         dataStructureMaker={props.dataStructureManager}
         selectedRange={{
@@ -106,8 +122,6 @@ function CirclePackingModal(
       props.dataStructureManager &&
       props.dataStructureManager.datasetOfManualEGs
     ) {
-      // dataStructureManager를 사용하는 코드
-      //console.log(props.dataStructureManager.datasetOfManualEGs);
     } else {
       console.log("dataStructureManager or datasetOfManualEGs is null");
     }
@@ -122,6 +136,7 @@ function CirclePackingModal(
     openModal: (
       selectedSvgIndex: number,
       engagementGroup: SimilarityBlock[][]
+      //engagementGroupTwo: SimilarityBlock[][]
     ) => {
       console.log("openModal called with index:", selectedSvgIndex);
       setCurrentIndex(selectedSvgIndex);
@@ -146,6 +161,7 @@ function CirclePackingModal(
         modalContentHeight,
         props.participantDict
       );
+      console.log("ConceptualMapDrawer data:", engagementGroup);
       setConceptualMapDrawer(newConceptualMapDrawer);
 
       const graphDataStructureMaker = new GraphDataStructureMaker(
@@ -170,11 +186,14 @@ function CirclePackingModal(
       if (conceptualMapDrawer) {
         conceptualMapDrawer.setGraphData(nodeLinkDict);
         conceptualMapDrawer.updateGraph().then(() => {
-          const nodeSizeMultiplierOnModal = 3.3;
-          const fontSizeMultiplierOnModal = 3.5;
-          const positionScalingFactor = 0.52;
+          const nodeSizeMultiplierOnModal = 5;
+          const fontSizeMultiplierOnModal = 3;
+          const positionScalingFactor = 0.7;
 
           const circleData = conceptualMapDrawer.circlePackingGSelection
+            .selectAll<SVGGElement, d3.HierarchyCircularNode<HierarchyDatum>>(
+              "g.filtered-leavess-group"
+            )
             .selectAll<
               SVGCircleElement,
               d3.HierarchyCircularNode<HierarchyDatum>
@@ -189,7 +208,7 @@ function CirclePackingModal(
           circleData.forEach((node) => {
             const cx = node.x;
             const cy = node.y;
-            const r = node.data.count * 2.5 + 2;
+            const r = node.data.count;
             minX = Math.min(minX, cx - r);
             minY = Math.min(minY, cy - r);
             maxX = Math.max(maxX, cx + r);
@@ -200,26 +219,32 @@ function CirclePackingModal(
           const dataHeight = maxY - minY;
 
           conceptualMapDrawer
-            .svgSelection!.attr("width", modalContentWidth - 110)
-            .attr("height", modalContentHeight)
+            .svgSelection!.attr("width", modalContentWidth - 470)
+            .attr("height", modalContentHeight - 30)
             .attr("viewBox", `${minX} ${minY} ${dataWidth} ${dataHeight}`)
             .attr("preserveAspectRatio", "xMidYMid meet");
 
           conceptualMapDrawer.circlePackingGSelection
+            .selectAll<SVGGElement, d3.HierarchyCircularNode<HierarchyDatum>>(
+              "g.filtered-leavess-group"
+            )
             .selectAll<
               SVGCircleElement,
               d3.HierarchyCircularNode<HierarchyDatum>
             >("circle")
-            .attr("r", (d) => d.data.count * nodeSizeMultiplierOnModal + 2)
-            .attr("cx", (d) => d.x * positionScalingFactor)
-            .attr("cy", (d) => d.y * positionScalingFactor);
+            .attr("r", (d) => d.data.count * nodeSizeMultiplierOnModal + 2);
+          //.attr("cx", (d) => d.x * positionScalingFactor)
+          //.attr("cy", (d) => d.y * positionScalingFactor);
 
           conceptualMapDrawer.circlePackingGSelection
+            .selectAll<SVGGElement, d3.HierarchyCircularNode<HierarchyDatum>>(
+              "g.filtered-leavess-group"
+            )
             .selectAll<
               SVGTextElement,
               d3.HierarchyCircularNode<HierarchyDatum>
             >("text")
-            .attr("x", (d) => d.x * positionScalingFactor)
+            //.attr("x", (d) => d.x * positionScalingFactor)
             .attr("y", (d) => {
               const radius = d.data.count * nodeSizeMultiplierOnModal;
               const fontSize = d.data.count * fontSizeMultiplierOnModal * 0.8;
@@ -227,22 +252,24 @@ function CirclePackingModal(
               const fontSizeFactor = 1; // font-size에 대한 비율을 조정합니다.
 
               return (
-                d.y * positionScalingFactor +
-                radius * radiusFactor +
-                fontSize * fontSizeFactor +
-                6
+                d.y + radius * radiusFactor + fontSize * fontSizeFactor + 9
               );
             })
             .style("font-size", (d) => {
               if (d.data.count > 3) {
-                return d.data.count * nodeSizeMultiplierOnModal * 0.8;
+                // return d.data.count * nodeSizeMultiplierOnModal * 0.8;
+                return 12;
               } else {
-                return d.data.count * nodeSizeMultiplierOnModal * 1.3;
+                // return d.data.count * nodeSizeMultiplierOnModal * 1.3;
+                return 12;
               }
             });
         });
 
         const circleData = conceptualMapDrawer.circlePackingGSelection
+          .selectAll<SVGGElement, d3.HierarchyCircularNode<HierarchyDatum>>(
+            "g.filtered-leavess-group"
+          )
           .selectAll<
             SVGCircleElement,
             d3.HierarchyCircularNode<HierarchyDatum>
@@ -252,9 +279,6 @@ function CirclePackingModal(
         setCircleData(circleData);
         // circleData에서 keyword만 추출하여 배열로 만들기
         const extractedKeywords = circleData.map((node) => node.data.id);
-
-        console.log(circleData);
-        console.log(extractedKeywords);
 
         // 상태 변수를 설정
         setCircleKeywords(extractedKeywords);
@@ -272,7 +296,7 @@ function CirclePackingModal(
       }
     }
   }, [modalVisible, selectedSvgIndex, engagementGroup]);
-
+  //console.log(engagementGroup);
   useEffect(() => {
     // 그려지는 상황인가??
     if (conceptualMapDrawer) {
@@ -316,7 +340,7 @@ function CirclePackingModal(
         <div
           style={{
             display: "flex",
-            alignItems: "center",
+            //alignItems: "center",
             flexDirection: "column",
             justifyContent: "space-around",
           }}
@@ -330,19 +354,30 @@ function CirclePackingModal(
             }}
           >
             <div
-              style={{ marginLeft: "110px", transform: "translateX(400px)" }}
+              style={{ marginLeft: "110px", transform: "translateX(0px)" }}
               ref={circlePackingMapDivRef}
               id={circlePackingMapDivId}
             ></div>
             <div
               style={{
-                width: "140px",
-                marginLeft: "10px",
-                marginRight: "800px",
+                width: "133px",
+                marginLeft: "0px",
+                marginRight: "400px",
               }}
               ref={barChartDivRef}
               id={barChartDivId}
-            ></div>
+            >
+              <div
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "10px",
+                  textAnchor: "middle",
+                  textAlign: "center",
+                }}
+              >
+                논쟁키워드 총량
+              </div>
+            </div>
             <div
               style={{
                 position: "absolute",
@@ -357,11 +392,19 @@ function CirclePackingModal(
                 dataStructureMaker={props.dataStructureManager}
                 selectedRange={{
                   startIndex:
-                    selectedSvgIndex >= 0 ? manualBigEGs[selectedSvgIndex] : -1,
+                    selectedSvgIndex >= 0
+                      ? parseInt(
+                          Object.keys(combinedIndexMap)[selectedSvgIndex]
+                        )
+                      : -1,
                   endIndex:
                     selectedSvgIndex >= 0 &&
-                    selectedSvgIndex < manualBigEGs.length - 1
-                      ? manualBigEGs[selectedSvgIndex + 1] - 1
+                    selectedSvgIndex < Object.keys(combinedIndexMap).length
+                      ? combinedIndexMap[
+                          parseInt(
+                            Object.keys(combinedIndexMap)[selectedSvgIndex]
+                          )
+                        ] - 1
                       : -1,
                 }}
                 circleKeywords={circleKeywords}
@@ -383,7 +426,7 @@ function drawBarChart(
 ) {
   // 바 차트를 그리기 위한 설정
   const barChartWidth = 120;
-  const barChartHeight = 580;
+  const barChartHeight = 550;
   const margin = { top: 20, right: 20, bottom: 20, left: 20 };
   const barChartDivId = `bar-chart-div-${selectedSvgIndex}`;
 
@@ -407,7 +450,7 @@ function drawBarChart(
     .range([barChartHeight - margin.bottom, margin.top]);
 
   const xAxis = d3.axisBottom(xScale);
-  const yAxis = d3.axisLeft(yScale);
+  const yAxis = d3.axisLeft(yScale).tickSizeInner(2);
 
   barChartSvg
     .append("g")
@@ -418,6 +461,8 @@ function drawBarChart(
   barChartSvg
     .append("g")
     .attr("transform", `translate(${margin.left}, 0)`)
+    .style("font-size", "8.2px")
+    .style("font-weight", "bold")
     .call(yAxis);
 
   // 바 차트의 막대 그리기

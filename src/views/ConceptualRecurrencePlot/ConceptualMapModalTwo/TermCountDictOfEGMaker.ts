@@ -11,6 +11,7 @@ export interface ParticipantCount {
   name: string;
   count: number;
   sentiment: number; // sum of sentiments of sentences
+  evaluateAgainst?: string;
 }
 
 export interface TermCountDetailDict {
@@ -30,6 +31,7 @@ export class TermCountDictOfEGMaker {
     participantDict: ParticipantDict,
     termType: TermType
   ) {
+    //console.log("utteranceObjectsOfEG", utteranceObjectsOfEG);
     // object for deepcopy
     const defaultParticipantNameCountDict: {
       [name: string]: ParticipantCount;
@@ -71,6 +73,9 @@ export class TermCountDictOfEGMaker {
             termCountDict[term];
           this.termCountDetailDictOfEG[term][utteranceObject.name].sentiment +=
             sentenceObject.sentiment;
+          this.termCountDetailDictOfEG[term][
+            utteranceObject.name
+          ].evaluateAgainst = utteranceObject.evaluateAgainst;
 
           if (!(term in this.termBooleanCountDetailDictOfEG)) {
             this.termBooleanCountDetailDictOfEG[term] = _.cloneDeep(
@@ -83,9 +88,14 @@ export class TermCountDictOfEGMaker {
           this.termBooleanCountDetailDictOfEG[term][
             utteranceObject.name
           ].sentiment += sentenceObject.sentiment;
+          this.termBooleanCountDetailDictOfEG[term][
+            utteranceObject.name
+          ].evaluateAgainst = utteranceObject.evaluateAgainst; // evaluateAgainst 값을 추가
         });
       });
     });
+    // console.log(this.termBooleanCountDetailDictOfEG);
+    // console.log(this.termCountDetailDictOfEG);
   }
 
   public getTermCountDictOfEG() {

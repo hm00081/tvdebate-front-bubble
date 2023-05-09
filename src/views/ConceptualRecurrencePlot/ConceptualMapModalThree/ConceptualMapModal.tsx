@@ -1,12 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, {
-  forwardRef,
-  Ref,
-  useEffect,
-  useRef,
-  useState,
-  useImperativeHandle,
-} from "react";
+import React, { forwardRef, Ref, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styles from "./ConceptualMapModal.module.scss";
 import { ConceptualMapDrawer } from "./ConceptualMapDrawer";
@@ -49,6 +42,7 @@ interface ComponentProps {
     manualBigEGs: SimilarityBlock[][][]
   ) => void;
   manualBigEGs: SimilarityBlock[][][]; // 추가
+  manualSmallEGs: SimilarityBlock[][][]; // 추가
   dataStructureManager: DataStructureManager;
 }
 
@@ -84,16 +78,25 @@ function ConceptualMapModal(
   const [conceptualMapDrawers, setConceptualMapDrawers] = useState<
     ConceptualMapDrawer[]
   >([]);
-  const [engagementGroups, setEngagementGroups] = useState<
-    SimilarityBlock[][][]
-  >([]);
   const [manualBigEGsFromDSM, setManualBigEGsFromDSM] = useState<
     SimilarityBlock[][][]
   >([]);
+  const [manualSmallEGsFromDSM, setManualSmallEGsFromDSM] = useState<
+    SimilarityBlock[][][]
+  >([]);
+  const [combinedEGsFromDSM, setCombinedEGsFromDSM] = useState<
+    SimilarityBlock[][][]
+  >([]);
+  const [filteredData, setFilteredData] = useState<SimilarityBlock[][][]>([]);
+
+  const [orderedData, setOrderedData] = useState<SimilarityBlock[][][]>([]);
+  interface CombinedIndexMap {
+    [key: number]: number;
+  }
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(window.innerWidth);
   const circlePackingMapModalRef = React.useRef<CirclePackingModalRef>(null);
-  const svgWidth = windowWidth / 15;
+  const svgWidth = windowWidth / 11;
   const relationships = [["이준석", "김종대"]];
   const dispatch = useDispatch();
 
@@ -108,7 +111,15 @@ function ConceptualMapModal(
     return null;
   };
 
-  const handleSvgClick = (event: MouseEvent) => {
+  useEffect(() => {
+    // Combine manualBigEGsFromDSM and manualSmallEGsFromDSM
+    const combined = [...manualBigEGsFromDSM, ...manualSmallEGsFromDSM];
+    setCombinedEGsFromDSM(combined);
+  }, [manualBigEGsFromDSM, manualSmallEGsFromDSM]);
+
+  const handleSvgClick = (
+    event: MouseEvent | React.MouseEvent<HTMLDivElement>
+  ) => {
     event.preventDefault();
     event.stopPropagation();
     const targetElement = event.target as HTMLElement;
@@ -116,9 +127,10 @@ function ConceptualMapModal(
     if (
       circlePackingMapModalRef.current &&
       manualBigEGsFromDSM.length > 0 &&
-      dataIndex !== null
+      dataIndex !== null &&
+      ![7, 9, 11, 13, 14].includes(dataIndex) // 이 줄 추가
     ) {
-      const selectedEngagementGroup = manualBigEGsFromDSM[dataIndex];
+      const selectedEngagementGroup = orderedData[dataIndex];
       circlePackingMapModalRef.current.openModal(
         dataIndex,
         selectedEngagementGroup
@@ -131,9 +143,10 @@ function ConceptualMapModal(
     if (conceptualMapDrawer) {
       conceptualMapDrawer.removeDrawing();
 
-      const selectedManualBigEG = manualBigEGsFromDSM[index];
+      const selectedManualOrderedEG = orderedData[index]; // 변경된 부분
+
       const graphDataStructureMaker = new GraphDataStructureMaker(
-        selectedManualBigEG,
+        selectedManualOrderedEG,
         props.participantDict,
         props.utteranceObjects,
         props.termType
@@ -152,6 +165,7 @@ function ConceptualMapModal(
       conceptualMapDrawer.updateGraph(relationship);
     }
   };
+
   const handleWindowResize = () => {
     setWindowWidth(window.innerWidth);
     setWindowHeight(window.innerWidth);
@@ -166,7 +180,9 @@ function ConceptualMapModal(
     if (dataStructureManager) {
       const datasetOfManualEGs = dataStructureManager.datasetOfManualEGs;
       const manualBigEGs = datasetOfManualEGs.manualBigEGs;
+      const manualSmallEGs = datasetOfManualEGs.manualSmallEGs;
       setManualBigEGsFromDSM(manualBigEGs);
+      setManualSmallEGsFromDSM(manualSmallEGs);
     }
   }, [dataStructureManager]);
 
@@ -183,13 +199,43 @@ function ConceptualMapModal(
   }, []);
 
   useEffect(() => {
-    if (dataStructureManager && manualBigEGsFromDSM.length > 0) {
-      setEngagementGroups(manualBigEGsFromDSM);
-      const newConceptualMapDrawers = manualBigEGsFromDSM.map((_, index) => {
+    if (combinedEGsFromDSM.length > 0 && manualSmallEGsFromDSM.length > 0) {
+      const customOrder = [0, 8, 2, 10, 4, 12, 6];
+      const ordered = customOrder.map((orderIndex) => {
+        return combinedEGsFromDSM[orderIndex];
+      });
+      setOrderedData(ordered);
+    }
+  }, [combinedEGsFromDSM]);
+
+  useEffect(() => {
+    if (
+      conceptualMapDrawers.length > 0 &&
+      combinedEGsMaker &&
+      manualBigEGsFromDSM.length > 0 &&
+      manualSmallEGsFromDSM.length > 0 &&
+      orderedData.length > 0
+    ) {
+      const customOrder = [0, 8, 2, 10, 4, 12, 6];
+      customOrder.forEach((orderIndex, index) => {
+        drawGraph(index, relationships[orderIndex % 4]);
+      });
+    }
+  }, [conceptualMapDrawers, combinedEGsMaker, combinedEGsFromDSM, orderedData]);
+
+  // 여기서 orderedData 가 위와같이 필터링 및 커스텀오더처리 되야하는데 안됐음.
+  useEffect(() => {
+    if (
+      dataStructureManager &&
+      manualBigEGsFromDSM.length > 0 &&
+      orderedData.length > 0
+    ) {
+      console.log(orderedData);
+      const newConceptualMapDrawers = orderedData.map((_, index) => {
         const newConceptualMapDrawer: ConceptualMapDrawer = new ConceptualMapDrawer(
           `.divSelectionThree.${conceptualMapDivClassName}-${index}`,
-          svgWidth,
-          svgWidth * 1.3,
+          svgWidth * 1.07,
+          svgWidth * 1.07,
           props.participantDict,
           handleSvgClick
         );
@@ -201,23 +247,7 @@ function ConceptualMapModal(
 
       setConceptualMapDrawers(newConceptualMapDrawers);
     }
-  }, [dataStructureManager, manualBigEGsFromDSM]);
-
-  useEffect(() => {
-    if (
-      conceptualMapDrawers.length > 0 &&
-      combinedEGsMaker &&
-      manualBigEGsFromDSM.length > 0
-    ) {
-      let dataIndex = 0;
-      for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 10; j++) {
-          drawGraph(dataIndex, relationships[i % 4]);
-          dataIndex++;
-        }
-      }
-    }
-  }, [conceptualMapDrawers, combinedEGsMaker, manualBigEGsFromDSM]);
+  }, [dataStructureManager, manualBigEGsFromDSM, orderedData]);
 
   useEffect(() => {
     if (!dataStructureManager) {
@@ -280,7 +310,7 @@ function ConceptualMapModal(
                   style={{
                     //border: "1.5px solid black",
                     width: "50px", // 작은 직사각형의 너비를 조절하세요.
-                    height: svgWidth * 1.3, // 작은 직사각형의 높이를 조절하세요.
+                    height: svgWidth * 1.07, // 작은 직사각형의 높이를 조절하세요.
                     alignItems: "center",
                     flexDirection: "column",
                     justifyContent: "center",
@@ -289,6 +319,8 @@ function ConceptualMapModal(
                     fontSize: "13px",
                     fontWeight: "bold",
                     textAlign: "center",
+                    position: "relative", // position 추가
+                    zIndex: 10, // z-index 추가
                   }}
                 >
                   박휘락
@@ -297,24 +329,33 @@ function ConceptualMapModal(
                   <br />
                   김종대
                 </div>
-                {Array.from({ length: 10 }).map((_, index) => {
-                  const dataIndex = relationshipIndex * 10 + index;
+                {orderedData.map((segments, index) => {
                   return (
-                    <div
-                      style={{
-                        //border: "1.5px solid black",
-                        width: svgWidth * 1.03,
-                        height: svgWidth * 1.3,
-                        alignItems: "center",
-                        margin: "3px",
-                      }}
-                      key={dataIndex}
-                      data-index={dataIndex}
-                      className={`divSelectionThree ${conceptualMapDivClassName}-${dataIndex}`}
-                      id={`divSelection2-${dataIndex}`}
-                    >
-                      <div className="topicPos">{modalTitle}</div>
-                    </div>
+                    <React.Fragment key={index}>
+                      {segments.map((_, segmentIndex) => {
+                        const dataIndex = index * 10 + segmentIndex;
+                        return (
+                          <div
+                            style={{
+                              width: svgWidth * 1.07,
+                              height: svgWidth * 1.07,
+                              alignItems: "center",
+                              margin: "3px",
+                              position: "relative",
+                              zIndex: 1,
+                              border: dataIndex <= 6 ? "0.9px solid gray" : "",
+                            }}
+                            key={dataIndex}
+                            data-index={dataIndex}
+                            className={`divSelectionThree ${conceptualMapDivClassName}-${dataIndex}`}
+                            id={`divSelectionThree-${dataIndex}`}
+                            onClick={handleSvgClick}
+                          >
+                            <div className="topicPos">{modalTitle}</div>
+                          </div>
+                        );
+                      })}
+                    </React.Fragment>
                   );
                 })}
               </div>

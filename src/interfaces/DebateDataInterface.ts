@@ -3,7 +3,7 @@ import { SentenceIndexLexicalChainsDict } from "../classes/LCseg/LCseg";
 export interface UtteranceObject {
   name: string;
   utterance: string;
-  evaluateAgainst: number; // 추후 이름 변경
+  evaluateAgainst: string; // -1: 반대, 0: 중립:, 1: 찬성
   findDisagreeScale: number; // 추후 이름 변경
   topicStartPoint?: boolean;
   topicEndPoint?: boolean;
