@@ -378,7 +378,7 @@ export class ConceptualMapDrawer {
       this.svgWidth,
       this.svgHeight
     );
-    console.log(againsts);
+    //console.log(againsts);
     const leavess = packLayoutss
       .flatMap((layout) => layout.leaves())
       .filter((d) => d !== undefined);

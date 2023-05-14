@@ -51,7 +51,6 @@ export class OccurrenceMaker {
           );
 
           termCountDictsOfWS.push(termCountDictOfWS);
-
           windowSentenceElements.shift();
           windowSentenceElements.push(sentenceObject);
         } else if (windowSentenceElements.length < sentenceWindow) {
@@ -94,7 +93,6 @@ export class OccurrenceMaker {
   }
 
   public get occurrenceVector(): number[] {
-    console.log(this._occurrenceVector);
     return this._occurrenceVector;
   }
   public get cooccurrenceMatrix(): number[][] {

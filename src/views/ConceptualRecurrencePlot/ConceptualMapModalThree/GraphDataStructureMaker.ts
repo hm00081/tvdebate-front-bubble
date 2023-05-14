@@ -27,6 +27,7 @@ export interface NodeDatum extends SimulationNodeDatum {
   booleanCount: number;
   participantCounts: ParticipantCount[]; // multiple count per 1 utterance
   participantBooleanCounts: ParticipantCount[]; // 1 count per 1 utterance
+  time?: number;
 }
 
 export interface LinkDatum extends SimulationLinkDatum<NodeDatum> {
@@ -56,29 +57,6 @@ export class GraphDataStructureMaker {
       this.nodes = [];
       return;
     }
-    // const utteranceObjectsForDrawing =
-    //   dataStructureMaker.dataStructureSet.utteranceObjectsForDrawingManager
-    //     .utteranceObjectsForDrawing;
-
-    // // 새로운 배열 생성 및 checkFindAgainst 값 할당
-    // const updatedUtteranceObjectsForDrawing = utteranceObjectsForDrawing.map(
-    //   (utterance) => {
-    //     let utteranceCheckFindAgainst = "중립";
-
-    //     if (utterance.name === "이준석" || utterance.name === "박휘락") {
-    //       utteranceCheckFindAgainst = "반대";
-    //     } else if (utterance.name !== "진행자") {
-    //       utteranceCheckFindAgainst = "찬성";
-    //     }
-
-    //     // 기존 utterance 객체에 checkFindAgainst 속성 추가
-    //     const newUtterance = {
-    //       ...utterance,
-    //       checkFindAgainst: utteranceCheckFindAgainst,
-    //     };
-    //     return newUtterance;
-    //   }
-    // );
 
     const startIndex = engagementGroup[0][0].columnUtteranceIndex;
     const endIndex = startIndex + engagementGroup.length;
@@ -98,7 +76,7 @@ export class GraphDataStructureMaker {
     const termCountDetailDictOfEG = termCountDictOfEGMaker.getTermCountDetailDictOfEG();
     const termBooleanCountDetailDictOfEG = termCountDictOfEGMaker.getTermBooleanCountDetailDictOfEG();
     //console.log(termCountDetailDictOfEG); // 찬반 데이터 포함되어있음
-    this.termListOfEG = this.makeTermListOfEG(termCountDictOfEG, 2);
+    this.termListOfEG = this.makeTermListOfEG(termCountDictOfEG, 1);
     const frequencyVectorOfEG = this.makeFrequencyVectorOfEG(
       this.termListOfEG,
       termCountDictOfEG
@@ -129,7 +107,8 @@ export class GraphDataStructureMaker {
       frequencyVectorOfEG,
       booleanFrequencyVectorOfEG,
       termCountDetailDictOfEG,
-      termBooleanCountDetailDictOfEG
+      termBooleanCountDetailDictOfEG,
+      utteranceObjectsOfEG
     );
   }
 
@@ -240,22 +219,41 @@ export class GraphDataStructureMaker {
         });
     });
   }
-  // ParticipantCount,
-  // TermCountDetailDict,
-  // TermCountDictOfEGMaker,
+
   private makeNodes(
     termListOfEG: string[],
     frequencyVectorOfEG: number[],
     booleanFrequencyVectorOfEG: number[],
     termCountDetailDictOfEG: TermCountDetailDict,
-    termBooleanCountDetailDictOfEG: TermCountDetailDict
+    termBooleanCountDetailDictOfEG: TermCountDetailDict,
+    utteranceObjectsOfEG: UtteranceObject[] // add this
   ): NodeDatum[] {
-    //console.log(termCountDetailDictOfEG);
-    // console.log(termBooleanCountDetailDictOfEG);
     const nodes = _.map<string, NodeDatum>(termListOfEG, (term, termIndex) => {
+      const utteranceObjectFound = utteranceObjectsOfEG.find(
+        (utteranceObject) =>
+          utteranceObject.sentenceObjects.some(
+            (sentenceObject) =>
+              sentenceObject.singleTermCountDict[term] != null ||
+              sentenceObject.compoundTermCountDict[term] != null
+          )
+      );
+
+      let termTime;
+      if (utteranceObjectFound) {
+        const sentenceObjectFound = utteranceObjectFound.sentenceObjects.find(
+          (sentenceObject) =>
+            sentenceObject.singleTermCountDict[term] != null ||
+            sentenceObject.compoundTermCountDict[term] != null
+        );
+        if (sentenceObjectFound && sentenceObjectFound.time) {
+          termTime = convertTimeToSeconds(sentenceObjectFound.time);
+        }
+      }
+
       return {
         id: term,
         group: "term",
+        time: termTime,
         count: frequencyVectorOfEG[termIndex],
         booleanCount: booleanFrequencyVectorOfEG[termIndex],
         participantCounts: _.values(termCountDetailDictOfEG[term]),
@@ -346,4 +344,9 @@ export class GraphDataStructureMaker {
     });
     return _.values(filteredLinkDict);
   }
+}
+
+function convertTimeToSeconds(time: string): number {
+  const parts = time.split(":").map((part) => parseInt(part, 10));
+  return parts[0] * 3600 + parts[1] * 60 + (parts[2] || 0);
 }

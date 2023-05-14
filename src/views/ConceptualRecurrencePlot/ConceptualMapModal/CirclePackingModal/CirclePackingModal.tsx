@@ -470,6 +470,8 @@ function drawBarChart(
   const bars = barChartSvg
     .selectAll("rect")
     .data(Array.from(countById.entries()));
+
+  console.log(countById);
   //console.log(countById.entries());
   bars
     .enter()

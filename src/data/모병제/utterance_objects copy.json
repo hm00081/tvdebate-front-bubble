@@ -236,7 +236,21 @@
           "문제": 1,
           "제기": 1
         },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": {
+          "모병제": 1
+        },
+        "allTermCountDict": {
+          "politics": {
+
+          },
+          "social": {
+
+          }, "economy": {
+
+          }, "military": {
+            "모병제": 1
+          }
+        }
         "sentiment": -0.10000000149011612,
         "time": "00:02:41"
       },
@@ -276,7 +290,7 @@
         },
         "compoundTermCountDict": {
           "인구절벽": 1,
-          "4차 산업혁명": 1
+          "충격": 1
         },
         "sentiment": 0,
         "time": "00:03:04"
@@ -293,7 +307,7 @@
           "영향": 1
         },
         "compoundTermCountDict": {
-          "인구절벽 대체제": 1
+          "인구절벽 영향": 1
         },
         "sentiment": -0.10000000149011612,
         "time": "00:03:13"
@@ -323,6 +337,7 @@
         "compoundTermCountDict": {
           "작아진 군대": 1,
           "전문 직업주의": 1,
+          "싸우는 군대": 1,
           "싸우는 군대 전환": 1
         },
         "sentiment": 0,
@@ -331,7 +346,9 @@
       {
         "sentence": "이게 지금도 늦었다 오히려 더 서둘러야 된다 저는 그렇게 봅니다.",
         "singleTermCountDict": {},
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": {
+          "서둘러": 1
+        },
         "sentiment": 0.30000001192092896,
         "time": "00:03:42"
       }
@@ -353,7 +370,7 @@
       {
         "sentence": "박휘락 교수님.",
         "singleTermCountDict": { "박휘락": 1, "교수": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "박휘락": 1, "교수": 1 },
         "sentiment": 0.20000000298023224,
         "time": "00:03:47"
       }
@@ -409,7 +426,7 @@
       {
         "sentence": "가장 중요한 게 사실 위협입니다.",
         "singleTermCountDict": { "중요": 1, "위협": 1 },
-        "compoundTermCountDict": { "안보위협": 1 },
+        "compoundTermCountDict": { "위협": 1 },
         "sentiment": -0.5,
         "time": "00:04:03"
       },
@@ -417,6 +434,7 @@
         "sentence": "위협이 감소됐다, 또는 감소될 것이다, 이런 판단 하에서 사실은 이제 조금은 모병제도 해봐야 되지 않겠느냐 이런 판단이 나왔으면 좋은데 그러면 북한의 핵위협이 있고 128만 군대는 어떻게 대응한다고 하는지 그 보완이 좀 있었어야 되는데 그건 없는 것 같다.",
         "singleTermCountDict": {
           "위협": 2,
+          "감소": 2,
           "판단": 2,
           "모병": 1,
           "북한": 1,
@@ -425,8 +443,10 @@
           "보완": 1
         },
         "compoundTermCountDict": {
+          "위협 감소": 2,
           "북한 핵위협": 2,
-          "128만 북한군": 1
+          "군 대응": 1,
+          "보완부재": 1
         },
         "sentiment": -0.20000000298023224,
         "time": "00:04:06"
@@ -472,8 +492,7 @@
           "해결": 1
         },
         "compoundTermCountDict": {
-          "평생 군복무": 1,
-          "병사월급 300만원": 1
+          "평생 복무": 1
         },
         "sentiment": -0.10000000149011612,
         "time": "00:04:40"
@@ -487,7 +506,7 @@
           "충원": 1,
           "과정": 1
         },
-        "compoundTermCountDict": { "간부 진급문제": 1 },
+        "compoundTermCountDict": {},
         "sentiment": 0,
         "time": "00:04:59"
       },
@@ -528,14 +547,14 @@
       {
         "sentence": "그런 부분에 대해서 추후에 토론과정에서 좀 더 자세하게 짚어볼 예정입니다.",
         "singleTermCountDict": { "추후": 1, "토론": 1, "과정": 1, "예정": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "추후": 1, "토론과정": 1, "예정": 1 },
         "sentiment": 0.10000000149011612,
         "time": "00:05:18"
       },
       {
         "sentence": "장경태 위원장님.",
         "singleTermCountDict": { "장경태": 1, "위원": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "장경태": 1, "위원": 1 },
         "sentiment": 0.20000000298023224,
         "time": "00:05:24"
       }
@@ -564,7 +583,7 @@
       {
         "sentence": "지금 50만 대군의 또 특히 보병유지를 위해서 어찌됐건 다시 해도 될까요.",
         "singleTermCountDict": { "대군": 1, "보병": 1, "유지": 1 },
-        "compoundTermCountDict": { "50만 보병유지 불가능": 1 },
+        "compoundTermCountDict": {},
         "sentiment": 0.20000000298023224,
         "time": "00:05:29"
       },
@@ -572,7 +591,7 @@
         "sentence": "애초 유지도 불가능하다고 생각하는데요.",
         "singleTermCountDict": { "애초": 1, "유지": 1, "불가능": 1 },
         "compoundTermCountDict": {
-          "50만 보병유지 불가능": 1
+          "보병유지 불가능": 1
         },
         "sentiment": -0.4000000059604645,
         "time": "00:05:37"
@@ -588,7 +607,7 @@
         "sentence": "그렇기 때문에 보병이 50만 편제는 유지가 어렵고요.",
         "singleTermCountDict": { "보병": 1, "편제": 1, "유지": 1 },
         "compoundTermCountDict": {
-          "50만 보병유지 불가능": 1
+          "보병편제 유지불가": 1
         },
         "sentiment": -0.4000000059604645,
         "time": "00:05:42"
@@ -596,7 +615,7 @@
       {
         "sentence": "또 유지하기 위해서는 복무연장을 해야 됩니다.",
         "singleTermCountDict": { "유지": 1, "복무": 1, "연장": 1 },
-        "compoundTermCountDict": { "복무연장": 1 },
+        "compoundTermCountDict": {},
         "sentiment": 0,
         "time": "00:05:46"
       },
@@ -642,7 +661,6 @@
           "의미": 1
         },
         "compoundTermCountDict": {
-          "복무단축 찬성": 1,
           "숙력된 병사": 1,
           "국방력 강화": 1
         },
@@ -682,7 +700,7 @@
       {
         "sentence": "네 번째 사회갈등도 줄여나가야 됩니다.",
         "singleTermCountDict": { "사회": 1, "갈등": 1 },
-        "compoundTermCountDict": { "사회갈등 해소필요": 1 },
+        "compoundTermCountDict": { "사회갈등해소": 1 },
         "sentiment": -0.20000000298023224,
         "time": "00:06:30"
       },
@@ -723,7 +741,7 @@
       {
         "sentence": "이준석 위원님.",
         "singleTermCountDict": { "이준석": 1, "위원": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "이준석": 1, "위원": 1 },
         "sentiment": 0.20000000298023224,
         "time": "00:06:43"
       }
@@ -795,7 +813,7 @@
         },
         "compoundTermCountDict": {
           "문재인 정부": 2,
-          "정책 실패": 3
+          "정책 실패": 1
         },
         "sentiment": -0.30000001192092896,
         "time": "00:07:01"
@@ -820,14 +838,14 @@
       {
         "sentence": "부동산 때려잡겠다고 여러 가지 정책을 내놨지만 부동산 가격은 오히려 오르죠.",
         "singleTermCountDict": { "부동": 2, "정책": 1, "가격": 1 },
-        "compoundTermCountDict": { "부동산 정책시류ㅐ": 2 },
+        "compoundTermCountDict": { "부동산": 2, "정책": 1, "가격": 1 },
         "sentiment": 0,
         "time": "00:07:20"
       },
       {
         "sentence": "대북지원은 강화하겠다고 했는데 오히려 미사일은 날아오죠.",
         "singleTermCountDict": { "대북": 1, "지원": 1, "강화": 1, "미사일": 1 },
-        "compoundTermCountDict": { "대북지원 실패": 1, "북 미사일": 1 },
+        "compoundTermCountDict": { "대북지원 실패": 1 },
         "sentiment": -0.5,
         "time": "00:07:25"
       },
@@ -875,6 +893,7 @@
         },
         "compoundTermCountDict": {
           "안보위협 과소평가": 1,
+          "과소평가": 1,
           "복무기간 단축": 1,
           "문재인 정부": 1
         },
@@ -907,14 +926,14 @@
       {
         "sentence": "이게 얼마나 비겁한 여당의 정책제안입니까?",
         "singleTermCountDict": { "여당": 1, "정책": 1, "제안": 1 },
-        "compoundTermCountDict": { "비겁한 여당": 1 },
+        "compoundTermCountDict": { "비겁한 여당": 1, "정책제안": 1 },
         "sentiment": 0,
         "time": "00:08:14"
       },
       {
         "sentence": "저는 좀 더 연구해서 내놨으면 좋겠습니다.",
         "singleTermCountDict": { "연구": 1 },
-        "compoundTermCountDict": { "정책수정 필요": 1 },
+        "compoundTermCountDict": { "대안연구 필요": 1 },
         "sentiment": 0,
         "time": "00:08:17"
       }
@@ -930,7 +949,10 @@
         "sentence": "지금 정책 제언이다 라고 얘기했는데 보고서에서는 뭐 이게 공식적인.",
         "singleTermCountDict": { "정책": 1, "제언": 1, "보고": 1, "공식": 1 },
         "compoundTermCountDict": {
-          "정책제언": 1
+          "정책": 1,
+          "제언": 1,
+          "보고서": 1,
+          "공식": 1
         },
         "sentiment": -0.30000001192092896,
         "time": "00:08:19"
@@ -1061,7 +1083,7 @@
       {
         "sentence": "그 얘기는 당사자가 민주당인 것 같습니다.",
         "singleTermCountDict": { "당사": 1, "민주당": 1 },
-        "compoundTermCountDict": { "총선용 모병제": 1 },
+        "compoundTermCountDict": { "모병제 총선용": 1 },
         "sentiment": 0,
         "time": "00:09:03"
       }
@@ -1094,7 +1116,7 @@
       {
         "sentence": "이미 박근혜 정부에서도 18개월 공약하지 않았습니까?",
         "singleTermCountDict": { "박근혜": 1, "정부": 1, "공약": 1 },
-        "compoundTermCountDict": { "박근혜 정부": 1, "복무단축": 1 },
+        "compoundTermCountDict": { "복무단축": 1 },
         "sentiment": -0.30000001192092896,
         "time": "00:09:10"
       },
@@ -1115,7 +1137,7 @@
       {
         "sentence": "그리고 또 김관진 전 국방부 장관이시죠.",
         "singleTermCountDict": { "김관진": 1, "국방": 1, "장관": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "김관진": 1 },
         "sentiment": 0,
         "time": "00:09:15"
       },
@@ -1131,7 +1153,7 @@
           "이야기": 1,
           "나라": 1
         },
-        "compoundTermCountDict": { "군인수 25만 적정": 1 },
+        "compoundTermCountDict": {},
         "sentiment": 0,
         "time": "00:09:19"
       },
@@ -1154,8 +1176,9 @@
           "책임": 1
         },
         "compoundTermCountDict": {
-          "보수정당": 2,
-          "문재인 정부": 1
+          "보수정당": 1,
+          "문재인 정부": 1,
+          "어불성설": 1
         },
         "sentiment": -0.4000000059604645,
         "time": "00:09:27"
@@ -1191,7 +1214,7 @@
           "대세": 1
         },
         "compoundTermCountDict": {
-          "군인수 25만 적정": 1
+          "김관진": 1
         },
         "sentiment": 0.20000000298023224,
         "time": "00:09:49"
@@ -1212,8 +1235,8 @@
         },
         "compoundTermCountDict": {
           "박근혜 정부": 1,
-          "군복무단축": 1,
-          "인구 감소": 1,
+          "군복무 단축": 1,
+          "인구변화": 1,
           "정책조정": 1
         },
         "sentiment": -0.20000000298023224,
@@ -1330,7 +1353,7 @@
           "완료": 1
         },
         "compoundTermCountDict": {
-          "청년인구 감소": 2
+          "인구감소세 증가": 1
         },
         "sentiment": 0.10000000149011612,
         "time": "00:11:10"
@@ -1345,14 +1368,14 @@
       {
         "sentence": "그러다가 이게 2025년이 되면 21만 명, 22만 명 수준을 유지하다가 2030년이 되면 17만 명이에요.",
         "singleTermCountDict": { "수준": 1, "유지": 1 },
-        "compoundTermCountDict": { "청년인구 감소": 1 },
+        "compoundTermCountDict": { "군인 수 감소": 1 },
         "sentiment": 0.10000000149011612,
         "time": "00:11:24"
       },
       {
         "sentence": "반토막 나는 겁니다.",
         "singleTermCountDict": { "토막": 1 },
-        "compoundTermCountDict": { "군인 수 반토막": 1 },
+        "compoundTermCountDict": { "반토막": 1 },
         "sentiment": 0.10000000149011612,
         "time": "00:11:33"
       },
@@ -1435,8 +1458,7 @@
           "인원": 1
         },
         "compoundTermCountDict": {
-          "조기전역자 증가": 1,
-          "군퇴출인원 증가": 1
+          "조기전역자 증가": 1
         },
         "sentiment": 0,
         "time": "00:12:03"
@@ -1643,8 +1665,8 @@
         },
         "compoundTermCountDict": {
           "문재인 정부": 1,
-          "인구절벽": 1,
-          "청년실업": 1
+          "인구절벽 해결": 1,
+          "청년실업 해결": 1
         },
         "sentiment": 0.5,
         "time": "00:13:21"
@@ -1659,7 +1681,7 @@
           "배경": 1
         },
         "compoundTermCountDict": {
-          "인구절벽": 2
+          "인구절벽 문제": 2
         },
         "sentiment": -0.20000000298023224,
         "time": "00:13:30"
@@ -1675,7 +1697,7 @@
         "sentence": "집권할 때는 모든 것을 해결한다 하다가 2년 반쯤 지났는데 그건 도저히 해결 못하겠다 그러면 기정사실화 하고 거기에 따른 대책이 이거다, 이건 좀 그렇고요.",
         "singleTermCountDict": { "집권": 1, "해결": 2, "기정": 1, "대책": 1 },
         "compoundTermCountDict": {
-          "공약미이행": 2
+          "공약 미이행": 2
         },
         "sentiment": -0.20000000298023224,
         "time": "00:13:37"
@@ -1697,7 +1719,7 @@
         },
         "compoundTermCountDict": {
           "북핵 대비": 3,
-          "모병제 전환": 3
+          "모병제 반대": 3
         },
         "sentiment": 0,
         "time": "00:13:46"
@@ -1737,6 +1759,7 @@
           "전쟁": 1,
           "나라": 1,
           "우선": 1,
+
           "총선": 1,
           "국방": 1,
           "병무": 1,
@@ -1746,7 +1769,6 @@
           "논의": 2
         },
         "compoundTermCountDict": {
-          "총선용 모병제": 1,
           "군유지 우선": 2
         },
         "sentiment": 0,
@@ -1770,7 +1792,7 @@
           "제안": 1
         },
         "compoundTermCountDict": {
-          "총선용 모병제": 3
+          "모병제 총선용": 4
         },
         "sentiment": -0.5,
         "time": "00:14:45"
@@ -1801,7 +1823,7 @@
           "계산": 1
         },
         "compoundTermCountDict": {
-          "총선용 모병제": 2
+          "모병제 총선용": 2
         },
         "sentiment": -0.10000000149011612,
         "time": "00:15:14"
@@ -1809,7 +1831,7 @@
       {
         "sentence": "이제는 오늘 토론하려면 정치적인 그걸 좀 획득하려고 한 건 사실이다, 그렇지만 이건 해야 되겠다, 이건 좀 선행돼야 된다고 생각합니다.",
         "singleTermCountDict": { "토론": 1, "정치": 1, "획득": 1, "선행": 1 },
-        "compoundTermCountDict": { "총선용 모병제": 1 },
+        "compoundTermCountDict": { "모병제 총선용": 1 },
         "sentiment": -0.5,
         "time": "00:15:24"
       }
@@ -1875,14 +1897,14 @@
       {
         "sentence": "박 교수님께서 갈 길이 멉니다.",
         "singleTermCountDict": { "교수": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "교수": 1 },
         "sentiment": 0.4000000059604645,
         "time": "00:15:39"
       },
       {
         "sentence": "토론할 게 많으니까 조금 진정하셔도 될 것 같고요.",
         "singleTermCountDict": { "토론": 1, "진정": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "토론": 1, "진정": 1 },
         "sentiment": 0.20000000298023224,
         "time": "00:15:41"
       },
@@ -1896,8 +1918,10 @@
           "질문": 1
         },
         "compoundTermCountDict": {
-          "인구절벽": 2,
-          "모병제 채택": 1
+          "인구절벽": 1,
+          "모병": 1,
+          "채택": 1,
+          "질문": 1
         },
         "sentiment": -0.5,
         "time": "00:15:43"
@@ -1916,9 +1940,15 @@
           "모병": 1
         },
         "compoundTermCountDict": {
-          "인구절벽": 2,
-
-          "청년인구": 1
+          "일반": 1,
+          "보통": 1,
+          "사람": 2,
+          "인구": 2,
+          "절벽": 1,
+          "청년인구": 1,
+          "군대": 1,
+          "자연": 1,
+          "모병": 1
         },
         "sentiment": 0,
         "time": "00:15:50"
@@ -1949,7 +1979,7 @@
       {
         "sentence": "짧게 부탁드리겠습니다.",
         "singleTermCountDict": { "부탁": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "부탁": 1 },
         "sentiment": 0,
         "time": "00:16:03"
       }
@@ -1964,7 +1994,7 @@
       {
         "sentence": "자, 50만 군대 유지가 불가능합니다.",
         "singleTermCountDict": { "군대": 1, "유지": 1, "불가능": 1 },
-        "compoundTermCountDict": { "50만군 유지불가": 1 },
+        "compoundTermCountDict": { "군대 유지 불가능": 1 },
         "sentiment": -0.6000000238418579,
         "time": "00:16:05"
       },
@@ -1978,7 +2008,7 @@
           "유지": 1
         },
         "compoundTermCountDict": {
-          "50만군 유지불가": 1
+          "군대 유지 불가능": 1
         },
         "sentiment": -0.4000000059604645,
         "time": "00:16:07"
@@ -2024,7 +2054,7 @@
       {
         "sentence": "지금 이제 전쟁 양상이 무인화 되고 있어요.",
         "singleTermCountDict": { "전쟁": 1, "양상": 1, "무인": 1 },
-        "compoundTermCountDict": { "전쟁양상 무인화": 1 },
+        "compoundTermCountDict": { "전쟁 무인화": 1 },
         "sentiment": 0.5,
         "time": "00:16:38"
       },
@@ -2127,7 +2157,8 @@
           "준비": 1
         },
         "compoundTermCountDict": {
-          "군 평생직장": 1
+          "평생직장": 1,
+          "모병제 전환": 1
         },
         "sentiment": 0,
         "time": "00:17:20"
@@ -2194,7 +2225,14 @@
           "흡수": 1
         },
         "compoundTermCountDict": {
-          "스마트군대": 2
+          "스마트": 1,
+          "군대": 2,
+          "소수": 1,
+          "정예": 1,
+          "필요": 1,
+          "징병": 1,
+          "인재": 1,
+          "흡수": 1
         },
         "sentiment": -0.10000000149011612,
         "time": "00:17:40"
@@ -2326,7 +2364,7 @@
           "전환": 1
         },
         "compoundTermCountDict": {
-          "감군체제": 1,
+          "감군 전환": 1,
           "스마트군대": 1
         },
         "sentiment": 0.10000000149011612,
@@ -2383,7 +2421,8 @@
         },
         "compoundTermCountDict": {
           "자주국방": 1,
-          "감군체제": 2
+          "감군": 2,
+          "모병제 반대": 2
         },
         "sentiment": 0,
         "time": "00:19:02"
@@ -2414,7 +2453,7 @@
       {
         "sentence": "장경태 의원부터 말씀 들어보도록 하죠.",
         "singleTermCountDict": { "장경태": 1, "의원": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "장경태": 1, "의원": 1 },
         "sentiment": -0.10000000149011612,
         "time": "00:19:02"
       }
@@ -2437,7 +2476,7 @@
           "과정": 1
         },
         "compoundTermCountDict": {
-          "감군체제": 2,
+          "감군": 2,
           "스마트군대": 1
         },
         "sentiment": 0.6000000238418579,
@@ -2491,8 +2530,8 @@
         "sentence": "그렇기 때문에 현대전과 미래전에 맞는 형태로 우리가 편제를 개편해야 되는데 편제를 개편하는 걸 50만 병력을 유지하면서 다 모두가 다 현대전 그리고 현대화 정예화 할 수 있다, 안 됩니다.",
         "singleTermCountDict": {},
         "compoundTermCountDict": {
-          "편제개편": 2,
-          "병력유지불가": 1,
+          "편제 개편": 2,
+          "병력유지 불가": 1,
           "정예군": 1
         },
         "sentiment": 0.30000001192092896,
@@ -2522,7 +2561,7 @@
           "논의": 1
         },
         "compoundTermCountDict": {
-          "편제개편": 2
+          "직업군인 편제": 2
         },
         "sentiment": 0.10000000149011612,
         "time": "00:20:12"
@@ -2544,8 +2583,8 @@
           "인정": 1
         },
         "compoundTermCountDict": {
-          "비대칭전력": 1,
-          "군대 기계화": 1
+          "비대칭 전력": 1,
+          "군대 기계화 우위": 1
         },
         "sentiment": 0.20000000298023224,
         "time": "00:20:21"
@@ -2569,7 +2608,8 @@
           "확충": 1
         },
         "compoundTermCountDict": {
-          "정예화": 1
+          "정예화": 1,
+          "징병제 반대": 1
         },
         "sentiment": -0.6000000238418579,
         "time": "00:20:34"
@@ -2615,7 +2655,7 @@
       {
         "sentence": "지금 인력 확충 얘기가 나와서 조금 짚고 가야 될 것 같은데요.",
         "singleTermCountDict": { "인력": 1, "확충": 1 },
-        "compoundTermCountDict": { "인력확충": 1 },
+        "compoundTermCountDict": { "인력": 1, "확충": 1 },
         "sentiment": 0,
         "time": "00:21:01"
       }
@@ -2651,7 +2691,7 @@
           "동일": 1
         },
         "compoundTermCountDict": {
-          "감군체제": 2,
+          "감군": 2,
           "전쟁위협": 1
         },
         "sentiment": -0.4000000059604645,
@@ -2689,14 +2729,14 @@
       {
         "sentence": "그 병력을 유지하는 상태로 정예화 하면 좋겠죠.",
         "singleTermCountDict": { "병력": 1, "유지": 1, "상태": 1, "정예": 1 },
-        "compoundTermCountDict": { "병력유지": 1 },
+        "compoundTermCountDict": { "병력유지 정예화": 1 },
         "sentiment": 0.10000000149011612,
         "time": "00:21:30"
       },
       {
         "sentence": "그런데 정예화 할 수 없기 때문에 감축과정에서 정예화 하자, 이렇게 논리가 되는 거죠.",
         "singleTermCountDict": { "정예": 2, "감축": 1, "과정": 1, "논리": 1 },
-        "compoundTermCountDict": { "군 정예화": 1 },
+        "compoundTermCountDict": { "군감축 정예화": 1 },
         "sentiment": -0.30000001192092896,
         "time": "00:21:32"
       }
@@ -2718,7 +2758,7 @@
       {
         "sentence": "이 부분부터 점검이 필요합니다.",
         "singleTermCountDict": { "점검": 1, "필요": 1 },
-        "compoundTermCountDict": { "모병제 점검필요": 1 },
+        "compoundTermCountDict": { "모병제 점검 필요": 1 },
         "sentiment": -0.6000000238418579,
         "time": "00:21:43"
       },
@@ -2732,7 +2772,7 @@
           "군인": 1
         },
         "compoundTermCountDict": {
-          "정예화 군인부재": 1
+          "정예화 군인 부재": 1
         },
         "sentiment": -0.4000000059604645,
         "time": "00:21:46"
@@ -2752,7 +2792,7 @@
           "징병": 1
         },
         "compoundTermCountDict": {
-          "징병제 전환": 3
+          "징병제 전환": 5
         },
         "sentiment": -0.6000000238418579,
         "time": "00:21:54"
@@ -2768,7 +2808,9 @@
           "근무": 1,
           "군대": 1
         },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": {
+          "모병제 반대": 3
+        },
         "sentiment": -0.4000000059604645,
         "time": "00:22:06"
       },
@@ -2796,7 +2838,9 @@
           "미군": 1
         },
         "compoundTermCountDict": {
-          "스마트군대": 2
+          "미군": 1,
+          "로봇 군대": 2,
+          "미래 군대": 2
         },
         "sentiment": 0,
         "time": "00:22:29"
@@ -2811,7 +2855,7 @@
       {
         "sentence": "그런데 미국이 완전 로봇 군대가 됐습니까?",
         "singleTermCountDict": { "미국": 1, "완전": 1, "로봇": 1, "군대": 1 },
-        "compoundTermCountDict": { "미군": 1, "스마트군대": 1 },
+        "compoundTermCountDict": { "미군": 1, "로봇 군대": 1 },
         "sentiment": 0,
         "time": "00:22:45"
       },
@@ -2832,7 +2876,7 @@
       {
         "sentence": "그리고 아까 이제 그 로봇 군대 된다 그랬는데 좋습니다.",
         "singleTermCountDict": { "로봇": 1, "군대": 1 },
-        "compoundTermCountDict": { "스마트군대": 1 },
+        "compoundTermCountDict": { "로봇 군대": 1 },
         "sentiment": 0.800000011920929,
         "time": "00:22:53"
       },
@@ -2846,8 +2890,9 @@
           "모병": 1
         },
         "compoundTermCountDict": {
-          "스마트군대": 1,
-          "선진화 군대": 1
+          "로봇 군대": 1,
+          "선진화 군대 양성": 1,
+          "선진화 후 모병제 도입": 1
         },
         "sentiment": 0.800000011920929,
         "time": "00:22:56"
@@ -2877,7 +2922,8 @@
           "제도": 1
         },
         "compoundTermCountDict": {
-          "선진화 군대": 2
+          "선진화 군대 양성": 1,
+          "선진화 후 모병제 도입": 1
         },
         "sentiment": -0.20000000298023224,
         "time": "00:23:09"
@@ -3051,7 +3097,7 @@
       {
         "sentence": "지금 이 감군이냐 모병이냐 이 논의는 같이 가야 됩니다.",
         "singleTermCountDict": { "감군": 1, "모병": 1, "논의": 1 },
-        "compoundTermCountDict": { "감체제": 1 },
+        "compoundTermCountDict": { "감군": 1, "모병": 1, "논의": 1 },
         "sentiment": -0.20000000298023224,
         "time": "00:24:19"
       },
@@ -3067,7 +3113,7 @@
           "촉구": 1
         },
         "compoundTermCountDict": {
-          "감군체제": 3
+          "감군 진행": 3
         },
         "sentiment": 0.20000000298023224,
         "time": "00:24:23"
@@ -3089,7 +3135,7 @@
       {
         "sentence": "그러니까 양과 질은 분리해서 생각할 수 없다, 이 문제를 꼭 말씀드리고 싶고요.",
         "singleTermCountDict": { "분리": 1, "문제": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "양질 분리": 1 },
         "sentiment": 0,
         "time": "00:24:40"
       },
@@ -3109,7 +3155,7 @@
           "단행": 1
         },
         "compoundTermCountDict": {
-          "해외 모병제사례": 3
+          "해외 모병제 진행": 3
         },
         "sentiment": 0,
         "time": "00:24:45"
@@ -3117,14 +3163,14 @@
       {
         "sentence": "그래서 이미 올해부터 완전 모병제로 전환이 됐고요.",
         "singleTermCountDict": { "올해": 1, "완전": 1, "모병": 1, "전환": 1 },
-        "compoundTermCountDict": { "완전 모병제": 1 },
+        "compoundTermCountDict": { "완전 모병제 전환": 1 },
         "sentiment": 0.20000000298023224,
         "time": "00:25:01"
       },
       {
         "sentence": "미국 모병제는 세계에서 가장 성공한 사례입니다.",
         "singleTermCountDict": { "미국": 1, "세계": 1, "성공": 1, "사례": 1 },
-        "compoundTermCountDict": { "미국 모병제": 1 },
+        "compoundTermCountDict": { "미국 모병제 성공": 1 },
         "sentiment": 0.6000000238418579,
         "time": "00:25:04"
       },
@@ -3153,7 +3199,8 @@
         },
         "compoundTermCountDict": {
           "징병제 폐지": 1,
-          "모병제 전환": 1
+          "모병제 전환": 1,
+          "사회주류 경로제공": 1
         },
         "sentiment": 0.20000000298023224,
         "time": "00:25:08"
@@ -3168,7 +3215,7 @@
       {
         "sentence": "대단히 성공한 거예요.",
         "singleTermCountDict": { "성공": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "모병제 성공": 1 },
         "sentiment": 0,
         "time": "00:25:32"
       },
@@ -3241,7 +3288,7 @@
       {
         "sentence": "내 꿈을 실현할 수 있는 디딤돌이거든요.",
         "singleTermCountDict": { "실현": 1, "디딤": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "꿈실현 디딤돌": 1 },
         "sentiment": 0.699999988079071,
         "time": "00:26:15"
       }
@@ -3263,7 +3310,7 @@
           "수단": 1
         },
         "compoundTermCountDict": {
-          "사회적 도약수단": 1
+          "사회적 도약수단 전략": 1
         },
         "sentiment": -0.30000001192092896,
         "time": "00:26:17"
@@ -3281,7 +3328,8 @@
           "상황": 1
         },
         "compoundTermCountDict": {
-          "사회적 사다리": 1
+          "사회적 사다리": 1,
+          "안보 걱정": 1
         },
         "sentiment": -0.30000001192092896,
         "time": "00:26:27"
@@ -3417,7 +3465,7 @@
           "예측": 1
         },
         "compoundTermCountDict": {
-          "병력수요공급 예측불가": 1
+          "수요공급 예측불가": 1
         },
         "sentiment": -0.4000000059604645,
         "time": "00:27:14"
@@ -3450,7 +3498,7 @@
           "육군": 1
         },
         "compoundTermCountDict": {
-          "군인수요 미달": 1
+          "수요 미달": 1
         },
         "sentiment": 0.30000001192092896,
         "time": "00:27:34"
@@ -3539,7 +3587,8 @@
           "필요": 1
         },
         "compoundTermCountDict": {
-          "북한 100만군": 1
+          "북한 상시병력": 1,
+          "군규모 유지 불필요": 1
         },
         "sentiment": -0.20000000298023224,
         "time": "00:28:18"
@@ -3652,7 +3701,7 @@
       {
         "sentence": "고정 병력수가 120만 정도 유지되고 있지 않습니까?",
         "singleTermCountDict": { "고정": 1, "병력": 1, "유지": 1 },
-        "compoundTermCountDict": { "120만 북한군": 1 },
+        "compoundTermCountDict": { "북한 고정병력 유지 ": 1 },
         "sentiment": -0.10000000149011612,
         "time": "00:28:41"
       },
@@ -3764,7 +3813,7 @@
           "주장": 1
         },
         "compoundTermCountDict": {
-          "모병제 전환시점": 1
+          "모병제 전환시기": 1
         },
         "sentiment": 0.20000000298023224,
         "time": "00:28:52"
@@ -3772,7 +3821,7 @@
       {
         "sentence": "지금 당장 2021년부터 모병제를 전환해야 된다 이런 건 아니고요.",
         "singleTermCountDict": { "당장": 1, "모병": 1, "전환": 1 },
-        "compoundTermCountDict": { "급속모병전환 불필요": 1 },
+        "compoundTermCountDict": { "급속 모병전환 불필요": 1 },
         "sentiment": 0,
         "time": "00:28:57"
       },
@@ -3809,7 +3858,7 @@
           "군인": 1
         },
         "compoundTermCountDict": {
-          "해외 모병제 국방강화": 4
+          "모병제 국방강화": 4
         },
         "sentiment": 0,
         "time": "00:29:10"
@@ -3817,7 +3866,9 @@
       {
         "sentence": "심지어 일본 자위대 인터넷에서는 항상 약하다고 예를 들면 놀리기도 합니다만 일본 군대 약하다고 하진 않거든요.",
         "singleTermCountDict": { "일본": 2, "자위": 1, "인터넷": 1, "군대": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": {
+          "일본 모병재": 2
+        },
         "sentiment": 0.10000000149011612,
         "time": "00:29:21"
       },
@@ -3836,7 +3887,9 @@
           "해체": 1,
           "의미": 1
         },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": {
+          "정예화된 모병제": 2
+        },
         "sentiment": -0.4000000059604645,
         "time": "00:29:28"
       },
@@ -3850,7 +3903,8 @@
           "기계": 1
         },
         "compoundTermCountDict": {
-          "스마트군대": 2
+          "정예화된 보병": 1,
+          "기계화된 보병": 1
         },
         "sentiment": 0.10000000149011612,
         "time": "00:29:41"
@@ -3888,8 +3942,7 @@
           "시기": 1
         },
         "compoundTermCountDict": {
-          "경력단절문제": 3,
-          "사회진출문제": 3
+          "모병제 경력단절 해소": 1
         },
         "sentiment": 0.20000000298023224,
         "time": "00:29:58"
@@ -3903,7 +3956,9 @@
           "파장": 2,
           "고려": 1
         },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": {
+          "모병제 영향력": 1
+        },
         "sentiment": -0.10000000149011612,
         "time": "00:30:05"
       },
@@ -3975,7 +4030,9 @@
           "생계": 1,
           "노력": 1
         },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": {
+          "모병제 영향력": 1
+        },
         "sentiment": -0.30000001192092896,
         "time": "00:30:33"
       }
@@ -4084,8 +4141,6 @@
           "모병": 1
         },
         "compoundTermCountDict": {
-          "고위층 병역기피": 4,
-          "소외계층": 3,
           "모병졔 혜택": 1
         },
         "sentiment": 0.20000000298023224,
@@ -4212,8 +4267,7 @@
           "실업": 1
         },
         "compoundTermCountDict": {
-          "청년실업률 증가": 1,
-          "일자리총량 일정": 1
+          "청년실업률 증가": 1
         },
         "sentiment": -0.30000001192092896,
         "time": "00:32:00"
@@ -4248,7 +4302,7 @@
         },
         "compoundTermCountDict": {
           "군인예우": 1,
-          "군인식 개선": 1
+          "국민 인식개선": 1
         },
         "sentiment": -0.20000000298023224,
         "time": "00:32:06"
@@ -4269,6 +4323,7 @@
         },
         "compoundTermCountDict": {
           "일자리 제공": 1,
+          "노블리스 오블리제": 1,
           "군인식 개선": 1
         },
         "sentiment": 0.5,
@@ -4552,12 +4607,14 @@
       {
         "sentence": "대한민국 미래를 위해서 처우도 좋고 보상도 좋고 예우도 좋고 그런 군대 만드셔야죠.",
         "singleTermCountDict": {
+          "대한민국 미래": 1,
           "처우 개선": 1,
           "보상 개선": 1
         },
         "compoundTermCountDict": {
-          "군 처우개선": 1,
-          "군 보상개선": 1
+          "대한민국 미래": 1,
+          "처우 개선": 1,
+          "보상 개선": 1
         },
         "sentiment": 0.8999999761581421,
         "time": "00:33:32"
@@ -4589,8 +4646,7 @@
           "찬성": 1
         },
         "compoundTermCountDict": {
-          "군인 출세어려움": 1,
-          "병사월급 300만원": 1
+          "병사 출세 어려움": 1
         },
         "sentiment": -0.10000000149011612,
         "time": "00:33:37"
@@ -4659,7 +4715,7 @@
           "위협": 1
         },
         "compoundTermCountDict": {
-          "모병 충원방법": 1
+          "충원방법": 1
         },
         "sentiment": 0,
         "time": "00:34:42"
@@ -4667,7 +4723,7 @@
       {
         "sentence": "예를 들어서 우리가 왜 옛날에 3년 있고 60만, 70만 군대가 있었습니까?",
         "singleTermCountDict": { "옛날": 1, "군대": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "대군": 1 },
         "sentiment": -0.30000001192092896,
         "time": "00:34:54"
       },
@@ -4708,7 +4764,7 @@
       {
         "sentence": "위협이 줄었기 때문입니다.",
         "singleTermCountDict": { "위협": 1 },
-        "compoundTermCountDict": { "위협감소": 1 },
+        "compoundTermCountDict": { "위협 감소": 1 },
         "sentiment": -0.5,
         "time": "00:35:07"
       },
@@ -4907,7 +4963,7 @@
           "필요": 1
         },
         "compoundTermCountDict": {
-          "징병제 지속불가": 1,
+          "징병제 지속가능": 1,
           "북한 위협": 1
         },
         "sentiment": 0.30000001192092896,
@@ -4936,7 +4992,7 @@
       {
         "sentence": "그런데 지속가능하지 않은 시점이 대략 2025년 이후에 닥친단 말이에요.",
         "singleTermCountDict": { "지속": 1, "가능": 1, "시점": 1, "이후": 1 },
-        "compoundTermCountDict": { "징병제 지속불가": 1 },
+        "compoundTermCountDict": {},
         "sentiment": -0.30000001192092896,
         "time": "00:36:49"
       },
@@ -4956,7 +5012,7 @@
       {
         "sentence": "사회에서 가장 질이 낮은 자원이 와도 가장 수준이 높게 써먹습니다.",
         "singleTermCountDict": { "사회": 1, "자원": 1, "수준": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "사회": 1, "자원": 1, "수준": 1 },
         "sentiment": -0.10000000149011612,
         "time": "00:37:06"
       },
@@ -5077,7 +5133,10 @@
           "정신": 1,
           "부여": 1
         },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": {
+          "전문성": 1,
+          "직업정신": 1
+        },
         "sentiment": 0.20000000298023224,
         "time": "00:37:55"
       },
@@ -5096,8 +5155,8 @@
           "대비": 1
         },
         "compoundTermCountDict": {
-          "자기능력개발": 2,
-          "스마트전쟁": 1
+          "자기능력 개발": 2,
+          "스마트전쟁 체제": 1
         },
         "sentiment": 0.4000000059604645,
         "time": "00:38:00"
@@ -5165,6 +5224,7 @@
           "의견": 1,
           "질문": 1,
           "소개": 1,
+
           "답변": 1,
           "토론": 1
         },
@@ -5331,7 +5391,7 @@
       {
         "sentence": "그런데 아까 박 교수님도 지적하셨듯이 군에서는 결국 한 계급이 올라갈 때마다 첨예화 될 수밖에 없거든요.",
         "singleTermCountDict": { "교수": 1, "지적": 1, "계급": 1, "첨예": 1 },
-        "compoundTermCountDict": { "계급첨예화": 1 },
+        "compoundTermCountDict": { "계급 첨예화": 1 },
         "sentiment": -0.30000001192092896,
         "time": "00:39:23"
       },
@@ -5398,7 +5458,7 @@
           "가능": 1
         },
         "compoundTermCountDict": {
-          "취업시장 제한": 4
+          "취업시장 제한": 1
         },
         "sentiment": 0.10000000149011612,
         "time": "00:39:39"
@@ -5638,7 +5698,7 @@
       {
         "sentence": "훈련기간이 꼭 4개월은 아닙니다만 그리고 지금 보면.",
         "singleTermCountDict": { "훈련": 1, "기간": 1 },
-        "compoundTermCountDict": { "장기훈련": 1 },
+        "compoundTermCountDict": { "장기 훈련기간": 1 },
         "sentiment": 0,
         "time": "00:42:14"
       }
@@ -5807,7 +5867,7 @@
           "수준": 1
         },
         "compoundTermCountDict": {
-          "장기복무": 1
+          "장기복무 보장": 1
         },
         "sentiment": -0.5,
         "time": "00:43:16"
@@ -6099,7 +6159,7 @@
         "sentence": "그렇기 때문에 많은 장교와 부사관이 필요한 체제거든요.",
         "singleTermCountDict": { "장교": 1, "부사관": 1, "필요": 1, "체제": 1 },
         "compoundTermCountDict": {
-          "간부체제개편": 1
+          "간부체제필요": 1
         },
         "sentiment": 0,
         "time": "00:44:45"
@@ -6114,7 +6174,7 @@
           "군대": 1
         },
         "compoundTermCountDict": {
-          "간부체제개편": 2
+          "간부체제필요": 2
         },
         "sentiment": 0.10000000149011612,
         "time": "00:44:48"
@@ -6122,7 +6182,7 @@
       {
         "sentence": "군의관 부분도 그렇습니다.",
         "singleTermCountDict": { "군의": 1 },
-        "compoundTermCountDict": { "군의관개편": 1 },
+        "compoundTermCountDict": {},
         "sentiment": 0.6000000238418579,
         "time": "00:44:52"
       },
@@ -6192,7 +6252,7 @@
       {
         "sentence": "고심 끝에 군의관 해체예요?",
         "singleTermCountDict": { "고심": 1, "군의": 1 },
-        "compoundTermCountDict": { "군의관해체": 1 },
+        "compoundTermCountDict": {},
         "sentiment": 0,
         "time": "00:45:11"
       }
@@ -6247,14 +6307,14 @@
       {
         "sentence": "지금 부사관을 10만에서 15만 늘려가고 있고요.",
         "singleTermCountDict": { "부사관": 1 },
-        "compoundTermCountDict": { "부사관편성 증가": 2 },
+        "compoundTermCountDict": { "부사관": 1 },
         "sentiment": -0.20000000298023224,
         "time": "00:45:21"
       },
       {
         "sentence": "사실은 부사관이 전형적 모병제 군인 아니겠습니까?",
         "singleTermCountDict": { "부사관": 1, "모병": 1, "군인": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "부사관 모병제 군인": 1 },
         "sentiment": 0,
         "time": "00:45:26"
       },
@@ -6319,8 +6379,7 @@
           "도입": 1
         },
         "compoundTermCountDict": {
-          "자율책임도입": 1,
-          "외박외출": 1
+          "자율책임도임": 1
         },
         "sentiment": 0.10000000149011612,
         "time": "00:45:46"
@@ -6393,7 +6452,7 @@
           "근무": 1
         },
         "compoundTermCountDict": {
-          "체제유지": 1
+          "현상황 유지": 1
         },
         "sentiment": 0,
         "time": "00:46:04"
@@ -6442,8 +6501,7 @@
           "모병": 1
         },
         "compoundTermCountDict": {
-          "모병제 불필요": 1,
-          "군사기 저하": 2
+          "모병제 불필요": 1
         },
         "sentiment": -0.30000001192092896,
         "time": "00:46:53"
@@ -6497,7 +6555,7 @@
         "singleTermCountDict": { "예비": 2, "현재": 1, "근무": 2, "경험": 1 },
         "compoundTermCountDict": {
           "예비역": 2,
-          "예비역 근무경험": 2
+          "충분한 근무경험": 2
         },
         "sentiment": 0.10000000149011612,
         "time": "00:47:18"
@@ -6577,7 +6635,7 @@
           "장교": 1
         },
         "compoundTermCountDict": {
-          "간부월급 인상": 2
+          "간부 월급": 2
         },
         "sentiment": -0.20000000298023224,
         "time": "00:47:49"
@@ -6680,7 +6738,21 @@
           "질문": 1
         },
         "compoundTermCountDict": {
-          "여성징집": 1
+          "미네르바K": 1,
+          "모병": 2,
+          "전환": 1,
+          "찬성": 1,
+          "남녀구분": 1,
+          "내용": 1,
+          "김한규": 1,
+          "군인": 1,
+          "숫자": 1,
+          "부족": 1,
+          "여성": 1,
+          "징집": 1,
+          "배제": 1,
+          "이유": 1,
+          "질문": 1
         },
         "sentiment": 0,
         "time": "00:48:26"
@@ -6787,7 +6859,7 @@
           "사람": 1
         },
         "compoundTermCountDict": {
-          "국방의무": 2
+          "모든국민 국방의무": 2
         },
         "sentiment": 0,
         "time": "00:49:02"
@@ -6795,7 +6867,7 @@
       {
         "sentence": "특히 이 문제는 군 가산점 문제랑 엮일 수밖에 없다는 생각을 하게 됩니다.",
         "singleTermCountDict": { "문제": 2, "가산": 1 },
-        "compoundTermCountDict": { "군가산점": 1 },
+        "compoundTermCountDict": { "군 가산점": 1 },
         "sentiment": 0.10000000149011612,
         "time": "00:49:15"
       },
@@ -6819,10 +6891,13 @@
           "노력": 1
         },
         "compoundTermCountDict": {
+          "징병": 1,
           "상대성별": 1,
-          "취업제한": 3,
+          "취업제한": 1,
+          "개발제한": 1,
+          "제한": 1,
           "불평등": 1,
-          "인권침해": 1
+          "침해": 1
         },
         "sentiment": -0.6000000238418579,
         "time": "00:49:19"
@@ -6868,8 +6943,7 @@
           "차별": 1
         },
         "compoundTermCountDict": {
-          "여성복무": 1,
-          "역차별": 1
+          "여성복무 제한": 1
         },
         "sentiment": -0.10000000149011612,
         "time": "00:50:03"
@@ -6877,7 +6951,7 @@
       {
         "sentence": "만약에 사병 복무에 대해서 가산점을 줬을 경우에.",
         "singleTermCountDict": { "사병": 1, "복무": 1, "가산": 1 },
-        "compoundTermCountDict": { "군가산점": 1 },
+        "compoundTermCountDict": { "가산점": 1 },
         "sentiment": 0,
         "time": "00:50:08"
       },
@@ -6939,7 +7013,7 @@
           "허점": 1
         },
         "compoundTermCountDict": {
-          "여성복무": 3
+          "여성 복무": 3
         },
         "sentiment": -0.4000000059604645,
         "time": "00:50:35"
@@ -6999,7 +7073,7 @@
       {
         "sentence": "오히려 여성 사병들이 발생할 거거든요.",
         "singleTermCountDict": { "여성": 1, "사병": 1, "발생": 1 },
-        "compoundTermCountDict": { "여성 사병": 1 },
+        "compoundTermCountDict": { "여성": 1, "사병": 1, "발생": 1 },
         "sentiment": -0.4000000059604645,
         "time": "00:50:56"
       },
@@ -7022,7 +7096,7 @@
       {
         "sentence": "같은 호봉에 맞춰서 병사2호봉과 하사2호봉이 비슷할 수 있고 물론 차이는 있을 겁니다.",
         "singleTermCountDict": { "호봉": 3, "병사": 1, "하사": 1, "차이": 1 },
-        "compoundTermCountDict": { "호봉": 3 },
+        "compoundTermCountDict": { "호봉차이": 3 },
         "sentiment": 0.30000001192092896,
         "time": "00:51:05"
       },
@@ -7058,7 +7132,9 @@
           "책임": 1,
           "사명": 1
         },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": {
+          "모병제 사명감": 2
+        },
         "sentiment": 0.10000000149011612,
         "time": "00:51:18"
       }
@@ -7073,7 +7149,7 @@
       {
         "sentence": "아니, 그런데 사병 1호봉이 300만 원이면.",
         "singleTermCountDict": { "사병": 1, "호봉": 1 },
-        "compoundTermCountDict": { "병사월급 300만원": 1 },
+        "compoundTermCountDict": {},
         "sentiment": -0.30000001192092896,
         "time": "00:51:25"
       }
@@ -7168,7 +7244,7 @@
       {
         "sentence": "김종대 의원님은 여성모병제를 어떻게 생각하십니까?",
         "singleTermCountDict": { "김종대": 1, "의원": 1, "여성": 1, "모병": 1 },
-        "compoundTermCountDict": { "여성모병": 1 },
+        "compoundTermCountDict": { "김종대": 1, "의원": 1, "여성모병": 1 },
         "sentiment": 0,
         "time": "00:51:51"
       }
@@ -7251,7 +7327,10 @@
           "의원": 1
         },
         "compoundTermCountDict": {
-          "여성징병": 1
+          "여성징병": 1,
+          "답변": 1,
+          "김종대": 1,
+          "의원": 1
         },
         "sentiment": 0,
         "time": "00:52:23"
@@ -7273,7 +7352,9 @@
           "사병": 1,
           "폐지": 1
         },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": {
+          "사병용어폐지": 2
+        },
         "sentiment": -0.10000000149011612,
         "time": "00:52:28"
       }
@@ -7326,7 +7407,7 @@
       {
         "sentence": "병사.",
         "singleTermCountDict": { "병사": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "병사": 1 },
         "sentiment": 0.20000000298023224,
         "time": "00:52:41"
       },
@@ -7340,7 +7421,9 @@
           "용어": 2,
           "폐지": 1
         },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": {
+          "사병용어폐지": 2
+        },
         "sentiment": 0,
         "time": "00:52:43"
       },
@@ -7406,7 +7489,8 @@
         "sentence": "그 질문 하시는데 저는 여성에게 문호를 개방하는 건 말하자면 평등권 또 헌법적 정신이라고 생각합니다.",
         "singleTermCountDict": {},
         "compoundTermCountDict": {
-          "여성문호개방": 2
+          "여성문호개방": 1,
+          "헌법정신": 1
         },
         "sentiment": 0.10000000149011612,
         "time": "00:53:00"
@@ -7432,7 +7516,7 @@
         "compoundTermCountDict": {
           "여성직업군인": 1,
           "남녀평등": 1,
-          "여성징집": 1
+          "여성징집찬성": 1
         },
         "sentiment": 0,
         "time": "00:53:10"
@@ -7463,7 +7547,7 @@
       {
         "sentence": "여성은 왜 안 간다고 생각하십니까?",
         "singleTermCountDict": { "여성": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "여성": 1 },
         "sentiment": -0.5,
         "time": "00:53:31"
       }
@@ -7558,7 +7642,7 @@
           "여성기회": 2,
           "군가산점": 1,
           "복지혜택": 1,
-          "여성단기복무": 1
+          "여성 단기복무": 1
         },
         "sentiment": 0,
         "time": "00:53:56"
@@ -7633,7 +7717,7 @@
       {
         "sentence": "그 취지에 찬성을 하고요.",
         "singleTermCountDict": { "취지": 1, "찬성": 1 },
-        "compoundTermCountDict": { "여성모병": 1 },
+        "compoundTermCountDict": { "여성모병 찬성": 1 },
         "sentiment": 0.20000000298023224,
         "time": "00:54:17"
       },
@@ -7655,7 +7739,7 @@
           "접목": 1
         },
         "compoundTermCountDict": {
-          "여성모병": 1
+          "여성 모병": 1
         },
         "sentiment": 0.20000000298023224,
         "time": "00:54:24"
@@ -7744,7 +7828,7 @@
           "노력": 1
         },
         "compoundTermCountDict": {
-          "지속가능병력": 1
+          "지속가능 병력": 1
         },
         "sentiment": 0.5,
         "time": "00:54:52"
@@ -8110,7 +8194,7 @@
           "능욕": 1
         },
         "compoundTermCountDict": {
-          "남녀 전투투입": 1
+          "남녀투입": 1
         },
         "sentiment": -0.10000000149011612,
         "time": "00:56:25"
@@ -8118,14 +8202,14 @@
       {
         "sentence": "그래서 저는 사실 여군 여성들이 들어오는 걸 저는 환영합니다.",
         "singleTermCountDict": { "여군": 1, "여성": 1, "환영": 1 },
-        "compoundTermCountDict": { "여군 환영": 2 },
+        "compoundTermCountDict": { "여군환영": 2 },
         "sentiment": 0.4000000059604645,
         "time": "00:56:39"
       },
       {
         "sentence": "저는 장점도 많은 것 같아요.",
         "singleTermCountDict": { "장점": 1 },
-        "compoundTermCountDict": { "여군 장점존재": 1 },
+        "compoundTermCountDict": {},
         "sentiment": 0.8999999761581421,
         "time": "00:56:43"
       },
@@ -8163,7 +8247,7 @@
           "예산": 1
         },
         "compoundTermCountDict": {
-          "여성병과": 2,
+          "여성 병과": 2,
           "국민적 공감대": 1
         },
         "sentiment": -0.30000001192092896,
@@ -8186,7 +8270,7 @@
       {
         "sentence": "그런데 9조가 봉급만 해도 300만 원에서 봉급만 해도 9조예요.",
         "singleTermCountDict": { "봉급": 2 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "봉급": 2 },
         "sentiment": 0.10000000149011612,
         "time": "00:57:21"
       },
@@ -8200,7 +8284,7 @@
       {
         "sentence": "18%추가로 돼야 되고 이 사람들 추가 집도 줘야 되고 하다 보면 너무 너무 예산이 많이 들어요.",
         "singleTermCountDict": { "추가": 2, "사람": 1, "예산": 1 },
-        "compoundTermCountDict": { "예산인상": 3 },
+        "compoundTermCountDict": { "예산추가": 2, "예산초과": 1 },
         "sentiment": -0.30000001192092896,
         "time": "00:57:29"
       },
@@ -8335,7 +8419,7 @@
           "판단": 1
         },
         "compoundTermCountDict": {
-          "예산인상": 1
+          "모병제 가능": 1
         },
         "sentiment": 0.4000000059604645,
         "time": "00:58:44"
@@ -8350,7 +8434,7 @@
       {
         "sentence": "이런 정도면 내년 국방예산이 50조입니다.",
         "singleTermCountDict": { "내년": 1, "국방": 1, "예산": 1 },
-        "compoundTermCountDict": { "국방예산 50조": 1 },
+        "compoundTermCountDict": { "국방예산 증가": 1 },
         "sentiment": 0.20000000298023224,
         "time": "00:59:01"
       },
@@ -8392,7 +8476,7 @@
           "국방": 1,
           "예산": 1
         },
-        "compoundTermCountDict": { "병사월급 100만원": 1, "국방예산": 1 },
+        "compoundTermCountDict": { "병사월급": 1, "국방예산": 1 },
         "sentiment": 0,
         "time": "00:59:15"
       },
@@ -8471,7 +8555,7 @@
       {
         "sentence": "제가 말하는 게 뭐냐 하면 병력을 줄이면서 하면 비용이 그렇게 많이 늘지 않는다 똑같은 거예요.",
         "singleTermCountDict": { "병력": 1, "비용": 1 },
-        "compoundTermCountDict": { "병력유지": 1, "예산동결": 1 },
+        "compoundTermCountDict": { "병력유지 비용동결": 1 },
         "sentiment": -0.5,
         "time": "01:00:02"
       },
@@ -8840,7 +8924,7 @@
       {
         "sentence": "탱크도 줄일까요?",
         "singleTermCountDict": { "탱크": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "탱크": 1 },
         "sentiment": 0.10000000149011612,
         "time": "01:02:01"
       }
@@ -8913,7 +8997,7 @@
       {
         "sentence": "그러면 이것을 초점화 해서 다시 병력 국방 경영을 재설계해야 되는 것이죠.",
         "singleTermCountDict": { "병력": 1, "국방": 1, "경영": 1 },
-        "compoundTermCountDict": { "국방경영 재설계": 1 },
+        "compoundTermCountDict": { "국방재설계": 1 },
         "sentiment": 0,
         "time": "01:02:29"
       },
@@ -9086,7 +9170,7 @@
       {
         "sentence": "그러니까 국방예산 몇 조를 쉽게 절약해서 여기 있습니다 하는데 이것도 쉽게 생각하는 것 같아요.",
         "singleTermCountDict": { "국방": 1, "예산": 1, "절약": 1 },
-        "compoundTermCountDict": { "국방예산 절약": 3 },
+        "compoundTermCountDict": { "국방예산절약": 3 },
         "sentiment": 0.800000011920929,
         "time": "01:03:48"
       }
@@ -9116,7 +9200,7 @@
       {
         "sentence": "장경태 위원장님 말씀하시죠.",
         "singleTermCountDict": { "장경태": 1, "위원": 1 },
-        "compoundTermCountDict": {},
+        "compoundTermCountDict": { "장경태": 1, "위원": 1 },
         "sentiment": 0.10000000149011612,
         "time": "01:03:54"
       }
@@ -9138,7 +9222,7 @@
           "시행": 1
         },
         "compoundTermCountDict": {
-          "모병제 국방예산 9조": 3
+          "모병제 국방예산": 3
         },
         "sentiment": 0,
         "time": "01:03:58"
@@ -9272,7 +9356,7 @@
           "효과": 1
         },
         "compoundTermCountDict": {
-          "비용상충효과": 2
+          "비용상충효과": 4
         },
         "sentiment": 0.8999999761581421,
         "time": "01:04:34"
@@ -9281,7 +9365,7 @@
         "sentence": "그렇기 때문에 상쇄할 수 있다고 보고 만약에 군대가 체질이 개선된다면 방금 말씀하셨듯이 어떤 그런 어려움들은 분명히 상쇄될 거라고 봅니다.",
         "singleTermCountDict": { "상쇄": 2, "군대": 1, "개선": 1, "어려움": 1 },
         "compoundTermCountDict": {
-          "군대체질 개선": 3
+          "군대체질개선": 3
         },
         "sentiment": 0,
         "time": "01:04:39"
@@ -9462,14 +9546,14 @@
       {
         "sentence": "‘지금 최저임금도 못 미치고’ 병사월급이요.",
         "singleTermCountDict": { "최저": 1, "임금": 1, "병사월급": 1 },
-        "compoundTermCountDict": { "최저임금": 1, "병사월급 100만원": 1 },
+        "compoundTermCountDict": { "최저임금": 1, "병사월급": 1 },
         "sentiment": -0.30000001192092896,
         "time": "01:05:35"
       },
       {
         "sentence": "‘군인권의식이 굉장히 낮습니다.",
         "singleTermCountDict": { "군인권": 1, "의식": 1 },
-        "compoundTermCountDict": { "낮은 군인권의식": 1 },
+        "compoundTermCountDict": { "군인권의식": 1 },
         "sentiment": 0.30000001192092896,
         "time": "01:05:39"
       },
@@ -9585,8 +9669,8 @@
           "입증": 1
         },
         "compoundTermCountDict": {
-          "스마트군대": 2,
-          "병력유지필요": 2
+          "스마트군대 체제": 2,
+          "병력유지 필요": 2
         },
         "sentiment": 0.20000000298023224,
         "time": "01:06:41"
@@ -9606,7 +9690,7 @@
           "상황": 1
         },
         "compoundTermCountDict": {
-          "무책임한 민주당": 1
+          "민주당 무책임": 1
         },
         "sentiment": -0.6000000238418579,
         "time": "01:06:57"
@@ -9622,7 +9706,7 @@
           "설명": 1
         },
         "compoundTermCountDict": {
-          "공청회 필요": 2
+          "공청회 필요": 1
         },
         "sentiment": 0.20000000298023224,
         "time": "01:07:07"
@@ -9684,9 +9768,8 @@
           "방법": 1
         },
         "compoundTermCountDict": {
-          "복무연장 필요": 1,
-          "징집유지 불가": 1,
-          "편제유지 불가": 1
+          "복무연장 수단": 1,
+          "징집유지 불가": 1
         },
         "sentiment": -0.20000000298023224,
         "time": "01:07:26"
@@ -9713,7 +9796,7 @@
           "이익": 1
         },
         "compoundTermCountDict": {
-          "스마트군대": 4,
+          "스마트군대 강화": 4,
           "국방이익": 2
         },
         "sentiment": 0.30000001192092896,
@@ -9767,7 +9850,7 @@
       {
         "sentence": "특히 군의 간부들이 상당히 각성하고 과거와 다르게 해야 한다고 봅니다.",
         "singleTermCountDict": { "간부": 1, "각성": 1, "과거": 1 },
-        "compoundTermCountDict": { "간부 각성": 1, "간부 변화": 1 },
+        "compoundTermCountDict": { "간부각성": 1, "간부변화": 1 },
         "sentiment": -0.10000000149011612,
         "time": "01:08:07"
       },
@@ -9802,14 +9885,14 @@
       {
         "sentence": "지금 사실 미군들보다 우리 병사들이 훨씬 더 우수하거든요.",
         "singleTermCountDict": { "미군": 1, "병사": 1, "우수": 1 },
-        "compoundTermCountDict": { "우수한 병사": 1 },
+        "compoundTermCountDict": { "병사우수": 1 },
         "sentiment": 0.4000000059604645,
         "time": "01:08:31"
       },
       {
         "sentence": "그런 사람한테 자율과 책임을 주면 다 참 잘할 수가 있습니다.",
         "singleTermCountDict": { "사람": 1, "자율": 1, "책임": 1 },
-        "compoundTermCountDict": { "병사 자율책임부여": 2 },
+        "compoundTermCountDict": { "자율책임부여": 2 },
         "sentiment": 0.699999988079071,
         "time": "01:08:35"
       },
@@ -9823,7 +9906,7 @@
       {
         "sentence": "저는 참 북핵 문제에 대해서 나름대로 뭐 노력하고 있습니다만 굉장히 걱정합니다.",
         "singleTermCountDict": { "문제": 1, "노력": 1, "걱정": 1 },
-        "compoundTermCountDict": { "북핵 문제": 1 },
+        "compoundTermCountDict": { "북핵문제": 1 },
         "sentiment": -0.5,
         "time": "01:08:43"
       },
@@ -9842,8 +9925,7 @@
           "신뢰": 1
         },
         "compoundTermCountDict": {
-          "국민신뢰": 1,
-          "북핵 문제": 1
+          "국민신뢰": 1
         },
         "sentiment": 0.20000000298023224,
         "time": "01:08:49"
@@ -9902,7 +9984,7 @@
       {
         "sentence": "자율과 책임이 최대치로 높아졌을 때는 직업으로 가는 것입니다.",
         "singleTermCountDict": { "자율": 1, "책임": 1, "최대": 1, "직업": 1 },
-        "compoundTermCountDict": { "자율책임": 1, "직업군인 전환": 1 },
+        "compoundTermCountDict": { "자율책임": 1, "직업군인": 1 },
         "sentiment": 0.30000001192092896,
         "time": "01:09:12"
       },
@@ -9926,7 +10008,8 @@
         },
         "compoundTermCountDict": {
           "자율책임": 1,
-          "모병제 전환": 3
+          "모병제 전환": 3,
+          "디딤돌": 1
         },
         "sentiment": 0.20000000298023224,
         "time": "01:09:19"
@@ -9941,7 +10024,7 @@
       {
         "sentence": "우리 청년들 남성의 경우에 30살이 돼서야 사회진출을 합니다.",
         "singleTermCountDict": { "청년": 1, "남성": 1, "사회": 1, "진출": 1 },
-        "compoundTermCountDict": { "뒤늦은 사회진출": 1 },
+        "compoundTermCountDict": { "청년": 1, "남성": 1, "사회진출": 1 },
         "sentiment": 0.10000000149011612,
         "time": "01:09:32"
       },
@@ -10046,7 +10129,7 @@
       {
         "sentence": "저는 그런 점에서 모병제는 충분히 검토할만하다는 결론을 내립니다.",
         "singleTermCountDict": { "모병": 1, "검토": 1, "결론": 1 },
-        "compoundTermCountDict": { "모병제 검토필요": 2 },
+        "compoundTermCountDict": { "모병제 필요": 2 },
         "sentiment": 0,
         "time": "01:10:32"
       }

@@ -499,6 +499,11 @@ function drawBarChart(
           return "rgb(251,154,153)";
       }
     });
+
+  bars
+    .append("title") // Tooltip 생성
+    .text((d) => `Name: ${d[0]}, Value: ${d[1]}`); // Tooltip에 표시될 텍스트 설정
+
   bars.exit().remove(); // 불필요한 막대 제거
 }
 

@@ -15,7 +15,17 @@ export interface SentenceObject {
   sentiment: number;
   singleTermCountDict: TermCountDict;
   compoundTermCountDict: TermCountDict;
+  allTermCountDict?: CategoryTermCountDict;
   time?: string;
+}
+
+export interface CategoryTermCountDict {
+  [category: string]: TermCountDict;
+}
+
+export interface CategoryTermCount {
+  category: string;
+  count: number;
 }
 
 export interface TermCountDict {

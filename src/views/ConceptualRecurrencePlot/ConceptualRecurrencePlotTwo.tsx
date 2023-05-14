@@ -37,8 +37,7 @@ import { GraphDataStructureMaker } from "./ConceptualMapModal/GraphDataStructure
 import * as math from "mathjs";
 import { ParticipantDict } from "../../common_functions/makeParticipants";
 import { UtteranceObject } from "../../interfaces/DebateDataInterface";
-import { Modal } from "antd";
-import styles from "./ConceptualMapModal/ConceptualMapModal.module.scss";
+import AreaChart from "../AreaChart/AreaChart";
 
 const modalContentWidth: number = 800;
 const modalContentHeight: number = 600;
@@ -328,10 +327,16 @@ function ConceptualRecurrencePlotTwo(
         //@ts-ignore
         dataStructureManager={dataStructureManager}
       ></ConceptualMapModalTwo>
-      <div style={{ position: "absolute", right: 0 }}>
+      <div
+        style={{ position: "absolute", height: "calc(100%-30px)", right: 0 }}
+      >
         <TranscriptViewer
           dataStructureMaker={dataStructureManager}
         ></TranscriptViewer>
+        {/* <div style={{ position: "relative", right: 0, bottom: 0, width: 330 }}> */}
+        {/* @ts-ignore */}
+        {/* <AreaChart />
+        </div> */}
       </div>
     </>
   );

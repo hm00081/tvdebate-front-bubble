@@ -10,33 +10,6 @@ import { TermCountDictOfEGMaker } from "../ConceptualMapModal/TermCountDictOfEGM
 import { ParticipantDict } from "../../../common_functions/makeParticipants";
 import { TermType } from "../DataImporter";
 
-// standardHighScore version
-// export function extractKeytermsFromEngagementGroup(
-//   engagementGroup: SimilarityBlock[][],
-//   conceptMatrixTransposed: number[][],
-//   keytermObjects: KeytermObject[],
-//   standardHighScore: number
-// ): KeytermObject[] {
-//   const highScoredKeyTermDict: { [keyterm: string]: KeytermObject } = {};
-//   _.forEach(engagementGroup, (rowSimilarityBlocks) => {
-//     const utteranceIndex = rowSimilarityBlocks[0].rowUtteranceIndex - 1;
-//     // find keyterms
-//     // the one utterance's keyterms score
-//     const keytermScores = conceptMatrixTransposed[utteranceIndex];
-//     _.forEach(keytermScores, (keytermScore, keytermIndex) => {
-//       if (keytermScore > standardHighScore) {
-//         const highScoredKeytermObject = keytermObjects[keytermIndex];
-//         highScoredKeyTermDict[
-//           highScoredKeytermObject.name
-//         ] = highScoredKeytermObject;
-//       }
-//     });
-//   });
-
-//   const highScoredKeyTerms: KeytermObject[] = _.values(highScoredKeyTermDict);
-//   return highScoredKeyTerms;
-// }
-
 export function extractKeytermsFromEngagementGroup(
   engagementGroup: SimilarityBlock[][],
   conceptMatrixTransposed: number[][],

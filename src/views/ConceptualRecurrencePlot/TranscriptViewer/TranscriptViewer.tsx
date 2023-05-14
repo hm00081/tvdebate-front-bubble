@@ -115,7 +115,8 @@ function TranscriptViewer(props: ComponentProps, ref: any) {
                 ].color,
               }}
             >
-              [ {utteranceObject.name} ] / {index}
+              [ {utteranceObject.name} ] / {index} /
+              {utteranceObject.sentenceObjects[0].time!}
             </div>
             <div
               dangerouslySetInnerHTML={{

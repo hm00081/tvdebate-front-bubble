@@ -94,8 +94,8 @@ export class TermCountDictOfEGMaker {
         });
       });
     });
-    // console.log(this.termBooleanCountDetailDictOfEG);
-    // console.log(this.termCountDetailDictOfEG);
+    //console.log(this.termBooleanCountDetailDictOfEG);
+    //console.log(this.termCountDetailDictOfEG);
   }
 
   public getTermCountDictOfEG() {

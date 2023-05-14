@@ -211,6 +211,7 @@ export class ConceptualMapDrawer {
       //@ts-ignore
       this.circlePackingTextsGSelection = svgGSelectionsMaker.appendCirclaPackingTextsGSelection();
     }
+    console.log(nodes);
     // drag event listener
     const drag = makeDrag();
 
@@ -222,7 +223,10 @@ export class ConceptualMapDrawer {
       nodes.forEach((node) => {
         if (node.group === "term" || node.group === "keyterm") {
           node.participantCounts.forEach((participant) => {
-            if (participant.evaluateAgainst !== undefined) {
+            if (
+              participant.evaluateAgainst !== undefined &&
+              participant.evaluateAgainst !== "중립"
+            ) {
               const existingChild = transformedData.find(
                 (child) => child.id === participant.evaluateAgainst
               );
@@ -326,10 +330,11 @@ export class ConceptualMapDrawer {
         hierarchicalData
       );
     };
+
     const convertGroupedData = transformDataForAgainst(nodes);
 
     //console.log("groupedData", groupedData);
-    //console.log("convertGroupedData", convertGroupedData); // 찬반중립으로 나눔
+    console.log("convertGroupedData", convertGroupedData); // 찬반중립으로 나눔
 
     const againsts = Array.from(convertGroupedData.keys());
 
@@ -366,6 +371,11 @@ export class ConceptualMapDrawer {
       const speakerCenters = new Map<string, { x: number; y: number }>();
       againsts.forEach((speaker, index) => {
         const x = centerX + radius * Math.cos(index * angleStep);
+        // const groupCenterX =
+        //   speaker === "찬성" ? centerX / 2 : centerX + centerX / 2;
+        // const angleOffset = speaker === "찬성" ? 0 : Math.PI;
+        // const x =
+        //   groupCenterX + radius * Math.cos(index * angleStep + angleOffset);
         const y = centerY + radius * Math.sin(index * angleStep);
         speakerCenters.set(speaker, { x, y });
       });
@@ -401,6 +411,23 @@ export class ConceptualMapDrawer {
         (d.parent?.data.id === "이준석" || d.parent?.data.id === "김종대") &&
         d.data.count > 0
     );
+
+    const allfilteredLeavess = leavess.filter(
+      (d) => d.parent?.data.id !== "진행자" && d.data.count > 0
+    );
+
+    let newFilteredLeavess = [];
+
+    for (let i = 0; i < allfilteredLeavess.length; i++) {
+      newFilteredLeavess.push({
+        speaker: allfilteredLeavess[i].parent?.data.id,
+        keyword: allfilteredLeavess[i].data.id,
+        //count: allfilteredLeavess[i].data.count,
+        //evaluateAgainst: allfilteredLeavess[i].data.evaluateAgainst,
+      });
+    }
+
+    //console.log(newFilteredLeavess);
 
     const colorScale = d3
       .scaleOrdinal<number, string>()
