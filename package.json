@@ -1,5 +1,5 @@
 {
-  "homepage": "https://hm00081.github.io/tvdebate-front",
+  "homepage": ".",
   "name": "debatevis",
   "version": "0.1.0",
   "private": true,
@@ -142,7 +142,9 @@
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
       "^.+\\.module\\.(css|sass|scss)$"
     ],
-    "modulePaths": [],
+    "modulePaths": [
+      "path.resolve(__dirname, 'dist/')"
+    ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web",
       "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
