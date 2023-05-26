@@ -1,13 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  // Link
-  useLocation,
-  useHistory,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.scss";
 import { DataStructureManager } from "./views/ConceptualRecurrencePlot/DataStructureMaker/DataStructureManager";
 import Timeline from "./views/Timeline/Timeline";
@@ -23,7 +16,7 @@ import TranscriptSubjectTest from "./views/TranscriptSubjectTest/TranscriptSubje
 import SubjectTestEnd from "./views/SubjectTestEnd/SubjectTestEnd";
 import SampleViewOfTopicSegmentation from "./views/SampleViewOfTopicSegmentation/SampleViewOfTopicSegmentation";
 import Header from "./views/Header/Header";
-import TranscriptViewer from "./views/ConceptualRecurrencePlot/TranscriptViewer/TranscriptViewer";
+import PlotPage from "./pages/RecurrencePlotPage";
 
 function App() {
   const [
@@ -32,10 +25,13 @@ function App() {
   ] = useState<DataStructureManager | null>(null);
   return (
     <Router>
-      <div>
-        {/* A <Switch> looks through its children <Route>s and
+      {/* <div> */}
+      {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-        <Switch>
+      {/* <Switch> */}
+      {/* <Route exact path="/">
+            <Home />
+          </Route>
           <Route path="/class-component-template">
             <ClassComponentTemplate />
           </Route>
@@ -56,45 +52,11 @@ function App() {
           </Route>
           <Route path="/subject-test-end">
             <SubjectTestEnd />
-          </Route>
-          <Route path="/bubble_chart">
-            <div className="root-div">
-              <Header />
-              <div
-                style={{
-                  marginTop: "50px",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <div
-                  style={{
-                    flexGrow: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  {/* @ts-ignore */}
-                  <ConceptualRecurrencePlotTwo></ConceptualRecurrencePlotTwo>
-                  {/* @ts-ignore */}
-                  <ConceptualRecurrencePlot key="ConceptualRecurrencePlot"></ConceptualRecurrencePlot>
-                  {/* @ts-ignore */}
-                  <ConcecptualRecurrencePlotThree></ConcecptualRecurrencePlotThree>
-                  {/* @ts-ignore */}
-                  <ConceptualRecurrencePlotFour></ConceptualRecurrencePlotFour>
-                </div>
-              </div>
-            </div>
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-          <Route path="/sample">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
+          </Route> */}
+      <Route exact path="/" component={PlotPage} />
+
+      {/* </Switch> */}
+      {/* </div> */}
     </Router>
   );
 }
